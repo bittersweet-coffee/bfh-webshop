@@ -18,11 +18,44 @@ header a {
 }
 
 nav {
-    margin-top: 40px;
-    border: 1px solid black;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #f1f1f1;
+}
+
+.nav-left {
+    float: left;
+}
+
+.nav-right {
+    float: right;
+}
+
+nav a {
+    display: block;
+    font: 1em "Open Sans", sans-serif;
+    color: #000000;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+}
+
+nav a:active {
+    color: #ffffff;
+    background: #4285f4;
 }
 
 #content {
+    margin-top: 50px;
     border: 1px solid black;
 }
 
@@ -31,5 +64,5 @@ footer {
 }
 
 #logo {
-    width: 10%;
+    width: 5%;
 }
