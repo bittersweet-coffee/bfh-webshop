@@ -1,0 +1,35 @@
+
+header {
+    overflow: hidden;
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background: #4285f4;
+    text-align: right;
+}
+
+header a {
+    float: right;
+    display: block;
+    font: 1em "Open Sans", sans-serif;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+nav {
+    margin-top: 40px;
+    border: 1px solid black;
+}
+
+#content {
+    border: 1px solid black;
+}
+
+footer {
+    border: 1px solid black;
+}
+
+#logo {
+    width: 10%;
+}
