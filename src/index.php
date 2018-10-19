@@ -1,6 +1,10 @@
-<!DOCTYPE html>
-<html>
-<?php require 'html/head.html';?>
+<?php
+    include 'php\utils\functions.php';
+    $pages = array(
+        "rods" => array("nav-left", "rods.php", "Fishing Rods"),
+        "reels" => array("nav-left", "reels.php", "Reels")
+    );
+require 'html/head.html';?>
 <body>
     <header>
     </header>
@@ -21,9 +25,10 @@
         echo "<li class=\"$item[0]\"><a href=\"$item[1].html\" alt=\"$item[1]\">$item[2]</a></li>";
     }
     echo "</nav></ul>";
-
     ?>
     <div id="content">
+        <?php
+        ?>
         <p>Hello, world!</p>
         <img src="img/logo.png" alt="Logo" id="logo">
     </div>
