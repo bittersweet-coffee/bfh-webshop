@@ -5,14 +5,7 @@ function getPageContent($name) {
             echo "<p> rods </p>";
             break;
         default:
-            $products = getProducts();
-            foreach ($products as $key => $product) {
-              echo "<div>
-                <p>$key</p>
-                <p>$product[0]</p>
-                <p>$product[1]</p>
-                </div>";
-            }
+            displayProducts();
             break;
     }
 }
@@ -34,4 +27,17 @@ function getProducts() {
         $products[$key] = $value;
     }
     return $products;
+}
+
+function displayProducts() {
+    $products = getProducts();
+    echo "<div id='container'>";
+    foreach ($products as $key => $product) {
+        echo "<div id='box'>
+                <p>Name:$key</p>
+                <p>ID: $product[0]</p>
+                <p>Description: $product[1]</p>
+            </div>";
+    }
+    echo "</div>";
 }

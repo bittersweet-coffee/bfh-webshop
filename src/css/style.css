@@ -66,3 +66,17 @@ footer {
 #logo {
     width: 5%;
 }
+
+#container {
+    width:100%;
+}
+
+#box {
+    background:lightblue;
+    border:1px solid black;
+    min-height:30px;
+    margin-top:10px;
+    margin-right:0.5%;
+    width: 190px;
+    display: inline-block;
+}
