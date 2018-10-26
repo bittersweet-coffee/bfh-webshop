@@ -3,6 +3,31 @@ function getPageContent($name) {
     switch ((isset($_GET[$name]) ? $_GET[$name] : '')) {
         case 'rods':
             echo "<p> rods </p>";
+            displayProducts();
+            break;
+        case 'reels':
+            echo "<p> reels </p>";
+            break;
+        case 'lures':
+            echo "<p> lures </p>";
+            break;
+        case 'lines':
+            echo "<p> lines </p>";
+            break;
+        case 'accessories':
+            echo "<p> accessories </p>";
+            break;
+        case 'about':
+            echo "<p> about </p>";
+            break;
+        case 'login':
+            echo "<p> login </p>";
+            break;
+        case '#en':
+            echo "<p> FIX THIS </p>";
+            break;
+        case '#de':
+            echo "<p> FIX THIS </p>";
             break;
         default:
             displayProducts();

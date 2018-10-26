@@ -12,6 +12,7 @@
         "#de" => array("nav-right", "#de","Deutsch")
     );
     require 'html/head.html';?>
+
 <body>
     <header>
     </header>
