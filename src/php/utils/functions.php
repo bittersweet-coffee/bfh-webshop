@@ -23,23 +23,41 @@ function getPageContent($name) {
         case 'login':
             echo "<p> login </p>";
             break;
-        case '#en':
-            echo "<p> FIX THIS </p>";
-            break;
-        case '#de':
-            echo "<p> FIX THIS </p>";
-            break;
         default:
             displayProducts();
             break;
     }
 }
-function displayNav($pages) {
+function displayNav($pages, $language) {
     echo "<nav><ul>";
+    $lang=getLanguage($language);
+    $urlbase = $_SERVER['PHP_SELF'] . "?lang=$lang";
     foreach ($pages as $page) {
-        echo "<li class=\"$page[0]\"><a href=\"index.php?page=$page[1]\" alt=\"$page[1]\">$page[2]</a></li>";
+        $url = $urlbase . "&page=$page[1]";
+        echo "<li class=\"$page[0]\"><a href=\"$url\" alt=\"$page[1]\">$page[2]</a></li>";
+    }
+    if (isset($_GET["page"])) {
+        $urlen = $_SERVER['PHP_SELF'] . "?lang=en" . "&page=" . $_GET["page"];
+        $urlde = $_SERVER['PHP_SELF'] . "?lang=de" . "&page=" . $_GET["page"];
+        echo "<li class=\"nav-right\"><a href=\"$urlen\" alt=\"English\">English</a></li>";
+        echo "<li class=\"nav-right\"><a href=\"$urlde\" alt=\"Deutsch\">Deutsch</a></li>";
+    } else {
+        $urlen = $_SERVER['PHP_SELF'] . "?lang=en";
+        $urlde = $_SERVER['PHP_SELF'] . "?lang=de";
+        echo "<li class=\"nav-right\"><a href=\"$urlen\" alt=\"English\">English</a></li>";
+        echo "<li class=\"nav-right\"><a href=\"$urlde\" alt=\"Deutsch\">Deutsch</a></li>";
     }
     echo "</nav></ul>";
+}
+
+function getLanguage($lang) {
+    foreach ($lang as $l) {
+        if (isset($_GET["lang"]) and $l == $_GET["lang"]) {
+            return $l;
+        }
+    }
+    return $lang[0];
+
 }
 
 function getProducts() {

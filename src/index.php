@@ -7,16 +7,15 @@
         "lines" => array("nav-left", "lines","Fishing Lines"),
         "accessories" => array("nav-left", "accessories","Accessories"),
         "about" => array("nav-left", "about","About"),
-        "login" => array("nav-right", "login","Login"),
-        "#en" => array("nav-right", "#en","English"),
-        "#de" => array("nav-right", "#de","Deutsch")
+        "login" => array("nav-right", "login","Login")
     );
+    $language = array("de", "en");
     require 'html/head.html';?>
 
 <body>
     <header>
     </header>
-    <?php displayNav($pages); ?>
+    <?php displayNav($pages, $language); ?>
     <div id="content">
         <img src="img/logo.png" alt="Logo" id="logo">
         <?php echo getPageContent("page"); ?>
