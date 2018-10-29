@@ -32,7 +32,7 @@ function displayNav($pages, $language) {
     echo "<nav><ul>";
     $lang=getLanguage($language);
     $urlbase = $_SERVER['PHP_SELF'] . "?lang=$lang";
-    foreach ($pages as $page) {
+    foreach ($pages[$lang] as $page) {
         $url = $urlbase . "&page=$page[1]";
         echo "<li class=\"$page[0]\"><a href=\"$url\" alt=\"$page[1]\">$page[2]</a></li>";
     }

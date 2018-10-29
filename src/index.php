@@ -1,13 +1,24 @@
 <?php
     include 'php\utils\functions.php';
     $pages = array(
-        "rods" => array("nav-left", "rods", "Fishing Rods"),
-        "reels" => array("nav-left", "reels", "Reels"),
-        "lures" => array("nav-left", "lures","Lures"),
-        "lines" => array("nav-left", "lines","Fishing Lines"),
-        "accessories" => array("nav-left", "accessories","Accessories"),
-        "about" => array("nav-left", "about","About"),
-        "login" => array("nav-right", "login","Login")
+        "en" => array (
+            "rods" => array("nav-left", "rods", "Fishing Rods"),
+            "reels" => array("nav-left", "reels", "Reels"),
+            "lures" => array("nav-left", "lures","Lures"),
+            "lines" => array("nav-left", "lines","Fishing Lines"),
+            "accessories" => array("nav-left", "accessories","Accessories"),
+            "about" => array("nav-left", "about","About"),
+            "login" => array("nav-right", "login","Login")
+        ),
+        "de" => array (
+            "Ruten" => array("nav-left", "rods", "Ruten"),
+            "Rollen" => array("nav-left", "reels", "Rollen"),
+            "Koeder" => array("nav-left", "lures","Koeder"),
+            "Schnuere" => array("nav-left", "lines","Schnuere"),
+            "Zubehoer" => array("nav-left", "accessories","Zubehoer"),
+            "ueber" => array("nav-left", "about","ueber"),
+            "Anmeldung" => array("nav-right", "login","Anmeldung")
+        )
     );
     $language = array("de", "en");
     require 'html/head.html';?>
