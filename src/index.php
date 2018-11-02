@@ -16,7 +16,7 @@
             "Koeder" => array("nav-left", "lures","Koeder"),
             "Schnuere" => array("nav-left", "lines","Schnuere"),
             "Zubehoer" => array("nav-left", "accessories","Zubehoer"),
-            "ueber" => array("nav-left", "about","ueber"),
+            "Ueber" => array("nav-left", "about","ueber"),
             "Anmeldung" => array("nav-right", "login","Anmeldung")
         )
     );
