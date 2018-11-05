@@ -20,7 +20,6 @@
             "Anmeldung" => array("nav-right", "login","Anmeldung")
         )
     );
-    $language = array("de", "en");
     require 'html/head.html';?>
 
 <body>

@@ -32,9 +32,9 @@ function getPageContent($name) {
             break;
     }
 }
-function displayNav($pages, $language) {
+function displayNav($pages) {
     echo "<nav><ul>";
-    $lang=getLanguage($language);
+    $lang=getLanguage($pages);
     $urlbase = $_SERVER['PHP_SELF'] . "?lang=$lang";
     foreach ($pages[$lang] as $page) {
         $url = $urlbase . "&page=$page[1]";
@@ -55,12 +55,12 @@ function displayNav($pages, $language) {
 }
 
 function getLanguage($lang) {
-    foreach ($lang as $l) {
-        if (isset($_GET["lang"]) and $l == $_GET["lang"]) {
-            return $l;
+    foreach ($lang as $key => $l) {
+        if (isset($_GET["lang"])) {
+            return $_GET["lang"];
         }
     }
-    return $lang[0];
+    return $key;
 
 }
 
