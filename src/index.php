@@ -1,5 +1,5 @@
 <?php
-    include 'php\utils\functions.php';
+    include 'php/utils/functions.php';
     $pages = array(
         "en" => array (
             "rods" => array("nav-left", "rods", "Fishing Rods"),
