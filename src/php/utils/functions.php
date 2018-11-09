@@ -3,19 +3,23 @@ function getPageContent($name) {
     switch ((isset($_GET[$name]) ? $_GET[$name] : '')) {
         case 'rods':
             echo "<p> rods </p>";
-            displayProducts();
+            displayProducts('Fishing Rods');
             break;
         case 'reels':
             echo "<p> reels </p>";
+            displayProducts('Reels');
             break;
         case 'lures':
             echo "<p> lures </p>";
+            displayProducts('Lures');
             break;
         case 'lines':
             echo "<p> lines </p>";
+            displayProducts('Fishing Lines');
             break;
         case 'accessories':
             echo "<p> accessories </p>";
+            displayProducts('Accessories');
             break;
         case 'about':
             echo "<p> about </p>";
@@ -28,7 +32,11 @@ function getPageContent($name) {
             displayBuy();
             break;
         default:
-            displayProducts();
+            displayProducts('Fishing Rods');
+            displayProducts('Reels');
+            displayProducts('Lures');
+            displayProducts('Fishing Lines');
+            displayProducts('Accessories');
             break;
     }
 }
@@ -64,9 +72,8 @@ function getLanguage($lang) {
 
 }
 
-function displayProducts() {
-    //echo getcwd();
-    $products = getProducts();
+function displayProducts($type) {
+    $products = getProducts($type);
     echo "<div id='container'>";
     foreach ($products as $key => $product) {
         if (isset($_GET["lang"])) {
@@ -91,16 +98,30 @@ function displayProducts() {
     echo "</div>";
 }
 
-function getProducts()
-{
-    $lines = file("content/products.txt");
+function getProducts($type) {
+    if (isset($_GET["lang"])) {
+        $lang = $_GET["lang"];
+    } else {
+        $lang = "de";
+    }
+    $db = connect();
+    $query = $db->prepare("SELECT product.name, product.id, product.description FROM lang_type_prod 
+        JOIN language ON language.ID=lang_type_prod.id_l 
+        JOIN p_type ON p_type.id=lang_type_prod.id_t 
+        JOIN product ON product.id=lang_type_prod.id_p 
+        WHERE language.short LIKE ? and p_type.name LIKE ?");
+    $query->bind_param('ss', $lang, $type);
+    $query->execute();
+    $result = $query->get_result();
     $products = array();
-    foreach ($lines as $line) {
-        $product = explode(";", $line);
-        $key = $product[0];
-        $value = array($product[1], $product[2]);
+    while($row = mysqli_fetch_row($result)) {
+        $key = $row[0];
+        $value = array($row[1], $row[2]);
         $products[$key] = $value;
     }
+
+
+
     return $products;
 }
 
@@ -119,4 +140,18 @@ function displayBuy() {
     }
 }
 
+function connect() {
+    $servername = "localhost";
+    $username = "admin";
+    $password = "Gugus1234";
+    $database = "aanda";
 
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+}
