@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 09. Nov 2018 um 12:54
+-- Erstellungszeit: 12. Nov 2018 um 19:53
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -45,95 +45,89 @@ INSERT INTO `language` (`id`, `name`, `short`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `lang_type_prod`
---
-
-CREATE TABLE `lang_type_prod` (
-  `id` int(11) NOT NULL,
-  `id_l` int(11) NOT NULL,
-  `id_t` int(11) NOT NULL,
-  `id_p` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Daten für Tabelle `lang_type_prod`
---
-
-INSERT INTO `lang_type_prod` (`id`, `id_l`, `id_t`, `id_p`) VALUES
-(1, 2, 1, 1),
-(2, 1, 1, 2),
-(3, 2, 1, 3),
-(4, 1, 1, 4),
-(5, 2, 2, 5),
-(6, 1, 2, 6),
-(7, 2, 2, 7),
-(8, 1, 2, 8),
-(9, 2, 1, 9),
-(10, 2, 3, 10),
-(11, 2, 4, 11),
-(12, 2, 5, 12),
-(13, 2, 3, 13),
-(14, 2, 4, 14),
-(15, 2, 5, 15),
-(16, 1, 3, 16),
-(17, 1, 4, 17),
-(18, 1, 5, 18),
-(19, 1, 3, 19),
-(20, 1, 4, 20),
-(21, 1, 5, 21),
-(22, 2, 1, 22),
-(23, 2, 2, 23),
-(24, 2, 3, 24),
-(25, 2, 4, 25);
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `product`
 --
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
   `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL
+  `price` float NOT NULL,
+  `p_id` int(11) NOT NULL,
+  `d_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Daten für Tabelle `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `description`) VALUES
-(1, 'Superangel', 'Superangel Beschreibung Superangel Beschreibung Superangel Beschreibung Superangel Beschreibung'),
-(2, 'Superrod', 'Superrod Description Superrod Description Superrod Description Superrod Description'),
-(3, 'Amateurangel', 'Amateurangel Beschreibung Amateurangel Beschreibung Amateurangel Beschreibung Amateurangel Beschreibung'),
-(4, 'Amateurrod', 'Amateurrod Description Amateurrod Description Amateurrod Description Amateurrod Description'),
-(5, 'Superrolle', 'Superrolle Beschreibung Superrolle Beschreibung Superrolle Beschreibung Superrolle Beschreibung'),
-(6, 'Superreel', 'Superreel Description Superreel Description Superreel Description Superreel Description'),
-(7, 'Amateurrolle', 'Amateurrolle Beschreiibung Amateurrolle Beschreiibung Amateurrolle Beschreiibung Amateurrolle Beschreiibung'),
-(8, 'Amateurreel', 'Amateurreel Description Amateurreel Description Amateurreel Description Amateurreel Description'),
-(9, 'Giga Angel', 'Wichtige Giga-Abgel Beschreibung'),
-(10, 'Superkoeder', 'Beschreibung von Superkoeder'),
-(11, 'Superschnur', 'Beschreibung von Superschnur'),
-(12, 'Superzubehoer', 'Beschreibung von Superzubehoer'),
-(13, 'Amateurkoeder', 'Beschreibung von Amateurkoeder'),
-(14, 'Amateurschnur', 'Beschreibung von Amateurschnur'),
-(15, 'Amateurzubehoer', 'Beschreibung von Amateurzubehoer'),
-(16, 'Super Lure', 'Description of Super Lure'),
-(17, 'Super Fishing Line', 'Description of Super Fishing Line'),
-(18, 'Super Accessorie', 'Description of Super Accessories'),
-(19, 'Amateur Lure', 'Description of Amateur Lure'),
-(20, 'Amateur Fishing Line', 'Description of Amateur Fishing Line'),
-(21, 'Amateur Accessorie', 'Description of Amateur Accessorie'),
-(22, 'Mega Angel', 'Beschreibung von Mega Angel'),
-(23, 'Mega Rolle', 'Beschreibung von Mega Rolle'),
-(24, 'Mega Koeder', 'Beschreibung von Mega Koeder'),
-(25, 'Mega Schnur', 'Beschreibung von Mega Schnur'),
-(26, 'Mega Rod', 'Description of Mega Rod'),
-(27, 'Mega Reel', 'Description of Mega Rod'),
-(28, 'Mega Lure', 'Description of Mega Lure'),
-(29, 'Mega Line', 'Description of Mega Line'),
-(30, 'Mega Zubehoer', 'Beschriebung von Mega Zubehoer'),
-(31, 'Mega Accessories', 'Description of Mega Accessories');
+INSERT INTO `product` (`id`, `name`, `price`, `p_id`, `d_id`) VALUES
+(1, 'Superrod', 50, 1, 1),
+(2, 'Superrod', 50, 1, 2),
+(3, 'Amateurrod', 20, 1, 3),
+(4, 'Amateurrod', 20, 1, 4),
+(5, 'Megarod', 200, 1, 5),
+(6, 'Megarod', 200, 1, 6),
+(7, 'Superreel', 25.5, 2, 7),
+(8, 'Superreel', 25.5, 2, 8),
+(9, 'Amateurreel', 15.5, 2, 9),
+(10, 'Amateurreel', 15.5, 2, 10),
+(11, 'Super lure', 3, 3, 11),
+(12, 'Super lure', 3, 3, 12),
+(13, 'Amateur lure', 1.5, 3, 13),
+(14, 'Amateur lure', 1.5, 3, 14),
+(15, 'Superline', 5, 4, 15),
+(16, 'Superline', 5, 4, 16),
+(17, 'Amateur line', 3.5, 4, 17),
+(18, 'Amateur line', 3.5, 4, 18),
+(19, 'Superaccessories', 70, 5, 19),
+(20, 'Superaccessories', 70, 5, 20),
+(21, 'Amateuraccessories', 23.3, 5, 21),
+(22, 'Amateuraccessories', 23.3, 5, 22),
+(23, 'Gigarod', 99.9, 1, 23),
+(24, 'Gigarod', 99.9, 1, 24);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `p_real`
+--
+
+CREATE TABLE `p_real` (
+  `id` int(11) NOT NULL,
+  `l_id` int(11) NOT NULL,
+  `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `p_real`
+--
+
+INSERT INTO `p_real` (`id`, `l_id`, `name`, `description`) VALUES
+(1, 1, 'Superrod', 'Description of Superrod Description of Superrod Description of Superrod'),
+(2, 2, 'Super Angel', 'Beschreibung von Super Angel Beschreibung von Super Angel Beschreibung von Super Angel'),
+(3, 1, 'Amateurrod', 'Description of Amateurrod Description of Amateurrod Description of Amateurrod'),
+(4, 2, 'Amateur Angel', 'Beschreibung von Amateur Angel'),
+(5, 1, 'Megarod', 'Description of Megarod'),
+(6, 2, 'Mega Angel', 'Beschreibung von Mega Angel'),
+(7, 1, 'Superreel', 'Description of Superreel'),
+(8, 2, 'Super Rolle', 'Beschreibung von Amateur Angel'),
+(9, 1, 'Amateurreel', 'Beschreibung von Super Rolle'),
+(10, 2, 'Amateur Rolle', 'Beschreibung von Amateur Rolle'),
+(11, 1, 'Super lure', 'Description of lure'),
+(12, 2, 'Super Koeder', 'Beschreibung von Koeder'),
+(13, 1, 'Amateur lure', 'Description of lure'),
+(14, 2, 'Amateur Koeder', 'Beschreibung von Koeder'),
+(15, 1, 'Superline', 'Description of Superline'),
+(16, 2, 'Super Schnur', 'Beschreibung von Schnur'),
+(17, 1, 'Amateur line', 'Description of Amateurline'),
+(18, 2, 'Amateur Schnur', 'Beschreibung von Schnut'),
+(19, 1, 'Superaccessories', 'Description of super accessories'),
+(20, 2, 'Super Zubehoer', 'Beschreibung von super Zubehoer'),
+(21, 1, 'Amateuraccessories', 'Description of Amatueraccessories'),
+(22, 2, 'Amateur Zubehoer', 'Beschreibung von Amateur Zubehoer'),
+(23, 1, 'Gigarod', 'Description of Gigarod'),
+(24, 2, 'Giga Angel', 'Beschreibung von Giga Angel');
 
 -- --------------------------------------------------------
 
@@ -168,19 +162,19 @@ ALTER TABLE `language`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indizes für die Tabelle `lang_type_prod`
---
-ALTER TABLE `lang_type_prod`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_id_l` (`id_l`),
-  ADD KEY `fk_id_t` (`id_t`),
-  ADD KEY `fk_id_p` (`id_p`);
-
---
 -- Indizes für die Tabelle `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `p_id` (`p_id`),
+  ADD KEY `d_id` (`d_id`);
+
+--
+-- Indizes für die Tabelle `p_real`
+--
+ALTER TABLE `p_real`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `l_id` (`l_id`);
 
 --
 -- Indizes für die Tabelle `p_type`
@@ -193,12 +187,18 @@ ALTER TABLE `p_type`
 --
 
 --
--- Constraints der Tabelle `lang_type_prod`
+-- Constraints der Tabelle `product`
 --
-ALTER TABLE `lang_type_prod`
-  ADD CONSTRAINT `fk_id_l` FOREIGN KEY (`id_l`) REFERENCES `language` (`id`),
-  ADD CONSTRAINT `fk_id_p` FOREIGN KEY (`id_p`) REFERENCES `product` (`id`),
-  ADD CONSTRAINT `fk_id_t` FOREIGN KEY (`id_t`) REFERENCES `p_type` (`id`);
+ALTER TABLE `product`
+  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`p_id`) REFERENCES `p_type` (`id`),
+  ADD CONSTRAINT `product_ibfk_3` FOREIGN KEY (`d_id`) REFERENCES `p_real` (`id`),
+  ADD CONSTRAINT `product_ibfk_4` FOREIGN KEY (`d_id`) REFERENCES `p_real` (`id`);
+
+--
+-- Constraints der Tabelle `p_real`
+--
+ALTER TABLE `p_real`
+  ADD CONSTRAINT `p_real_ibfk_1` FOREIGN KEY (`l_id`) REFERENCES `language` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
