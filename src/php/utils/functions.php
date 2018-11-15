@@ -31,6 +31,10 @@ function getPageContent($name) {
             echo "<p> buy </p>";
             displayBuy();
             break;
+        case 'shipping':
+            echo "<p> shipping </p>";
+            displayShipping();
+            break;
         default:
             displayProducts('Fishing Rods');
             displayProducts('Reels');
@@ -77,11 +81,7 @@ function displayProducts($type) {
     $products = getProducts($type);
     echo "<div id='container'>";
     foreach ($products as $key => $product) {
-        if (isset($_GET["lang"])) {
-            $lang = $_GET["lang"];
-        } else {
-            $lang = "de";
-        }
+        $lang = getLanguage(["en", "de"]);
         $page = "buy";
         $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
         echo "<div id='box'>
@@ -92,7 +92,7 @@ function displayProducts($type) {
                     <input type=\"hidden\" name=\"price\" value=\"$product[0]\">
                     <p>Description: $product[1]</p>
                     <input type=\"hidden\" name=\"description\" value=\"$product[1]\">
-                    <input type=\"submit\" value=\"buy\" name=\"buy\" /> 
+                    <input type=\"submit\" value=\"buy now\" name=\"buy\" /> 
                 </form>
             </div>";
     }
@@ -100,12 +100,8 @@ function displayProducts($type) {
 }
 
 function getProducts($type) {
-    if (isset($_GET["lang"])) {
-        $lang = $_GET["lang"];
-    } else {
-        $lang = "de";
-    }
     $db = connect();
+    $lang = getLanguage(["en", "de"]);
     $query = $db->prepare("SELECT p_real.name, product.price, p_real.description FROM product
         JOIN p_real ON product.d_id=p_real.id
         JOIN language on p_real.l_id=language.id
@@ -127,18 +123,55 @@ function getProducts($type) {
 }
 
 function displayBuy() {
+    $lang = getLanguage(["en", "de"]);
+    $page = "shipping";
+    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
+    $html = "<form method=\"POST\" action=" . $url . ">";
     if ((isset($_POST["name"]))) {
         $name = $_POST['name'];
-        echo "<p> NAME: $name </p>";
+        $html = $html . "<p> NAME: $name </p>";
+        $html = $html . "<input type=\"hidden\" name=\"name\" value=\"$name\">";
     }
     if ((isset($_POST["price"]))) {
-        $ID = $_POST['price'];
-        echo "<p>ID: $ID </p>";
+        $price = $_POST['price'];
+        $html = $html . "<p>Price: $price </p>";
+        $html = $html . "<input type=\"hidden\" name=\"price\" value=\"$price\">";
     }
     if ((isset($_POST["description"]))) {
          $description = $_POST['description'];
-        echo "<p>DESC: $description </p>";
+        $html = $html . "<p>DESC: $description </p>";
+        $html = $html . "<input type=\"hidden\" name=\"description\" value=\"$description\">";
     }
+    $donation = 5.0;
+    $html = $html . "
+            How many would you like? <input name=\"number\" type=\"number\" value=\"1\">
+            <br>
+            <p> Donation of " . $donation . ".- to \"Safe A Fisherman\":</p>
+            <input type=\"hidden\" name=\"don\" value=\"$donation\">
+            <input type=\"radio\" name=\"donation\" value=\"ok\"> Yes, good thing! <br>
+            <input type=\"radio\" name=\"donation\" value=\"nok\" checked=\"checked\"> No Thanks. <br>
+            <input type=\"submit\" value=\"ship that shit\" name=\"ship\" />
+        </form>";
+    echo $html;
+}
+
+function displayShipping(){
+    $lang = getLanguage(["en", "de"]);
+    $page = "confirmation";
+    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
+    $html = "<form method=\"POST\" action=" . $url . ">";
+    $html = $html . "<h3> Purchase Information </h3>";
+    $html = $html . "<p> Product Name: " . $_POST['name'] . "</p>";
+    $html = $html . "<p>Description: " . $_POST['description'] . "</p>";
+    $html = $html . "<p>Price per piece: " . $_POST['price'] . "</p>";
+    $html = $html . "<p>Amount: " . $_POST['number'] . "</p>";
+    if ($_POST['donation'] == "ok") {
+        $html = $html . "<p> Donation: " . $_POST['don'] . ".- </p>";
+        $html = $html . "<p>Thanks for the donation of to \"Safe A Fisherman\" </p>";
+    }
+    $html = $html . "</form>";
+    echo $html;
+
 }
 
 function connect() {
