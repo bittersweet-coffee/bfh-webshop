@@ -68,12 +68,13 @@ function displayNav($pages) {
 }
 
 function getLanguage($lang) {
+    $default = "en";
     foreach ($lang as $key => $l) {
         if (isset($_GET["lang"])) {
             return $_GET["lang"];
         }
     }
-    return $key;
+    return $default;
 
 }
 
@@ -159,17 +160,61 @@ function displayShipping(){
     $lang = getLanguage(["en", "de"]);
     $page = "confirmation";
     $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = "<form method=\"POST\" action=" . $url . ">";
-    $html = $html . "<h3> Purchase Information </h3>";
-    $html = $html . "<p> Product Name: " . $_POST['name'] . "</p>";
-    $html = $html . "<p>Description: " . $_POST['description'] . "</p>";
-    $html = $html . "<p>Price per piece: " . $_POST['price'] . "</p>";
-    $html = $html . "<p>Amount: " . $_POST['number'] . "</p>";
+    $html = "<pre><form method=\"POST\" action=" . $url . "id=\"customerform\">";
+    $html = $html . "<h3>Purchase Information </h3>";
+    $html = $html . "\n     Product Name: " . $_POST['name'];
+    $html = $html . "\n     Description: " . $_POST['description'];
+    $html = $html . "\n     Price per piece: " . $_POST['price'];
+    $html = $html . "\n     Amount: " . $_POST['number'];
     if ($_POST['donation'] == "ok") {
-        $html = $html . "<p> Donation: " . $_POST['don'] . ".- </p>";
-        $html = $html . "<p>Thanks for the donation of to \"Safe A Fisherman\" </p>";
+        $html = $html . "\n     Donation: " . $_POST['don'] . ".-";
+        $html = $html . "\n     Thanks for the donation of to \"Safe A Fisherman\"";
     }
-    $html = $html . "</form>";
+    $html = $html . "<h3> Customer Information </h3>";
+    $html = $html . "
+        First name: 
+        <input type=\"text\" name=\"firstname\"> \n
+        Last name:
+        <input type=\"text\" name=\"lastname\"><br>
+        E-Mail: 
+        <input type=\"email\" name=\"email\"><br>
+        Address: 
+        <input type=\"text\" name=\"address\"><br>
+        Postal code: 
+        <input type=\"text\" name=\"postalCode\"><br>
+        Country:
+        <input type=\"text\" name=\"country\"><br>
+        Payment Method: 
+        <select id=\"billId\" onchange=\"getBillDiv()\">
+            <option value=\"\"></option>
+            <option value=\"card\">Credit card</option>
+            <option value=\"paper\">Paper bill</option>
+        </select>
+        <div class='hidden' id='card'>
+            <h5> Credit Card Information </h5>
+            Name on the Card: 
+            <input type=\"text\" name=\"card_name\">
+            Number: 
+            <input type=\"text\" name=\"card_number\">
+            CVV:
+            <input type=\"text\" name=\"card_cvv\">
+        </div>
+        <div class='hidden' id='paper'>
+            <h5> Billing Address </h5>
+            <input type=\"checkbox\" name=\"sameAddress\" value=\"address\">  Billing Address is the same as Customer Address
+            First name: 
+            <input type=\"text\" name=\"bill_firstname\">
+            Last name:
+            <input type=\"text\" name=\"bill_lastname\">
+            Address: 
+            <input type=\"text\" name=\"bill_address\">
+            Postal code: 
+            <input type=\"text\" name=\"bill_postalCode\">
+        </div>";
+    $html = $html . "</form>
+    Leave Some Comments here:
+    <textarea rows=\"4\" cols=\"50\" name=\"comment\" form=\"customerform\"></textarea>
+    </pre>";
     echo $html;
 
 }
@@ -179,11 +224,7 @@ function connect() {
     $username = "admin";
     $password = "Gugus1234";
     $database = "aanda";
-
-    // Create connection
     $conn = new mysqli($servername, $username, $password, $database);
-
-    // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
