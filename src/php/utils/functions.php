@@ -35,6 +35,11 @@ function getPageContent($name) {
             echo "<p> shipping </p>";
             displayShipping();
             break;
+        case 'confirmation':
+            echo "<p> confirmation </p>";
+            displayConfirmation();
+            break;
+
         default:
             displayProducts('Fishing Rods');
             displayProducts('Reels');
@@ -93,7 +98,7 @@ function displayProducts($type) {
                     <input type=\"hidden\" name=\"price\" value=\"$product[0]\">
                     <p>Description: $product[1]</p>
                     <input type=\"hidden\" name=\"description\" value=\"$product[1]\">
-                    <input type=\"submit\" value=\"buy now\" name=\"buy\" /> 
+                    <input type=\"submit\" value=\"Buy Now\" name=\"buy\" /> 
                 </form>
             </div>";
     }
@@ -151,7 +156,7 @@ function displayBuy() {
             <input type=\"hidden\" name=\"don\" value=\"$donation\">
             <input type=\"radio\" name=\"donation\" value=\"ok\"> Yes, good thing! <br>
             <input type=\"radio\" name=\"donation\" value=\"nok\" checked=\"checked\"> No Thanks. <br>
-            <input type=\"submit\" value=\"ship that shit\" name=\"ship\" />
+            <input type=\"submit\" value=\"Ship\" name=\"ship\" />
         </form>";
     echo $html;
 }
@@ -160,32 +165,40 @@ function displayShipping(){
     $lang = getLanguage(["en", "de"]);
     $page = "confirmation";
     $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = "<pre><form method=\"POST\" action=" . $url . "id=\"customerform\">";
-    $html = $html . "<h3>Purchase Information </h3>";
-    $html = $html . "\n     Product Name: " . $_POST['name'];
-    $html = $html . "\n     Description: " . $_POST['description'];
-    $html = $html . "\n     Price per piece: " . $_POST['price'];
-    $html = $html . "\n     Amount: " . $_POST['number'];
+    $html = "<pre><form method=\"POST\" action=" . $url . ">
+        <h3>Purchase Information </h3>
+            Product Name:       " . $_POST['name'] . "
+            Description:        " . $_POST['description'] . "
+            Price per piece:    " . $_POST['price'] ."
+            Amount:             " . $_POST['number'];
+    $html = $html . "<input type=\"hidden\" name=\"name\" value=\"" .$_POST['name']."\">";
+    $html = $html . "<input type=\"hidden\" name=\"description\" value=\"" .$_POST['description']."\">";
+    $html = $html . "<input type=\"hidden\" name=\"price\" value=\"" .$_POST['price']."\">";
+    $html = $html . "<input type=\"hidden\" name=\"number\" value=\"" .$_POST['number']."\">";
+    $html = $html . "<input type=\"hidden\" name=\"donation\" value=\"nok\">";
     if ($_POST['donation'] == "ok") {
-        $html = $html . "\n     Donation: " . $_POST['don'] . ".-";
-        $html = $html . "\n     Thanks for the donation of to \"Safe A Fisherman\"";
+        $html = $html . "
+            Donation:           " . $_POST['don'] . " 
+            Thanks for the donation to \"Safe A Fisherman\". ";
+        $html = $html . "<input type=\"hidden\" name=\"donation\" value=\"" .$_POST['donation']."\">";
+        $html = $html . "<input type=\"hidden\" name=\"don\" value=\"" .$_POST['don']."\">";
     }
     $html = $html . "<h3> Customer Information </h3>";
     $html = $html . "
         First name: 
-        <input type=\"text\" name=\"firstname\"> \n
+        <input type=\"text\" name=\"firstname\" id=\"customer_firstname\"> \n
         Last name:
-        <input type=\"text\" name=\"lastname\"><br>
+        <input type=\"text\" name=\"lastname\" id=\"customer_lastname\" > \n
         E-Mail: 
-        <input type=\"email\" name=\"email\"><br>
+        <input type=\"email\" name=\"email\"> \n
         Address: 
-        <input type=\"text\" name=\"address\"><br>
+        <input type=\"text\" name=\"address\" id=\"customer_address\"> \n
         Postal code: 
-        <input type=\"text\" name=\"postalCode\"><br>
+        <input type=\"text\" name=\"postalCode\" id=\"customer_postalCode\"> \n
         Country:
-        <input type=\"text\" name=\"country\"><br>
+        <input type=\"text\" name=\"country\" id=\"customer_country\"> \n
         Payment Method: 
-        <select id=\"billId\" onchange=\"getBillDiv()\">
+        <select id=\"billId\" onchange=\"getBillDiv()\" name=\"payment\">
             <option value=\"\"></option>
             <option value=\"card\">Credit card</option>
             <option value=\"paper\">Paper bill</option>
@@ -201,20 +214,81 @@ function displayShipping(){
         </div>
         <div class='hidden' id='paper'>
             <h5> Billing Address </h5>
-            <input type=\"checkbox\" name=\"sameAddress\" value=\"address\">  Billing Address is the same as Customer Address
+            <input id=\"address_checkbox\" type=\"checkbox\" name=\"sameAddress\" onchange=\"getCustomerData()\"> Billing Address is the same as Customer Address
+            If checked, Values get copied.
             First name: 
-            <input type=\"text\" name=\"bill_firstname\">
+            <input type=\"text\" name=\"bill_firstname\" id=\"bill_firstname\">
             Last name:
-            <input type=\"text\" name=\"bill_lastname\">
+            <input type=\"text\" name=\"bill_lastname\" id=\"bill_lastname\">
             Address: 
-            <input type=\"text\" name=\"bill_address\">
+            <input type=\"text\" name=\"bill_address\" id=\"bill_address\">
             Postal code: 
-            <input type=\"text\" name=\"bill_postalCode\">
-        </div>";
-    $html = $html . "</form>
+            <input type=\"text\" name=\"bill_postalCode\" id=\"bill_postalCode\">
+            Country:
+            <input type=\"text\" name=\"bill_country\" id=\"bill_country\">
+        </div>
     Leave Some Comments here:
-    <textarea rows=\"4\" cols=\"50\" name=\"comment\" form=\"customerform\"></textarea>
-    </pre>";
+    <textarea id=\"comment\" rows=\"4\" cols=\"50\" name=\"comment\"></textarea>
+    <input type=\"submit\" value=\"Submit\" name=\"ship\" />";
+    $html = $html . "</form> </pre>";
+    echo $html;
+}
+
+
+function displayConfirmation() {
+    $lang = getLanguage(["en", "de"]);
+    $url = $_SERVER['PHP_SELF'] . "?lang=$lang";
+    $total = 0.0;
+    $price = $_POST['price'];
+    $amout = $_POST['number'];
+    $total = $total + ($price * $amout);
+    $html = "<pre><form method=\"POST\" action=" . $url . ">
+        <h3>Purchase Information </h3>
+            Product Name:       " . $_POST['name'] . "
+            Description:        " . $_POST['description'] . "
+            Price per piece:    " . $_POST['price'] ."
+            Amount:             " . $_POST['number'];
+    if ($_POST['donation'] == "ok") {
+        $html = $html . "
+            Donation:           " . $_POST['don'];
+        $don = $_POST['don'];
+        $total = $total + $don;
+    }
+    $html = $html . "
+            Total:              " . $total;
+    $html = $html . "<h3> Customer Information </h3>";
+    $html = $html . "
+        First name:     ". $_POST['firstname'] . " 
+        Last name:      ". $_POST['lastname'] ."
+        E-Mail:         ". $_POST['email'] ." 
+        Address:        ". $_POST['address'] ."
+        Postal code:    ". $_POST['postalCode'] ."
+        Country:        ". $_POST['country'];
+    $html = $html . "<h3> Payment Information </h3>";
+    if ($_POST['payment'] == "card") {
+        $html = $html . "
+           <h5> Credit Card Information </h5>
+            Name on the Card:   ". $_POST['card_name'] ."
+            Number:             ". $_POST['card_number'] ."
+            CVV:                ". $_POST['card_cvv'];
+    } else if ($_POST['payment'] == "paper") {
+        $html = $html . "
+        <h5> Billing Address </h5>
+            First name:     ". $_POST['bill_firstname'] ."
+            Last name:      ". $_POST['bill_lastname'] ."
+            Address:        ". $_POST['bill_address'] ."
+            Postal code:    ". $_POST['bill_postalCode'] ."
+            Country:        ". $_POST['bill_country'];
+    } else {
+        $html = $html . "<h5> Something went wrong! Please contact Shopadmin! </h5>";
+    }
+    if ($_POST['comment'] != "") {
+        $html = $html . "
+            <h5> Your Comment </h5>
+            \"" . $_POST['comment'] ."\"";
+    }
+    $html = $html . "           <input type=\"submit\" value=\"Confirm\" name=\"confirm\" />";
+    $html = $html . "</form> </pre>";
     echo $html;
 
 }
