@@ -80,3 +80,8 @@ footer {
     width: 190px;
     display: inline-block;
 }
+.hidden {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+}
