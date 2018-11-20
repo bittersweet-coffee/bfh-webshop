@@ -85,3 +85,8 @@ footer {
     max-height: 0;
     overflow: hidden;
 }
+
+#amountAlert {
+    color: red;
+    font-weight: bold;
+}

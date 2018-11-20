@@ -122,9 +122,6 @@ function getProducts($type) {
         $value = array($row[1], $row[2]);
         $products[$key] = $value;
     }
-
-
-
     return $products;
 }
 
@@ -150,8 +147,8 @@ function displayBuy() {
     }
     $donation = 5.0;
     $html = $html . "
-            How many would you like? <input name=\"number\" type=\"number\" value=\"1\">
-            <br>
+            How many would you like? <input id='amount' name=\"number\" type=\"number\" value=\"1\" onchange='checkAmount()'>
+            <p id='amountAlert'></p>
             <p> Donation of " . $donation . ".- to \"Safe A Fisherman\":</p>
             <input type=\"hidden\" name=\"don\" value=\"$donation\">
             <input type=\"radio\" name=\"donation\" value=\"ok\"> Yes, good thing! <br>
@@ -186,19 +183,19 @@ function displayShipping(){
     $html = $html . "<h3> Customer Information </h3>";
     $html = $html . "
         First name: 
-        <input type=\"text\" name=\"firstname\" id=\"customer_firstname\"> \n
+        <input type=\"text\" name=\"firstname\" id=\"customer_firstname\" required> \n
         Last name:
-        <input type=\"text\" name=\"lastname\" id=\"customer_lastname\" > \n
+        <input type=\"text\" name=\"lastname\" id=\"customer_lastname\" required> \n
         E-Mail: 
-        <input type=\"email\" name=\"email\"> \n
+        <input type=\"email\" name=\"email\" required> \n
         Address: 
-        <input type=\"text\" name=\"address\" id=\"customer_address\"> \n
+        <input type=\"text\" name=\"address\" id=\"customer_address\" required> \n
         Postal code: 
-        <input type=\"text\" name=\"postalCode\" id=\"customer_postalCode\"> \n
+        <input type=\"text\" name=\"postalCode\" id=\"customer_postalCode\" required> \n
         Country:
-        <input type=\"text\" name=\"country\" id=\"customer_country\"> \n
+        <input type=\"text\" name=\"country\" id=\"customer_country\" required> \n
         Payment Method: 
-        <select id=\"billId\" onchange=\"getBillDiv()\" name=\"payment\">
+        <select id=\"billId\" name=\"payment\" onchange='getBillDiv()' required>
             <option value=\"\"></option>
             <option value=\"card\">Credit card</option>
             <option value=\"paper\">Paper bill</option>
@@ -206,11 +203,11 @@ function displayShipping(){
         <div class='hidden' id='card'>
             <h5> Credit Card Information </h5>
             Name on the Card: 
-            <input type=\"text\" name=\"card_name\">
+            <input type=\"text\" name=\"card_name\" id=\"card_name\">
             Number: 
-            <input type=\"text\" name=\"card_number\">
+            <input type=\"text\" name=\"card_number\" id=\"card_number\">
             CVV:
-            <input type=\"text\" name=\"card_cvv\">
+            <input type=\"text\" name=\"card_cvv\" id=\"card_cvv\">
         </div>
         <div class='hidden' id='paper'>
             <h5> Billing Address </h5>
@@ -287,7 +284,8 @@ function displayConfirmation() {
             <h5> Your Comment </h5>
             \"" . $_POST['comment'] ."\"";
     }
-    $html = $html . "           <input type=\"submit\" value=\"Confirm\" name=\"confirm\" />";
+    $html = $html . "           
+            <input type=\"submit\" value=\"confirm\" name=\"confirm\"/>";
     $html = $html . "</form> </pre>";
     echo $html;
 
