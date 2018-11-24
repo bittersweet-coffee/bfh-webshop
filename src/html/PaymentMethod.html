@@ -1,0 +1,57 @@
+<div>
+    <label>Payment Method: </label>
+    <select id='billId' name='payment' onchange='getBillDiv()' required>
+        <option value=''></option>
+        <option value='card'>Credit card</option>
+        <option value='paper'>Paper bill</option>
+    </select>
+    <div class='hidden' id='card'>
+        <h5> Credit Card Information </h5>
+        <p id='card_name'>
+            <label>Name on the Card: </label>
+            <input type='text' name='card_name'>
+            <mark>Card Name can't be empty or is not valid.</mark>
+        </p>
+        <p id="card_number">
+            <label>Number: </label>
+            <input type="text" name="card_number">
+            <mark>Card Number can't be empty or is not valid.</mark>
+        </p>
+        <p id="card_cvv">
+            <label>CVV: </label>
+            <input type="text" name="card_cvv">
+            <mark>CVV can't be empty or is not valid.</mark>
+        </p>
+    </div>
+    <div class='hidden' id='paper'>
+        <h5> Billing Address </h5>
+        <p id="address_checkbox"><input type="checkbox" name="sameAddress" onchange="getCustomerData()">
+            <label>Billing Address is the same as Customer Address</label>
+            <label>If checked, Values get copied.</label></p>
+        <p id="bill_firstname">
+            <label>First name: </label>
+            <input type="text" name="bill_firstname">
+            <mark>Firstname can't be empty or is not valid.</mark>
+        </p>
+        <p id="bill_lastname">
+            <label>Last name: </label>
+            <input type="text" name="bill_lastname">
+            <mark>Lastname can't be empty or is not valid.</mark>
+        </p>
+        <p id="bill_address">
+            <label>Address: </label>
+            <input type="text" name="bill_address">
+            <mark>Address can't be empty or is not valid.</mark>
+        </p>
+        <p id="bill_postalCode">
+            <label>Postal code: </label>
+            <input type="text" name="bill_postalCode">
+            <mark>Postal code can't be empty or is not valid.</mark>
+        </p>
+        <p id="bill_country">
+            <label>Country: </label>
+            <input type="text" name="bill_country">
+            <mark>Country can't be empty or is not valid.</mark>
+        </p>
+    </div>
+</div>
