@@ -1,5 +1,16 @@
 <?php
+
+
     include 'php/utils/functions.php';
+    include 'php/database/database.php';
+    include 'php/products/Product.php';
+    include 'php/utils/Form.php';
+    include 'php/customer/Customer.php';
+    //include 'php/mail/mail.php';
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
     $pages = array(
         "en" => array (
             "rods" => array("nav-left", "rods", "Fishing Rods"),
@@ -25,7 +36,7 @@
 <body>
     <header>
     </header>
-    <?php displayNav($pages, $language); ?>
+    <?php displayNav($pages); ?>
     <div id="content">
         <img src="img/logo.png" alt="Logo" id="logo">
         <?php echo getPageContent("page"); ?>
