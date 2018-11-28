@@ -28,7 +28,7 @@ function getPageContent($content) {
             echo "<p> about </p>";
             break;
         case 'login':
-            echo "<p> login </p>";
+            displayLogin();
             break;
         case 'buy':
             displayBuy();
@@ -36,6 +36,13 @@ function getPageContent($content) {
         case 'shipping':
             displayShipping();
             break;
+        case 'register':
+            displayRegister();
+            break;
+        case 'sign_in':
+            displaySignIn();
+            break;
+
         case 'confirmation':
             displayConfirmation();
             break;
@@ -104,4 +111,34 @@ function displayShipping(){
 function displayConfirmation() {
     $form = new ConfirmationForm(getLanguage(["en", "de"]), "");
     echo $form->render();
+}
+
+function displayLogin() {
+    $html = "<h1> Create Account or Login </h1>";
+    $lang = getLanguage(["en", "de"]);
+    $page = "register";
+    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
+    $html = $html . "<a href='$url' class='button'>Register</a>";
+    $page = "sign_in";
+    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
+    $html = $html . "<a href='$url' class='button'>Sign In</a>";
+    echo $html;
+}
+
+function displayRegister() {
+    $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
+    $registerForm->setUserInputTag("text", "Username");
+    $registerForm->setUserInputTag("password", "Password");
+    $registerForm->setUserInputTag("password", "Retype");
+    $registerForm->setUserInputTag("text", "Firstname");
+    $registerForm->setUserInputTag("text", "Lastname");
+    $registerForm->setUserInputTag("text", "Address");
+    $registerForm->setUserInputTag("text", "PostalCode");
+    $registerForm->setUserInputTag("email", "Email");
+    $registerForm->setUserInputTag("text", "Country");
+    echo $registerForm->render();
+}
+
+function displaySignIn() {
+
 }

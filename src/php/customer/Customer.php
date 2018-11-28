@@ -36,5 +36,18 @@ class Customer {
         return $context;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
 }

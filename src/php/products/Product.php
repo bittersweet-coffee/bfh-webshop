@@ -37,6 +37,11 @@ class Product
         return $html;
     }
 
+    public function renderMailContent() {
+        $context = "
+        ";
+    }
+
     public function getName()
     {
         return $this->name;
