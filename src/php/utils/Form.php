@@ -4,8 +4,10 @@ class Form {
     private $html;
     private $method = "POST";
     private $url;
+    private $lang;
 
     public function __construct(string $language,string $page="") {
+        $this->lang=$language;
         if ($page == "") {
             $this->url = $_SERVER['PHP_SELF'] . "?lang=$language";
         } else {
@@ -23,7 +25,6 @@ class Form {
 
     public function setHtml($html): void
     {
-        //$this->html = "<form method='$this->method' action='$this->url'>";
         $this->html = $html;
     }
 
@@ -35,6 +36,35 @@ class Form {
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    public function getCancleButton($reason) {
+        $url = $_SERVER['PHP_SELF'] . "?lang=$this->lang";
+        $button = "<input
+                type='submit'
+                value='Cancle' 
+                formnovalidate='true'
+                onclick='return cancleForm(this)' />" ;
+        return $button;
+    }
+
+    public function setInputTag($type, $name) {
+        $cookie = $this->checkCookie($name);
+        $inputTag = "
+            <p id='$name'>
+                <label>$name: </label>
+                <input type='$type' name='$name' value='$cookie' required>
+                <mark>'$name' can't be empty or is not valid.</mark>
+            </p>
+            ";
+        return $inputTag;
+    }
+
+    private function checkCookie($id) {
+        if (isset($_COOKIE[$id])) {
+            return $_COOKIE[$id];
+        }
+        return '';
     }
 }
 
@@ -105,13 +135,7 @@ class ShippingForm extends Form {
     }
 
     public function setCustomerInputTag($type, $name) {
-        $this->customerInputTag = $this->customerInputTag . "
-            <p id='customer_$name'>
-                <label>$name: </label>
-                <input type='$type' name='$name' required>
-                <mark>'$name' can't be empty or is not valid.</mark>
-            </p>
-            ";
+        $this->customerInputTag = $this->customerInputTag . parent::setInputTag($type,$name);
     }
 
 }
@@ -131,10 +155,11 @@ class ConfirmationForm extends Form {
             $_SESSION['Firstname'],
             $_SESSION['Lastname'],
             $_SESSION['Email'],
+            $_SESSION['PostalCode'],
             $_SESSION['Address'],
-            $_SESSION['Country'],
-            $_SESSION['PostalCode']
+            $_SESSION['Country']
         );
+        $_SESSION['customer'] = $this->customer;
         if ($_SESSION['payment'] == "card") {
             $this->productPayment = ProductPayment::cardPayment(
                 $_SESSION['payment'],
@@ -156,7 +181,7 @@ class ConfirmationForm extends Form {
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
-        parent::setHtml("<form method='$method' action='$url' onsubmit='return confirmForm(this)'>");
+        parent::setHtml("<form method='$method' action='$url'>");
 
     }
 
@@ -167,21 +192,42 @@ class ConfirmationForm extends Form {
         parent::appendContext($this->customer->render());
         parent::appendContext($this->paymentInformationHeader);
         parent::appendContext($this->productPayment->render());
-        if (isset($_SESSION['comment'])) {
+        if (isset($_SESSION['comment']) && $_SESSION['comment'] != "") {
             $comment = "<h5> Your Comment</h5>";
             $comment = $comment . "<p>" . $_SESSION['comment'] . "</p>";
             parent::appendContext($comment);
         }
-        $submit = "<input type='submit' value='Confirm' name='confirm'/>";
+        $submit = "<input type='submit' value='Confirm' name='confirm' onclick='return confirmForm(this)'/>";
         $url = parent::getUrl();
-        $cancle = "<button 
-                type='cancel' 
-                onclick=\"javascript:window.location = '$url'
-                onclick= 'return confirm(\"You are about to cancel your purchase. Continue?\")'> 
-                Cancel</button >";
         parent::appendContext($submit);
-        parent::appendContext($cancle);
+        parent::appendContext(parent::getCancleButton("Purchase"));
         return parent::render();
     }
+}
 
+class RegisterForm extends Form {
+
+    private $userInputTag ="";
+    private $signInHeader="<h2> Registration </h2>";
+
+    public function __construct(string $language, string $page = "")
+    {
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function setUserInputTag($type, $name) {
+        $this->userInputTag = $this->userInputTag . parent::setInputTag($type,$name);
+    }
+
+    public function render() {
+        parent::appendContext($this->signInHeader);
+        parent::appendContext($this->userInputTag);
+        $submit = "<input type='submit' value='Register' name='register'/>";
+        parent::appendContext($submit);
+        parent::appendContext(parent::getCancleButton("Registration"));
+        return parent::render();
+    }
 }

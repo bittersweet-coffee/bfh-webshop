@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Nov 2018 um 19:53
+-- Erstellungszeit: 26. Nov 2018 um 18:31
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -25,6 +25,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `contact_users`
+--
+
+CREATE TABLE `contact_users` (
+  `id` int(11) NOT NULL,
+  `firstname` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postalcode` int(4) NOT NULL,
+  `email` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `contact_users`
+--
+
+INSERT INTO `contact_users` (`id`, `firstname`, `lastname`, `address`, `postalcode`, `email`, `country`) VALUES
+(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'jan.henzi@hotmail.com', 'CH'),
+(2, 'TestUserFirstname', 'TestUserLastName', 'TestUserStrasse 12', 1234, 'testUser@mail.com', 'GB');
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `language`
 --
 
@@ -41,6 +65,50 @@ CREATE TABLE `language` (
 INSERT INTO `language` (`id`, `name`, `short`) VALUES
 (1, 'English', 'en'),
 (2, 'Deutsch', 'de');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `payment_card`
+--
+
+CREATE TABLE `payment_card` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `number` bigint(16) NOT NULL,
+  `cvv` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `payment_card`
+--
+
+INSERT INTO `payment_card` (`id`, `name`, `number`, `cvv`) VALUES
+(1, 'JAN HENZI', 1234123412341234, 123),
+(2, 'TEST USER', 4321432143214321, 321);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `payment_paper`
+--
+
+CREATE TABLE `payment_paper` (
+  `id` int(11) NOT NULL,
+  `firstname` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postalcode` int(4) NOT NULL,
+  `country` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `payment_paper`
+--
+
+INSERT INTO `payment_paper` (`id`, `firstname`, `lastname`, `address`, `postalcode`, `country`) VALUES
+(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'CH'),
+(2, 'TestUserFirstname', 'TestUserLastName', 'TestUserStrasse 12', 1234, 'GB');
 
 -- --------------------------------------------------------
 
@@ -151,14 +219,73 @@ INSERT INTO `p_type` (`id`, `name`) VALUES
 (4, 'Fishing Lines'),
 (5, 'Accessories');
 
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `shopusers`
+--
+
+CREATE TABLE `shopusers` (
+  `id` int(11) NOT NULL,
+  `username` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `shopusers`
+--
+
+INSERT INTO `shopusers` (`id`, `username`, `password`, `contact`) VALUES
+(1, 'henzij', 'welcome1', 1),
+(2, 'testuser', 'welcome1', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `users_card_paper`
+--
+
+CREATE TABLE `users_card_paper` (
+  `id_u` int(11) NOT NULL,
+  `id_c` int(11) NOT NULL,
+  `id_p` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Daten für Tabelle `users_card_paper`
+--
+
+INSERT INTO `users_card_paper` (`id_u`, `id_c`, `id_p`) VALUES
+(1, 1, 1),
+(2, 2, 2);
+
 --
 -- Indizes der exportierten Tabellen
 --
 
 --
+-- Indizes für die Tabelle `contact_users`
+--
+ALTER TABLE `contact_users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indizes für die Tabelle `language`
 --
 ALTER TABLE `language`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `payment_card`
+--
+ALTER TABLE `payment_card`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `payment_paper`
+--
+ALTER TABLE `payment_paper`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -183,6 +310,21 @@ ALTER TABLE `p_type`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indizes für die Tabelle `shopusers`
+--
+ALTER TABLE `shopusers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `contact` (`contact`);
+
+--
+-- Indizes für die Tabelle `users_card_paper`
+--
+ALTER TABLE `users_card_paper`
+  ADD KEY `id_u` (`id_u`),
+  ADD KEY `id_c` (`id_c`),
+  ADD KEY `id_p` (`id_p`);
+
+--
 -- Constraints der exportierten Tabellen
 --
 
@@ -199,6 +341,20 @@ ALTER TABLE `product`
 --
 ALTER TABLE `p_real`
   ADD CONSTRAINT `p_real_ibfk_1` FOREIGN KEY (`l_id`) REFERENCES `language` (`id`);
+
+--
+-- Constraints der Tabelle `shopusers`
+--
+ALTER TABLE `shopusers`
+  ADD CONSTRAINT `shopusers_ibfk_1` FOREIGN KEY (`contact`) REFERENCES `contact_users` (`id`);
+
+--
+-- Constraints der Tabelle `users_card_paper`
+--
+ALTER TABLE `users_card_paper`
+  ADD CONSTRAINT `users_card_paper_ibfk_1` FOREIGN KEY (`id_u`) REFERENCES `contact_users` (`id`),
+  ADD CONSTRAINT `users_card_paper_ibfk_2` FOREIGN KEY (`id_c`) REFERENCES `payment_card` (`id`),
+  ADD CONSTRAINT `users_card_paper_ibfk_3` FOREIGN KEY (`id_p`) REFERENCES `payment_paper` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

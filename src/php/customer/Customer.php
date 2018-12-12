@@ -11,14 +11,14 @@ class Customer {
     public function __construct(string $firstname,
                                 string $lastname,
                                 string $address,
-                                string $postalCode,
+                                int $postalCode,
                                 string $email,
                                 string $country)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->address = $address;
-        $this->postalCode = $postalCode;
+        $this->postalCode = intval($postalCode);
         $this->email = $email;
         $this->country = $country;
     }
@@ -36,5 +36,33 @@ class Customer {
         return $context;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    public function getPostalCode(): int
+    {
+        return (int) $this->postalCode;
+    }
 }
