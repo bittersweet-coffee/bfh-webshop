@@ -42,7 +42,6 @@ function getPageContent($content) {
         case 'sign_in':
             displaySignIn();
             break;
-
         case 'confirmation':
             displayConfirmation();
             break;
@@ -83,7 +82,7 @@ function displayNav($pages) {
 function getLanguage($lang) {
     $default = "en";
     foreach ($lang as $key => $l) {
-        if (isset($_GET["lang"])) {
+        if (isset($_GET["lang"]) && ($_GET["lang"]) == $key) {
             return $_GET["lang"];
         }
     }
@@ -114,6 +113,7 @@ function displayConfirmation() {
 }
 
 function displayLogin() {
+    include 'php/utils/registration.php';
     $html = "<h1> Create Account or Login </h1>";
     $lang = getLanguage(["en", "de"]);
     $page = "register";
@@ -138,7 +138,5 @@ function displayRegister() {
     $registerForm->setUserInputTag("text", "Country");
     echo $registerForm->render();
 }
-
 function displaySignIn() {
-
 }

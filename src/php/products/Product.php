@@ -9,6 +9,12 @@ class Product
     private $donation;
     private $totoal = 0;
 
+    private CONST productQuery = "SELECT p_real.name, product.price, p_real.description FROM product
+        JOIN p_real ON product.d_id=p_real.id
+        JOIN language on p_real.l_id=language.id
+        JOIN p_type on product.p_id=p_type.id
+        WHERE language.short LIKE ? and p_type.name LIKE ?";
+
     public function __construct($name, $price, $description)
     {
         $this->name = $name;
@@ -78,19 +84,27 @@ class Product
         }
         return $this->totoal;
     }
+
+    public static function getProductsFromDatabase($type, $language) {
+        $query = Database::doQueryPrepare(self::productQuery);
+        $query->bind_param('ss', $language, $type);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
+    }
+
+
 }
 
 class ProductHandler {
-    private $entity;
     private $products;
 
     public function __construct() {
         $this->products = array();
-        $this->entity = new Entity();
     }
 
     public function setupProducts($type, $language) {
-        $products = $this->entity->getProductsFromDatabase($type,$language);
+        $products = Product::getProductsFromDatabase($type,$language);
         while($row = mysqli_fetch_row($products)) {
             $product = new Product($row[0], $row[1], $row[2]);
             $this->addProduct($product);
@@ -135,9 +149,6 @@ class ProductPayment {
     private $bill_address;
     private $bill_postalCode;
     private $bill_country;
-
-
-
 
     public function __construct(string $paymentMethod)
     {

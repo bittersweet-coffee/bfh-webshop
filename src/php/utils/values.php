@@ -4,6 +4,38 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+if (isset($_POST["Firstname"])) {
+    $_SESSION['Firstname'] = $_POST['Firstname'];
+    setcookie('Firstname', $_POST['Firstname']);
+}
+
+if (isset($_POST["Lastname"])) {
+    $_SESSION['Lastname'] = $_POST['Lastname'];
+    setcookie('Lastname', $_POST['Lastname']);
+}
+
+if (isset($_POST["Email"])) {
+    $_SESSION['Email'] = $_POST['Email'];
+    setcookie('Email', $_POST['Email']);
+}
+
+if (isset($_POST["Address"])) {
+    $_SESSION['Address'] = $_POST['Address'];
+    setcookie('Address', $_POST['Address']);
+
+}
+
+if (isset($_POST["Country"])) {
+    $_SESSION['Country'] = $_POST['Country'];
+    setcookie('Country', $_POST['Country']);
+}
+
+if (isset($_POST["PostalCode"])) {
+    $var = intval($_POST['PostalCode']);
+    $_SESSION['PostalCode'] = $var;
+    setcookie('PostalCode', $var);
+}
+
 if (isset($_GET['product'])) {
     $_SESSION['product'] = $_SESSION[$_GET['product']];
 }
@@ -14,30 +46,6 @@ if (isset($_POST["donation"])) {
 
 if (isset($_POST["number"])) {
     $_SESSION['amount'] = $_POST['number'];
-}
-
-if (isset($_POST["Firstname"])) {
-    $_SESSION['Firstname'] = $_POST['Firstname'];
-}
-
-if (isset($_POST["Lastname"])) {
-    $_SESSION['Lastname'] = $_POST['Lastname'];
-}
-
-if (isset($_POST["Email"])) {
-    $_SESSION['Email'] = $_POST['Email'];
-}
-
-if (isset($_POST["Address"])) {
-    $_SESSION['Address'] = $_POST['Address'];
-}
-
-if (isset($_POST["Country"])) {
-    $_SESSION['Country'] = $_POST['Country'];
-}
-
-if (isset($_POST["PostalCode"])) {
-    $_SESSION['PostalCode'] = $_POST['PostalCode'];
 }
 
 if (isset($_POST["payment"])) {

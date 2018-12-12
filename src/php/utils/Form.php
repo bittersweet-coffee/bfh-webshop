@@ -47,6 +47,25 @@ class Form {
                 onclick='return cancleForm(this)' />" ;
         return $button;
     }
+
+    public function setInputTag($type, $name) {
+        $cookie = $this->checkCookie($name);
+        $inputTag = "
+            <p id='$name'>
+                <label>$name: </label>
+                <input type='$type' name='$name' value='$cookie' required>
+                <mark>'$name' can't be empty or is not valid.</mark>
+            </p>
+            ";
+        return $inputTag;
+    }
+
+    private function checkCookie($id) {
+        if (isset($_COOKIE[$id])) {
+            return $_COOKIE[$id];
+        }
+        return '';
+    }
 }
 
 class BuyForm extends Form {
@@ -116,13 +135,7 @@ class ShippingForm extends Form {
     }
 
     public function setCustomerInputTag($type, $name) {
-        $this->customerInputTag = $this->customerInputTag . "
-            <p id='customer_$name'>
-                <label>$name: </label>
-                <input type='$type' name='$name' required>
-                <mark>'$name' can't be empty or is not valid.</mark>
-            </p>
-            ";
+        $this->customerInputTag = $this->customerInputTag . parent::setInputTag($type,$name);
     }
 
 }
@@ -142,9 +155,9 @@ class ConfirmationForm extends Form {
             $_SESSION['Firstname'],
             $_SESSION['Lastname'],
             $_SESSION['Email'],
+            $_SESSION['PostalCode'],
             $_SESSION['Address'],
-            $_SESSION['Country'],
-            $_SESSION['PostalCode']
+            $_SESSION['Country']
         );
         $_SESSION['customer'] = $this->customer;
         if ($_SESSION['payment'] == "card") {
@@ -195,7 +208,7 @@ class ConfirmationForm extends Form {
 class RegisterForm extends Form {
 
     private $userInputTag ="";
-    private $signInHeader="<h2> Sign In </h2>";
+    private $signInHeader="<h2> Registration </h2>";
 
     public function __construct(string $language, string $page = "")
     {
@@ -206,13 +219,7 @@ class RegisterForm extends Form {
     }
 
     public function setUserInputTag($type, $name) {
-        $this->userInputTag = $this->userInputTag . "
-            <p id='user_$name'>
-                <label>$name: </label>
-                <input type='$type' name='$name' required>
-                <mark>'$name' can't be empty or is not valid.</mark>
-            </p>
-            ";
+        $this->userInputTag = $this->userInputTag . parent::setInputTag($type,$name);
     }
 
     public function render() {
