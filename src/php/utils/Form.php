@@ -231,3 +231,28 @@ class RegisterForm extends Form {
         return parent::render();
     }
 }
+
+class LoginForm extends Form {
+    private $userInputTag ="";
+    private $signInHeader="<h2> Login </h2>";
+
+    public function __construct(string $language, string $page = "") {
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function setUserInputTag($type, $name) {
+        $this->userInputTag = $this->userInputTag . parent::setInputTag($type,$name);
+    }
+
+    public function render() {
+        parent::appendContext($this->signInHeader);
+        parent::appendContext($this->userInputTag);
+        $submit = "<input type='submit' value='Login' name='Login'/>";
+        parent::appendContext($submit);
+        parent::appendContext(parent::getCancleButton("Login"));
+        return parent::render();
+    }
+}

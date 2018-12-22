@@ -7,6 +7,8 @@
     include 'php/utils/Form.php';
     include 'php/customer/Customer.php';
     include 'php/user/user.php';
+
+
     //include 'php/mail/mail.php';
     if (session_status() == PHP_SESSION_NONE) {
         session_start();

@@ -1,6 +1,7 @@
 <?php
 
 function getPageContent($content) {
+    include 'php/utils/login.php';
     include 'php/utils/values.php';
     $productHandler = new ProductHandler();
     switch ((isset($_GET[$content]) ? $_GET[$content] : '')) {
@@ -106,23 +107,17 @@ function displayShipping(){
     echo $form->render();
 }
 
-
 function displayConfirmation() {
     $form = new ConfirmationForm(getLanguage(["en", "de"]), "");
     echo $form->render();
 }
 
 function displayLogin() {
+    echo "<h1> Create Account or Login </h1>";
+    if (isset($_GET["reason"]) && $_GET["reason"] == "loginFailed") {
+        echo "<h3> Wrong Password or wrong Username</h3>";
+    }
     include 'php/utils/registration.php';
-    $html = "<h1> Create Account or Login </h1>";
-    $lang = getLanguage(["en", "de"]);
-    $page = "register";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = $html . "<a href='$url' class='button'>Register</a>";
-    $page = "sign_in";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = $html . "<a href='$url' class='button'>Sign In</a>";
-    echo $html;
 }
 
 function displayRegister() {
@@ -138,5 +133,19 @@ function displayRegister() {
     $registerForm->setUserInputTag("text", "Country");
     echo $registerForm->render();
 }
+
 function displaySignIn() {
+    $login = new LoginForm(getLanguage(["en", "de"]), "");
+    $login->setUserInputTag("text", "Username");
+    $login->setUserInputTag("password", "Password");
+    echo $login->render();
+}
+
+function checkUsername($queryResult, $username) {
+    while($row = mysqli_fetch_row($queryResult)) {
+        if ($row[0] == $username){
+            return false;
+        }
+    }
+    return true;
 }
