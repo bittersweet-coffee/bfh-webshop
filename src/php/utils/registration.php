@@ -20,7 +20,7 @@ function doRegistration() {
         $_SESSION['PostalCode'],
         $_SESSION["Email"],
         $_SESSION["Country"]);
-    $_SESSION['customer'] = $customer;
+    //$_SESSION['customer'] = $customer;
     $user = new User($customer, $_POST["Username"], $_POST["Password"]);
     $user->storeUser();
 }

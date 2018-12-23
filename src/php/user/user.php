@@ -86,4 +86,26 @@ class User {
         $query->bind_param('issi',$idShopUser,$username, $password, $idContUser);
         $query->execute();
     }
+
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function toArray() {
+        $customer = $this->getCustomer();
+        $user = array(
+            "username" => $this->getUsername(),
+            "firstname" => $customer->getFirstname(),
+            "lastname" => $customer->getLastname(),
+            "address" => $customer->getAddress(),
+            "postalCode" => $customer->getPostalCode(),
+            "country" => $customer->getCountry());
+        return $user;
+    }
 }

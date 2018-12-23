@@ -1,6 +1,9 @@
 <?php
 
 function getPageContent($content) {
+    $t = new Translator(getLanguage(["en", "de"]));
+    // Call Translator like this:
+    //echo $t->t("Test");
     include 'php/utils/login.php';
     include 'php/utils/values.php';
     $productHandler = new ProductHandler();

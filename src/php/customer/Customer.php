@@ -1,12 +1,17 @@
 <?php
 
-class Customer {
+class Customer
+{
     private $firstname;
     private $lastname;
     private $address;
     private $postalCode;
     private $email;
     private $country;
+
+    private CONST getCustomerQuery = "SELECT * FROM shopusers
+              JOIN contact_users ON shopusers.contact = contact_users.id
+              WHERE shopusers.username LIKE ?";
 
     public function __construct(string $firstname,
                                 string $lastname,
@@ -23,7 +28,8 @@ class Customer {
         $this->country = $country;
     }
 
-    public function render() {
+    public function render()
+    {
         $context =
             "<div id='customer_container'>
                 <p><label>Firstname: </label> $this->firstname</p>
@@ -63,6 +69,18 @@ class Customer {
 
     public function getPostalCode(): int
     {
-        return (int) $this->postalCode;
+        return (int)$this->postalCode;
+    }
+
+    public static function getCustomer(string $usr) {
+        $query = Database::doQueryPrepare(self::getCustomerQuery);
+        $query->bind_param('s', $usr);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result || $result->num_rows !== 1) {
+            return false;
+        }
+        $row = $result->fetch_assoc();
+        return $row;
     }
 }

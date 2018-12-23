@@ -13,6 +13,7 @@
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
+    require 'php/utils/Translator.php';
 
     $pages = array(
         "en" => array (
