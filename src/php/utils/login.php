@@ -18,6 +18,8 @@ function checkPassword() {
 
 function getLoginFailedUrl() {
     $loc = "Location: ";
+    //$host unused - need for tests.
+    //$host = $_SERVER['HTTP_HOST'];
     $uri = $_SERVER['REQUEST_URI'];
     $page = "&page=login";
     $reason = "&reason=loginFailed";
