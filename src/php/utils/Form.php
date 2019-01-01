@@ -30,6 +30,11 @@ class Form {
 
     public function getUrl(): string
     {
+        foreach($_GET as $key => $value){
+            if ($key != "lang" and $key != "page") {
+                $this->url = $this->url . "&" . $key . "=" . $value;
+            }
+        }
         return $this->url;
     }
 
@@ -70,7 +75,7 @@ class Form {
 
 class BuyForm extends Form {
 
-    private $header = "<h2>Product Information</h2>";
+    private $headerText = "Product Information";
 
     public function __construct(string $language, string $page = "") {
         parent::__construct($language, $page);
@@ -81,19 +86,29 @@ class BuyForm extends Form {
     }
 
     public function render() {
-        $product = $_SESSION['product'];
-        parent::appendContext("
-             <p>
-                <label>How many would you like?</label>
-                <input id='amount' name='number' type='number' value='1' onchange='checkAmount()'>
-                <p id='amountAlert'></p>
-             </p>
-             <p> Donation of 5.- to \"Safe A Fisherman\":</p>
-             <input type='radio' name='donation' value=5> Yes, good thing!
-             <input type='radio' name='donation' value=0 checked='checked'> No Thanks. <br>
-             <input type='submit' value='Ship' name='Ship'/>
-            ");
-        $content = $this->header . $product->render() . parent::render();
+        $product = getProduct();
+        $header = "<h2>" . translate($this->headerText) . "</h2>";
+        $labelText = translate("How many would you like?");
+        $label = "<label>" . $labelText . "</label>";
+        $ptext = translate("Donation of 5.- to \"Save a Fisherman\"");
+        $p = "<p>" . $ptext . "</p>";
+        $inputTextYes = translate("Yes, good thing!");
+        $inputTextNo = translate("No Thanks.");
+        $input1 = "<input id='amount' name='amount' type='number' value='1' onchange='checkAmount()'>";
+        $input2 = "<input type='radio' name='donation' value=5> " . $inputTextYes;
+        $input3 = "<input type='radio' name='donation' value=0 checked='checked'> " . $inputTextNo;
+        $submit = "<input type='submit' name='buy'/>";
+
+        $content = "<p>". $label
+                        . $input1
+                        . "<p id='amountAlert'></p>"
+                        . "</p>"
+                        . $input2
+                        . $input3 . "<br/>"
+                        . $submit;
+
+        parent::appendContext($content);
+        $content = $header . $product->render() . parent::render();
         return $content;
     }
 

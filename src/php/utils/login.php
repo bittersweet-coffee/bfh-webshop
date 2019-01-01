@@ -32,7 +32,7 @@ function getLoginFailedUrl() {
 function performLoggin(string $usr, string $pwd) {
     $customer = buildCustomer($usr);
     $user = new User($customer, $usr, $pwd);
-    $_SESSION['loggin'] = true;
+    $_SESSION['login'] = true;
     $_SESSION['user'] = $user->toArray();
 }
 
