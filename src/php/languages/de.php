@@ -46,4 +46,29 @@ $messages['Cardnumber'] = 'Kartennummer';
 
 $messages['Your Comment'] = 'Dein Kommentar';
 $messages['Payment Information'] = 'Zahlungsinformationen';
+$messages['Create Account or Login'] = 'Konto erstellen oder Login';
+$messages['Wrong Password or wrong Username'] = 'Falsches Passwort oder falscher Benutzername';
+$messages['This Username is already taken...'] = 'Dieser Benutzername ist bereits vergeben...';
+$messages['Successfully created user'] = 'Erfolgreich Benutzer angelet.';
+$messages['Registration'] = 'Registrierung';
+
+$messages['Username'] = 'Benutzername';
+$messages['Password'] = 'Passwort';
+$messages['Retype'] = 'Wiederholung';
+$messages['Buy'] = 'Kaufen';
+$messages['Ship'] = 'Versand';
+$messages['Confirm'] = 'Bestätigen';
+$messages['Cancle'] = 'Abbrechen';
+$messages['Buy Now'] = 'Sofort kaufen';
+$messages['Sign in'] = 'Einloggen';
+$messages['Register'] = 'Registrieren';
+$messages['Userarea'] = 'Benutzerbereich';
+$messages['Welcome'] = 'Willkommen';
+$messages['Logout'] = 'Ausloggen';
+$messages['An error has occurred'] = 'Ein Fehler ist aufgetreten';
+$messages['The reason seems to be this'] = 'Der Grund scheint folgendes zu sein';
+$messages['Try it again. If it occurs again, contact the administrator'] = 'Versuchen Sie es nochmals. Wenn es wieder auftritt kontaktieren Sie den Administrator';
+$messages['Do you really want to log out?'] = 'Möchtetst du wirklich ausloggen?';
+
+
 

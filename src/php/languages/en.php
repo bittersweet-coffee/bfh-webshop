@@ -46,5 +46,22 @@ $messages['Cardnumber'] = 'Cardnumber';
 
 $messages['Your Comment'] = 'Your Comment';
 $messages['Payment Information'] = 'Payment Information';
-
-
+$messages['Create Account or Login'] = 'Create Account or Login';
+$messages['Wrong Password or wrong Username'] = 'Wrong Password or wrong Username';
+$messages['This Username is already taken...'] = 'This Username is already taken...';
+$messages['Successfully created user'] = 'Successfully created user';
+$messages['Registration'] = 'Registration';
+$messages['Buy'] = 'Buy';
+$messages['Ship'] = 'Versand';
+$messages['Confirm'] = 'Confirm';
+$messages['Cancle'] = 'Cancle';
+$messages['Buy Now'] = 'Buy Now';
+$messages['Sign in'] = 'Einloggen';
+$messages['Register'] = 'Register';
+$messages['Userarea'] = 'Userarea';
+$messages['Welcome'] = 'Welcome';
+$messages['Logout'] = 'Logout';
+$messages['An error has occurred'] = 'An error has occurred';
+$messages['The reason seems to be this'] = 'The reason seems to be this';
+$messages['Try it again. If it occurs again, contact the administrator'] = 'Try it again. If it occurs again, contact the administrator';
+$messages['Do you really want to log out?'] = 'Do you really want to log out?';

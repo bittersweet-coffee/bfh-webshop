@@ -29,7 +29,14 @@ class Nav {
         foreach ($this->elements as $item) {
             $class = $item[0];
             $url = add_param($urlBase, "page", $item[1]);
-            $content = $this->t->t($item[2]);
+            if (checkLogin() && $item[1] == "login") {
+                $url = add_param($urlBase, "page", "logout");
+                $content = $this->t->t("Logout");
+            } else {
+                $url = add_param($urlBase, "page", $item[1]);
+                $content = $this->t->t($item[2]);
+            }
+
             $listItem = "<li class='$class'><a href='$url' alt='$item[1]'>$content</a></li>";
             $this->appendItem($listItem);
         }
@@ -53,9 +60,20 @@ class Nav {
         $this->appendItem($listItemEN);
     }
 
+    private function appendUserArea() {
+        if (checklogin()) {
+            $lang = getLanguage(["en", "de"]);
+            $urlBase = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+            $url = add_param($urlBase, "page", "userarea");
+            $userarea = "<li class='nav-right'><a href='$url' alt='userarea'> ". translate("Userarea") ." </a></li>";
+            $this->appendItem($userarea);
+        }
+    }
+
     public function render() {
         $this->appendListItems();
         $this->appendLanguages();
+        $this->appendUserArea();
         $this->appendItem("</nav></ul>");
         return $this->html;
 

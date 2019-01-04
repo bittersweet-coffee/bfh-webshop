@@ -40,18 +40,18 @@ class Form {
     public function getCancleButton($reason) {
         $button = "<input
                 type='submit'
-                value='Cancle' 
+                value='".translate("Cancle")."' 
                 formnovalidate='true'
                 onclick='return cancleForm(this)' />" ;
         return $button;
     }
 
     public function setInputTag($type, $name) {
-        $cookie = checkCookie($name);
+        $labelText = translate($name);
         $inputTag = "
             <p id='$name'>
-                <label>$name: </label>
-                <input type='$type' name='$name' value='$cookie' required>
+                <label>$labelText: </label>
+                <input type='$type' name='$name' required>
                 <mark>'$name' can't be empty or is not valid.</mark>
             </p>
             ";
@@ -81,10 +81,11 @@ class BuyForm extends Form {
         $p = "<p>" . $ptext . "</p>";
         $inputTextYes = translate("Yes, good thing!");
         $inputTextNo = translate("No Thanks.");
+        $submitText = translate("Buy");
         $input1 = "<input id='amount' name='amount' type='number' value='1' min='1''>";
         $input2 = "<input type='radio' name='donation' value=5> " . $inputTextYes;
         $input3 = "<input type='radio' name='donation' value=0 checked='checked'> " . $inputTextNo;
-        $submit = "<input type='submit' name='buy'/>";
+        $submit = "<input type='submit' name='buy' value='".$submitText."'/>";
 
         $content = "<p>". $label
                         . $input1
@@ -128,7 +129,8 @@ class ShippingForm extends Form {
         $commentText = translate("Leave Some Comments here");
         $comment ="<p>" . $commentText . "</p>";
         $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea>";
-        $submit = "<input type='submit' name='shipping'/>";
+        $submitText = translate("Ship");
+        $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
 
         parent::appendContext($header);
         parent::appendContext($purchaseHeader);
@@ -180,8 +182,8 @@ class ConfirmationForm extends Form {
             $comment = $comment . "<p>" . $_SESSION['comment'] . "</p>";
             parent::appendContext($comment);
         }
-        $submit = "<input type='submit' value='Confirm' name='confirm' onclick='return confirmForm(this)'/>";
-        $url = parent::getUrl();
+        $submitText = translate("Confirm");
+        $submit = "<input type='submit' name='confirm' value='".$submitText."' onclick='return confirmForm(this)'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Purchase"));
         return parent::render();
@@ -189,9 +191,6 @@ class ConfirmationForm extends Form {
 }
 
 class RegisterForm extends Form {
-
-    private $userInputTag ="";
-    private $signInHeader="<h2> Registration </h2>";
 
     public function __construct(string $language, string $page = "")
     {
@@ -201,14 +200,15 @@ class RegisterForm extends Form {
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
-    public function setUserInputTag($type, $name) {
-        $this->userInputTag = $this->userInputTag . parent::setInputTag($type,$name);
-    }
+
 
     public function render() {
-        parent::appendContext($this->signInHeader);
-        parent::appendContext($this->userInputTag);
-        $submit = "<input type='submit' value='Register' name='register'/>";
+        $signInHeader ="<h2> ". translate("Registration") . " </h2>";
+        parent::appendContext($signInHeader);
+        parent::appendContext(User::render_InputTags());
+        parent::appendContext(Customer::render_InputTags());
+        $submitText = translate("Register");
+        $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Registration"));
         return parent::render();
@@ -223,10 +223,12 @@ class LoginForm extends Form {
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
+        $this->setUserInputTag("text", "Username");
+        $this->setUserInputTag("password", "Password");
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
-    public function setUserInputTag($type, $name) {
+    private function setUserInputTag($type, $name) {
         $this->userInputTag = $this->userInputTag . parent::setInputTag($type,$name);
     }
 

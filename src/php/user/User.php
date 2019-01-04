@@ -13,6 +13,12 @@ class User {
     private CONST lastShopUserIDQuery = "SELECT MAX(id) FROM `shopusers`";
     private CONST passwordHashQuery = "SELECT * FROM `shopusers` WHERE `username` LIKE ?";
 
+    private CONST inputElements = array (
+        "Username" => "text",
+        "Password" => "password",
+        "Retype" => "password",
+    );
+
     private $customer;
     private $username;
     private $password;
@@ -107,5 +113,26 @@ class User {
             "postalCode" => $customer->getPostalCode(),
             "country" => $customer->getCountry());
         return $user;
+    }
+
+    public static function render_InputTags(): string {
+        $userInputTag = "";
+        foreach (self::inputElements as $inputElementName => $inputType) {
+            $userInputTag = $userInputTag . self::setInputTag($inputType, $inputElementName);
+        }
+        return $userInputTag;
+    }
+
+    private static function setInputTag($type, $name): string {
+        $t_name = translate($name);
+        $t_mark = translate("can't be empty or is not valid");
+        $inputTag = "
+            <p id='$name'>
+                <label>$t_name: </label>
+                <input type='$type' name='$name' required>
+                <mark>'$t_name' $t_mark</mark>
+            </p>
+            ";
+        return $inputTag;
     }
 }

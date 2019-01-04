@@ -7,17 +7,18 @@ if (session_status() == PHP_SESSION_NONE) {
 // BUY-FORMS validation
 if (isset($_POST["buy"])) {
     if (!isset($_POST["amount"]) and !isset($_POST["donation"])) {
-        displayErrorPage("validationFailed");
+        createErrorUrl("validationFailed");
     }
-    if ($_POST["amount"] < 0) {
-        displayErrorPage("validationFailed");
+    if ($_POST["amount"] <= 0) {
+        createErrorUrl("amountBelowZero");
+    } else {
+        $loc = "Location: ";
+        $uri = $_SERVER['REQUEST_URI'];
+        $uri = add_param($uri,"amount",htmlspecialchars($_POST["amount"]));
+        $uri = add_param($uri,"donation",htmlspecialchars($_POST["donation"]));
+        $url =  $loc . $uri;
+        header($url);
     }
-    $loc = "Location: ";
-    $uri = $_SERVER['REQUEST_URI'];
-    $uri = add_param($uri,"amount",htmlspecialchars($_POST["amount"]));
-    $uri = add_param($uri,"donation",htmlspecialchars($_POST["donation"]));
-    $url =  $loc . $uri;
-    header($url);
 }
 
 if (isset($_POST["shipping"])) {
@@ -25,6 +26,8 @@ if (isset($_POST["shipping"])) {
         checkComment();
         createCustomer();
         createPayment();
+    } else {
+        createErrorUrl("validationFailed");
     }
 }
 

@@ -162,7 +162,7 @@ class ProductHandler {
             $url = $url . "&product=$name";
             $html = $html . "<div id='box'>";
             $html = $html . $product->render();
-            $html = $html . "<a href='$url' class='button'>Buy Now</a></div>";
+            $html = $html . "<a href='$url' class='button'>" . translate("Buy Now") . "</a></div>";
         }
         echo $html. "</div>";
     }

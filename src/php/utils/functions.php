@@ -25,6 +25,9 @@ function getPageContent($content) {
         case 'login':
             displayLogin();
             break;
+        case 'logout':
+            displayLogout();
+            break;
         case 'buy':
             displayBuy();
             break;
@@ -42,7 +45,12 @@ function getPageContent($content) {
             break;
         case 'errorPage':
             displayErrorReason(get_param("reason", "error"));
+            break;
         default:
+            if (checkLogin()) {
+                $username = $_SESSION['user']['username'];
+                echo "<h3> ". translate("Welcome") ." $username</h3>";
+            }
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             $productHandler->setupProducts('Reels', getLanguage(["en", "de"]));
             $productHandler->setupProducts('Lures', getLanguage(["en", "de"]));
@@ -94,31 +102,29 @@ function displayConfirmation() {
 }
 
 function displayLogin() {
-    echo "<h1> Create Account or Login </h1>";
-    if (isset($_GET["reason"]) && $_GET["reason"] == "loginFailed") {
-        echo "<h3> Wrong Password or wrong Username</h3>";
+    echo "<h1> ". translate("Create Account or Login") ." </h1>";
+    if (get_param("reason", "") == "loginFailed") {
+        echo "<h3> ". translate("Wrong Password or wrong Username") . "</h3>";
+    }
+    if (get_param("action", "") == "logout") {
+        session_destroy();
+        $loc = "Location: ";
+        $url = htmlspecialchars($_SERVER['PHP_SELF']);
+        $url = add_param($url, "lang", getLanguage(["en", "de"]));
+        $url = add_param($url, "page", "login");
+        $url =  $loc . $url;
+        header($url);
     }
     include 'php/utils/registration.php';
 }
 
 function displayRegister() {
     $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
-    $registerForm->setUserInputTag("text", "Username");
-    $registerForm->setUserInputTag("password", "Password");
-    $registerForm->setUserInputTag("password", "Retype");
-    $registerForm->setUserInputTag("text", "Firstname");
-    $registerForm->setUserInputTag("text", "Lastname");
-    $registerForm->setUserInputTag("text", "Address");
-    $registerForm->setUserInputTag("text", "PostalCode");
-    $registerForm->setUserInputTag("email", "Email");
-    $registerForm->setUserInputTag("text", "Country");
     echo $registerForm->render();
 }
 
 function displaySignIn() {
     $login = new LoginForm(getLanguage(["en", "de"]), "");
-    $login->setUserInputTag("text", "Username");
-    $login->setUserInputTag("password", "Password");
     echo $login->render();
 }
 
@@ -136,12 +142,17 @@ function displayErrorReason(string $reason) {
     echo $error->render();
 }
 
-function displayErrorPage($reason) {
+function displayLogout(){
+    displayLogoutMenu();
+}
+
+function createErrorUrl($reason) {
     $loc = "Location: ";
-    $uri = $_SERVER['REQUEST_URI'];
-    $uri = str_replace('&page='. get_param("page", ""), '&page=errorPage', $uri);
-    $reason = "&reason=$reason";
-    $url =  $loc . $uri . $reason;
+    $url = htmlspecialchars($_SERVER['PHP_SELF']);
+    $url = add_param($url, "lang", getLanguage(["en", "de"]));
+    $url = add_param($url, "page", "errorPage");
+    $url = add_param($url,"reason", $reason);
+    $url =  $loc . $url;
     header($url);
 }
 
@@ -166,3 +177,8 @@ function checkCookie($id) {
     }
     return '';
 }
+
+function checkLogin() {
+    return (isset($_SESSION['login']) && $_SESSION['login'] == true);
+}
+

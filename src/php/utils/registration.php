@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_POST["register"])) {
-    if (checkUsername(User::getDatabaseUsernames(), $_POST["Username"])) {
+    if (checkUsername(User::getDatabaseUsernames(), htmlspecialchars($_POST["Username"]))) {
         doRegistration();
         echo "<h3> Successfully created user </h3>";
         displayMainMenu();
@@ -26,17 +26,20 @@ function doRegistration() {
 }
 
 function displayUserAlreadyTaken() {
-    echo "<h2> This Username is already taken... </h2>";
+
+    echo "<h2>" .translate("This Username is already taken..."). "  </h2>";
     displayRegister();
 }
 
 function displayMainMenu() {
     $lang = getLanguage(["en", "de"]);
     $page = "register";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = "<a href='$url' class='button'>Register</a>";
+    $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+    $url = add_param($url, "page", $page);
+    $html = "<a href='$url' class='button'>" . translate("Register") . "</a>";
     $page = "sign_in";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = $html . "<a href='$url' class='button'>Sign In</a>";
+    $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+    $url = add_param($url, "page", $page);
+    $html = $html . "<a href='$url' class='button'>" . translate("Sign in") . "</a>";
     echo $html;
 }
