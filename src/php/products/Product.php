@@ -3,32 +3,52 @@
 class Product
 {
     private $name;
+    private $realName;
     private $price;
     private $description;
     private $amount;
     private $donation;
     private $totoal = 0;
 
-    private CONST productQuery = "SELECT p_real.name, product.price, p_real.description FROM product
+    private CONST productQuery = "SELECT product.name, p_real.name, product.price, p_real.description 
+        FROM product
         JOIN p_real ON product.d_id=p_real.id
         JOIN language on p_real.l_id=language.id
         JOIN p_type on product.p_id=p_type.id
         WHERE language.short LIKE ? and p_type.name LIKE ?";
 
-    public function __construct($name, $price, $description)
+    private CONST singleProductQuery = "SELECT product.name as realName, 
+            p_real.name as name, 
+            product.price as price, 
+            p_real.description as descr 
+        FROM product
+        JOIN p_real ON product.d_id=p_real.id
+        JOIN language on p_real.l_id=language.id
+        JOIN p_type on product.p_id=p_type.id
+        WHERE language.short LIKE ? and product.name LIKE ?";
+
+    public function __construct($realName, $name, $price, $description)
     {
+        $this->realName = $realName;
         $this->name = $name;
         $this->price = $price;
         $this->description = $description;
     }
 
     public function render() {
+        $labelNameText = translate("Name");
+        $labelPriceText = translate("Price");
+        $labelDescriptionText = translate("Description");
+        $labelName = "<label>" . $labelNameText . ": </label>";
+        $labelPrice = "<label>" . $labelPriceText . ": </label>";
+        $labelDescription = "<label>" . $labelDescriptionText . ": </label>";
         $html =
             "
-                <p><label>Name: </label>$this->name;</p>
-                <p><label>Price: </label>$this->price</p>
-                <p><label>Description: </label>$this->description</p>
+                <p>$labelName $this->name;</p>
+                <p>$labelPrice $this->price</p>
+                <p>$labelDescription $this->description</p>
             ";
+
         if (isset($this->amount)) {
             $html = $html . "<p><label>Amount: </label>$this->amount</p>";
         }
@@ -51,6 +71,11 @@ class Product
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getRealName()
+    {
+        return $this->realName;
     }
 
     public function getPrice()
@@ -93,6 +118,18 @@ class Product
         return $result;
     }
 
+    public static function getSingleProduct($lang, $name){
+        $query = Database::doQueryPrepare(self::singleProductQuery);
+        $query->bind_param('ss', $lang, $name);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result || $result->num_rows !== 1) {
+            return false;
+        }
+        $row = $result->fetch_assoc();
+        return $row;
+    }
+
 
 }
 
@@ -106,7 +143,7 @@ class ProductHandler {
     public function setupProducts($type, $language) {
         $products = Product::getProductsFromDatabase($type,$language);
         while($row = mysqli_fetch_row($products)) {
-            $product = new Product($row[0], $row[1], $row[2]);
+            $product = new Product($row[0], $row[1], $row[2], $row[3]);
             $this->addProduct($product);
         }
     }
@@ -114,10 +151,10 @@ class ProductHandler {
     public function renderAllProducts() {
         $lang = getLanguage(["en", "de"]);
         $page = "buy";
-        $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
         $html = "<div id='container'>";
         foreach ($this->products as $product) {
-            $name = $product->getName();
+            $name = $product->getRealName();
+            $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
             $url = $url . "&product=$name";
             $html = $html . "<div id='box'>";
             $html = $html . $product->render();

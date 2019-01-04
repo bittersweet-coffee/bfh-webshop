@@ -4,6 +4,14 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// BUY-FORMS validation
+if (isset($_POST["buy"])) {
+    //checkAmount -> Yes - header(), No - ErrorPage
+    //checkDonation -> Null -> ErrorPage
+    //Get-Variablen ergänzen!
+    // Product handeln.
+}
+
 if (isset($_POST["Firstname"])) {
     $_SESSION['Firstname'] = $_POST['Firstname'];
     setcookie('Firstname', $_POST['Firstname']);

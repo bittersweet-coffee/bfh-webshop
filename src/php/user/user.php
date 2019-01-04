@@ -11,6 +11,7 @@ class User {
             VALUES (?, ?, ?, ?, ?, ?, ?);";
     private CONST lastCustomerIDQuery = "SELECT MAX(id) FROM `contact_users`";
     private CONST lastShopUserIDQuery = "SELECT MAX(id) FROM `shopusers`";
+    private CONST passwordHashQuery = "SELECT * FROM `shopusers` WHERE `username` LIKE ?";
 
     private $customer;
     private $username;
@@ -29,6 +30,17 @@ class User {
         return $result;
     }
 
+    public  static function getPasswordHash(string $usr, string $pwd) {
+        $query = Database::doQueryPrepare(self::passwordHashQuery);
+        $query->bind_param('s', $usr);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result || $result->num_rows !== 1) {
+            return false;
+        }
+        $row = $result->fetch_assoc();
+        return password_verify($pwd, $row["password"]);
+    }
     public function storeUser() {
         $idContUsers = $this->getLastID(self::lastCustomerIDQuery) + 1;
         $this->storeCustomerData($idContUsers,
@@ -73,5 +85,27 @@ class User {
         $query = Database::doQueryPrepare(self::storeUserQuery);
         $query->bind_param('issi',$idShopUser,$username, $password, $idContUser);
         $query->execute();
+    }
+
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function toArray() {
+        $customer = $this->getCustomer();
+        $user = array(
+            "username" => $this->getUsername(),
+            "firstname" => $customer->getFirstname(),
+            "lastname" => $customer->getLastname(),
+            "address" => $customer->getAddress(),
+            "postalCode" => $customer->getPostalCode(),
+            "country" => $customer->getCountry());
+        return $user;
     }
 }

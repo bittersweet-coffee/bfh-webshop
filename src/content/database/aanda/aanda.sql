@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Nov 2018 um 18:31
+-- Erstellungszeit: 23. Dez 2018 um 12:00
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -228,7 +228,7 @@ INSERT INTO `p_type` (`id`, `name`) VALUES
 CREATE TABLE `shopusers` (
   `id` int(11) NOT NULL,
   `username` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `contact` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
