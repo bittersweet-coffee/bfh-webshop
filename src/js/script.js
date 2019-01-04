@@ -1,15 +1,9 @@
 $(document).ready(function () {
-
-    var submitbutton = $("input[name=submit]");
+    var shippingbutton = $("input[name=shipping]");
     var regbutton = $("input[name=register]");
-    submitbutton.prop('disabled', true);
-    regbutton.prop('disabled', true);
     $("* mark").hide();
-    $('#billId').on('change', function() {
-
-    });
-    checkCustomerData(submitbutton);
-    checkCreditCardData(submitbutton);
+    checkCustomerData(shippingbutton);
+    checkCreditCardData(shippingbutton);
     checkUserData(regbutton);
     checkCustomerData(regbutton);
     handleAddressCheckbox();
@@ -18,12 +12,11 @@ $(document).ready(function () {
         if (selectedOption == "") {
             submitbutton.prop('disabled', true);
         } else if (selectedOption == "card") {
-            checkCreditCardData(submitbutton);
+            checkCreditCardData(shippingbutton);
         } else if (selectedOption == "paper"){
-            checkBilladdressData(submitbutton);
+            checkBilladdressData(shippingbutton);
         }
     });
-
 });
 
 function getBillDiv() {
@@ -47,23 +40,24 @@ function getBillDiv() {
     }
 }
 
-function checkAmount() {
-    var amout = document.getElementById("amount").value;
-    if (amout < 1) {
-        document.getElementById("amountAlert").innerHTML = "Amount can't be Zero or negative! Has been reset to 1";
-        document.getElementById("amount").value = 1;
+function confirmForm() {
+    var lang = getUrlParameter('lang');
+    if (lang == "de") {
+        return confirm("Du bist dabei, einen verbindlichen Vertrag abzuschließen. " +
+            "Willst du wirklich weitermachen?");
     } else {
-        document.getElementById("amountAlert").innerHTML = "";
+        return confirm("You are about to enter into a binding contract. " +
+            "Do you really want to continue?");
     }
 }
 
-function confirmForm() {
-    return confirm("You are about to enter into a binding contract. Do you really want to continue?");
-}
-
 function cancleForm() {
-    var str = "You are about to cancel. Continue?"
-    return confirm(str);
+    var lang = getUrlParameter('lang');
+    if (lang == "de") {
+        return confirm("Du bist im Begriff, abzubrechen. Fortfahren?");
+    } else {
+        return confirm("You are about to cancel. Continue?");
+    }
 }
 
 function checkifempty(val) {
@@ -90,85 +84,76 @@ function checkCustomerData(button) {
         postalCode = true,
         country = true;
 
-    if (checkifempty($("#Firstname input").value)) {
-        firstname = false;
-    }
-
-    if (checkifempty($("#Lastname input").value)) {
-        firstname = false;
-    }
-
-
     $("#Firstname input").focusout(function () {
-        firstname = checkifempty(this.value);
-        fadeMark("Firstname", firstname, "Firstname can't be empty!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        firstname = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*[A-Za-z]*\d*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Firstname", firstname, "Vorname kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Firstname", firstname, "Firstname can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', firstname);
     });
 
     $("#Lastname input").focusout(function () {
-        lastname = checkifempty(this.value);
-        fadeMark("Lastname", lastname, "Lastname can't be empty!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        lastname = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*[A-Za-z]*\d*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Lastname", lastname, "Nachname kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Lastname", lastname, "Lastname can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', lastname);
     });
 
     $("#Email input").focusout(function () {
         email = checkifempty(this.value.match(/^.+@.+\..+$/));
-        fadeMark("Email", email, "Email does not match conditions!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Email", email, "E-Mail stimmt nicht mit den Bedingungen überein.");
+        } else {
+            fadeMark("Email", email, "Email does not match conditions.");
+        }
+        button.prop('disabled', email);
     });
 
     $("#Address input").focusout(function () {
-        address = checkifempty(this.value);
-        fadeMark("Address", address, "Address can't be empty!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        address = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*\d*[A-Za-z]*\d*[A-Za-z]*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Address", address, "Adresse kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Address", address, "Address can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', address);
     });
 
     $("#PostalCode input").focusout(function () {
         postalCode = checkifempty(this.value.match(/^\d{4}$/));
-        fadeMark("PostalCode", postalCode, "Postal Code has to be 4 digits!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("PostalCode", postalCode, "Die Postleitzahl muss aus 4 Ziffern bestehen.");
+        } else {
+            fadeMark("PostalCode", postalCode, "Postal Code has to be 4 digits.");
+        }
+        button.prop('disabled', postalCode);
     });
 
     $("#Country input").focusout(function () {
         country = checkifempty(this.value.match(/^[A-Za-z]{2}$/));
-        fadeMark("Country", country, "Country has to be two Characters!");
-        button.prop('disabled',
-            firstname ||
-            lastname ||
-            email ||
-            address ||
-            postalCode ||
-            country);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Country", country, "Der Ländercode muss aus zwei Buchstaben bestehen.");
+        } else {
+            fadeMark("Country", country, "The country code must consist of two letters.");
+        }
+        button.prop('disabled', country);
     });
 }
 
@@ -178,30 +163,41 @@ function checkUserData(button) {
     retype = true;
 
     $("#Username input").focusout(function () {
-        username = checkifempty(this.value);
-        fadeMark("Username", username, "Username can't be empty!");
-        button.prop('disabled',
-            username ||
-            password ||
-            retype);
+        username = checkifempty(this.value.match(/^[A-Za-z]+\d*[A-Za-z]*\d*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Username", username, "Der Benutzername darf nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Username", username, "Username can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', username);
     });
 
     $("#Password input").focusout(function () {
         password = checkifempty(this.value.match(/^\d*[A-Za-z]+\d*[A-Za-z]*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Password", password, "Das Passwort darf nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Password", password, "Password can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
         fadeMark("Password", password, "Password can't be empty or is not valid (only digits and characters!");
-        button.prop('disabled',
-            username ||
-            password ||
-            retype);
+        button.prop('disabled', password);
     });
 
     $("#Retype input").focusout(function () {
         retype = checkifempty(this.value.match($("#Password input").val()));
-        fadeMark("Retype", retype, "Does not match with Password Field!");
-        button.prop('disabled',
-            username ||
-            password ||
-            retype);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Retype", retype, "Passt nicht zum Passwortfeld!");
+        } else {
+            fadeMark("Retype", retype, "Does not match with Password Field!");
+        }
+        button.prop('disabled', retype);
     });
 }
 
@@ -212,29 +208,37 @@ function checkCreditCardData(button) {
 
     $("#card_name input").focusout(function () {
         card_name = checkifempty(this.value);
-        fadeMark("card_name", card_name, "Cardname can't be empty!");
-        button.prop('disabled',
-            card_name ||
-            card_number ||
-            card_cvv);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("card_name", card_name, "Der Kartenname darf nicht leer sein!");
+        } else {
+            fadeMark("card_name", card_name, "Cardname can't be empty!");
+        }
+        button.prop('disabled', card_name);
     });
 
     $("#card_number input").focusout(function () {
         card_number = checkifempty(this.value.match(/^(\d{4}(\s|-){1}){3}(\d{4})$/));
-        fadeMark("card_number", card_number, "Card Number does not match condition!");
-        button.prop('disabled',
-            card_name ||
-            card_number ||
-            card_cvv);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("card_name", card_number, "Die Kartennummer stimmt nicht mit der Bedingung überein! " +
+                "Zahlenblöcke müssen mit Leerzeichen oder Minus (-) getrennt werden.");
+        } else {
+            fadeMark("card_name", card_number, "The card number does not match the condition! " +
+                "Number blocks must be separated with spaces or minus (-).");
+        }
+        button.prop('disabled', card_number);
     });
 
     $("#card_cvv input").focusout(function () {
         card_cvv = checkifempty(this.value.match(/^\d{3}$/));
-        fadeMark("card_cvv", card_cvv, "CVV has to be 3 Digits!");
-        button.prop('disabled',
-            card_name ||
-            card_number ||
-            card_cvv);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("card_name", card_cvv, "CVV muss aus 3 Zahlen bestehen!");
+        } else {
+            fadeMark("card_name", card_cvv, "CVV has to be 3 numbers!");
+        }
+        button.prop('disabled', card_cvv);
     });
 }
 
@@ -265,57 +269,71 @@ function checkBilladdressData(button) {
     bill_country = true;
 
     $("#bill_firstname input").focusout(function () {
-        bill_firstname = checkifempty(this.value);
-        fadeMark("bill_firstname", bill_firstname, "Firstname can't be empty!");
-        button.prop('disabled',
-            bill_firstname ||
-            bill_lastname ||
-            bill_address ||
-            bill_postalCode ||
-            bill_country);
+        bill_firstname = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*[A-Za-z]*\d*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("bill_firstname", bill_firstname, "Vorname kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("bill_firstname", bill_firstname, "Firstname can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', bill_firstname);
     });
 
     $("#bill_lastname input").focusout(function () {
-        bill_lastname = checkifempty(this.value);
-        fadeMark("bill_lastname", bill_lastname, "Lastname can't be empty!");
-        button.prop('disabled',
-            bill_firstname ||
-            bill_lastname ||
-            bill_address ||
-            bill_postalCode ||
-            bill_country);
+        bill_lastname = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*[A-Za-z]*\d*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("bill_firstname", bill_firstname, "Nachname kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("bill_firstname", bill_firstname, "Lastname can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', bill_firstname);
     });
 
     $("#bill_address input").focusout(function () {
-        bill_address = checkifempty(this.value);
-        fadeMark("bill_address", bill_address, "Address can't be empty!");
-        button.prop('disabled',
-            bill_firstname ||
-            bill_lastname ||
-            bill_address ||
-            bill_postalCode ||
-            bill_country);
+        bill_address = checkifempty(this.value.match(/^[A-Za-z]+\d*\s*\d*[A-Za-z]*\d*[A-Za-z]*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("bill_address", bill_address, "Adresse kann nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("bill_address", bill_address, "Address can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', bill_address);
     });
 
     $("#bill_postalCode input").focusout(function () {
         bill_postalCode = checkifempty(this.value.match(/^\d{4}$/));
-        fadeMark("bill_postalCode", bill_postalCode, "Postal Code has to be 4 Digits!");
-        button.prop('disabled',
-            bill_firstname ||
-            bill_lastname ||
-            bill_address ||
-            bill_postalCode ||
-            bill_country);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("bill_postalCode", bill_postalCode, "Die Postleitzahl muss aus 4 Ziffern bestehen.");
+        } else {
+            fadeMark("bill_postalCode", bill_postalCode, "Postal Code has to be 4 digits.");
+        }
+        button.prop('disabled', bill_postalCode);
     });
 
     $("#bill_country input").focusout(function () {
         bill_country = checkifempty(this.value.match(/^[A-Za-z]{2}$/));
-        fadeMark("bill_country", bill_country, "Country has to be two Characters!");
-        button.prop('disabled',
-            bill_firstname ||
-            bill_lastname ||
-            bill_address ||
-            bill_postalCode ||
-            bill_country);
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("bill_country", bill_country, "Der Ländercode muss aus zwei Buchstaben bestehen.");
+        } else {
+            fadeMark("bill_country", bill_country, "The country code must consist of two letters.");
+        }
+        button.prop('disabled', bill_country);
     });
+}
+
+//fond and copies from here : "https://davidwalsh.name/query-string-javascript"
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? name : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }

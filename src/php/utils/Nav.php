@@ -25,10 +25,10 @@ class Nav {
     
     private function appendListItems() {
         $lang = getLanguage(["en", "de"]);
-        $urlBase = $_SERVER['PHP_SELF'] . "?lang=$lang";
+        $urlBase = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
         foreach ($this->elements as $item) {
             $class = $item[0];
-            $url = $urlBase . "&page=$item[1]";
+            $url = add_param($urlBase, "page", $item[1]);
             $content = $this->t->t($item[2]);
             $listItem = "<li class='$class'><a href='$url' alt='$item[1]'>$content</a></li>";
             $this->appendItem($listItem);
@@ -36,13 +36,16 @@ class Nav {
     }
 
     private function appendLanguages() {
-        $urlDE = $_SERVER['PHP_SELF'] . "?lang=de";
-        $urlEN = $_SERVER['PHP_SELF'] . "?lang=en";
-        foreach($_GET as $key => $value){
-            if ($key != "lang") {
-                $urlDE = $urlDE . "&" . $key . "=" . $value;
-                $urlEN = $urlEN . "&" . $key . "=" . $value;
-            }
+        $urlDE = htmlspecialchars($_SERVER['PHP_SELF']) . "?lang=de";
+        $urlEN = htmlspecialchars($_SERVER['PHP_SELF']) . "?lang=en";
+        $uri = htmlspecialchars($_SERVER['REQUEST_URI']);
+
+        if (strpos($uri, 'lang=en') !== false) {
+            $urlDE = str_replace('lang=en', 'lang=de', $uri);
+            $urlEN = $uri;
+        } else if (strpos($uri, 'lang=de') !== false) {
+            $urlEN = str_replace('lang=de', 'lang=en', $uri);
+            $urlDE = $uri;
         }
         $listItemDE = "<li class='nav-right'><a href='$urlDE' alt='langDE'> DE </a></li>";
         $listItemEN = "<li class='nav-right'><a href='$urlEN' alt='langEN'> EN </a></li>";

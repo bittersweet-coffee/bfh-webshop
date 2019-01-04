@@ -6,92 +6,114 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // BUY-FORMS validation
 if (isset($_POST["buy"])) {
-    //checkAmount -> Yes - header(), No - ErrorPage
-    //checkDonation -> Null -> ErrorPage
-    //Get-Variablen ergänzen!
-    // Product handeln.
+    if (!isset($_POST["amount"]) and !isset($_POST["donation"])) {
+        displayErrorPage("validationFailed");
+    }
+    if ($_POST["amount"] < 0) {
+        displayErrorPage("validationFailed");
+    }
+    $loc = "Location: ";
+    $uri = $_SERVER['REQUEST_URI'];
+    $uri = add_param($uri,"amount",htmlspecialchars($_POST["amount"]));
+    $uri = add_param($uri,"donation",htmlspecialchars($_POST["donation"]));
+    $url =  $loc . $uri;
+    header($url);
 }
 
-if (isset($_POST["Firstname"])) {
-    $_SESSION['Firstname'] = $_POST['Firstname'];
-    setcookie('Firstname', $_POST['Firstname']);
+if (isset($_POST["shipping"])) {
+    if (checkCustomerData() && checkPayment()) {
+        checkComment();
+        createCustomer();
+        createPayment();
+    }
 }
 
-if (isset($_POST["Lastname"])) {
-    $_SESSION['Lastname'] = $_POST['Lastname'];
-    setcookie('Lastname', $_POST['Lastname']);
+function checkCustomerData() {
+    if (!isset($_POST["Firstname"]) ||
+        !isset($_POST["Lastname"])  ||
+        !isset($_POST["Email"])     ||
+        !isset($_POST["Address"])   ||
+        !isset($_POST["Country"])   ||
+        !isset($_POST["PostalCode"])) {
+       return false;
+    }
+    setCustomerCookies();
+    return true;
 }
 
-if (isset($_POST["Email"])) {
-    $_SESSION['Email'] = $_POST['Email'];
-    setcookie('Email', $_POST['Email']);
+function setCustomerCookies() {
+    setcookie("Firstname", htmlspecialchars($_POST["Firstname"]));
+    setcookie("Lastname", htmlspecialchars($_POST["Lastname"]));
+    setcookie("Address", htmlspecialchars($_POST["Address"]));
+    setcookie("PostalCode", htmlspecialchars($_POST["PostalCode"]));
+    setcookie("Email", htmlspecialchars($_POST["Email"]));
+    setcookie("Country", htmlspecialchars($_POST["Country"]));
 }
 
-if (isset($_POST["Address"])) {
-    $_SESSION['Address'] = $_POST['Address'];
-    setcookie('Address', $_POST['Address']);
-
+function createCustomer() {
+    $customer = new Customer(
+        htmlspecialchars($_POST["Firstname"]),
+        htmlspecialchars($_POST["Lastname"]),
+        htmlspecialchars($_POST["Address"]),
+        htmlspecialchars($_POST["PostalCode"]),
+        htmlspecialchars($_POST["Email"]),
+        htmlspecialchars($_POST["Country"]));
+    $_SESSION['customer'] = $customer;
 }
 
-if (isset($_POST["Country"])) {
-    $_SESSION['Country'] = $_POST['Country'];
-    setcookie('Country', $_POST['Country']);
+function checkPayment() {
+    if (!isset($_POST["payment"])) {
+        return false;
+    } else if($_POST["payment"] == "card"){
+        return checkCardPayment();
+    } else if ($_POST["payment"] == "paper") {
+        return checkPaperPayment();
+    } else {
+        return false;
+    }
 }
 
-if (isset($_POST["PostalCode"])) {
-    $var = intval($_POST['PostalCode']);
-    $_SESSION['PostalCode'] = $var;
-    setcookie('PostalCode', $var);
+function checkCardPayment() {
+    if (!isset($_POST["card_name"])   ||
+        !isset($_POST["card_number"]) ||
+        !isset($_POST["card_cvv"])) {
+        return false;
+    }
+    return true;
 }
 
-if (isset($_GET['product'])) {
-    $_SESSION['product'] = $_SESSION[$_GET['product']];
+function checkPaperPayment() {
+    if (!isset($_POST["bill_firstname"])  ||
+        !isset($_POST["bill_lastname"])   ||
+        !isset($_POST["bill_address"])    ||
+        !isset($_POST["bill_postalCode"]) ||
+        !isset($_POST["bill_country"])) {
+        return false;
+    }
+    return true;
 }
 
-if (isset($_POST["donation"])) {
-    $_SESSION['donation'] = $_POST['donation'];
+function createPayment() {
+    if($_POST["payment"] == "card") {
+        $payment = ProductPayment::cardPayment(
+            "card",
+            htmlspecialchars($_POST["card_name"]),
+            htmlspecialchars($_POST["card_number"]),
+            htmlspecialchars($_POST["card_cvv"]));
+    } else if ($_POST["payment"] == "paper") {
+        $payment = ProductPayment::billPayment(
+            "paper",
+            htmlspecialchars($_POST["bill_firstname"]),
+            htmlspecialchars($_POST["bill_lastname"]),
+            htmlspecialchars($_POST["bill_address"]),
+            htmlspecialchars($_POST["bill_postalCode"]),
+            htmlspecialchars($_POST["bill_country"]));
+    }
+    $_SESSION['payment'] = $payment;
 }
 
-if (isset($_POST["number"])) {
-    $_SESSION['amount'] = $_POST['number'];
-}
-
-if (isset($_POST["payment"])) {
-    $_SESSION['payment'] = $_POST['payment'];
-}
-
-if (isset($_POST["card_name"])) {
-    $_SESSION['card_name'] = $_POST['card_name'];
-}
-
-if (isset($_POST["card_number"])) {
-    $_SESSION['card_number'] = $_POST['card_number'];
-}
-
-if (isset($_POST["card_cvv"])) {
-    $_SESSION['card_cvv'] = $_POST['card_cvv'];
-}
-
-if (isset($_POST["bill_firstname"])) {
-    $_SESSION['bill_firstname'] = $_POST['bill_firstname'];
-}
-
-if (isset($_POST["bill_lastname"])) {
-    $_SESSION['bill_lastname'] = $_POST['bill_lastname'];
-}
-
-if (isset($_POST["bill_address"])) {
-    $_SESSION['bill_address'] = $_POST['bill_address'];
-}
-
-if (isset($_POST["bill_postalCode"])) {
-    $_SESSION['bill_postalCode'] = $_POST['bill_postalCode'];
-}
-
-if (isset($_POST["bill_country"])) {
-    $_SESSION['bill_country'] = $_POST['bill_country'];
-}
-
-if (isset($_POST["comment"])) {
-    $_SESSION['comment'] = $_POST['comment'];
+function checkComment() {
+    if (isset($_POST["comment"])) {
+        $_SESSION['comment'] = htmlspecialchars($_POST['comment']);
+    }
 }

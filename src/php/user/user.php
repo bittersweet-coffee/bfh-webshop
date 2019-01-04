@@ -46,9 +46,9 @@ class User {
         $this->storeCustomerData($idContUsers,
             $this->customer->getFirstname(),
             $this->customer->getLastname(),
-            $this->customer->getEmail(),
             $this->customer->getAddress(),
             intval($this->customer->getPostalCode()),
+            $this->customer->getEmail(),
             $this->customer->getCountry());
         $idShopUser = $this->getLastID(self::lastShopUserIDQuery) + 1;
         $this->storeUserData($idShopUser,$this->username,$this->password,$idContUsers);
@@ -65,18 +65,18 @@ class User {
     private function storeCustomerData(int $id,
                                        string $fname,
                                        string $lname,
-                                       string $mail,
                                        string $adr,
                                        int $pc,
+                                       string $mail,
                                        string $country) {
         $query = Database::doQueryPrepare(self::storeCustomerData);
-        $query->bind_param('issssis',
+        $query->bind_param('isssiss',
             $id,
             $fname,
             $lname,
-            $mail,
             $adr,
             $pc,
+            $mail,
             $country);
         $query->execute();
     }

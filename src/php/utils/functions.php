@@ -4,7 +4,7 @@ function getPageContent($content) {
     include 'php/utils/login.php';
     include 'php/utils/validate.php';
     $productHandler = new ProductHandler();
-    switch ((isset($_GET[$content]) ? $_GET[$content] : '')) {
+    switch ((isset($_GET[$content]) ? get_param($content,'') : '')) {
         case 'rods':
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             break;
@@ -40,7 +40,8 @@ function getPageContent($content) {
         case 'confirmation':
             displayConfirmation();
             break;
-
+        case 'errorPage':
+            displayErrorReason(get_param("reason", "error"));
         default:
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             $productHandler->setupProducts('Reels', getLanguage(["en", "de"]));
@@ -54,8 +55,8 @@ function getPageContent($content) {
 function getLanguage($lang) {
     $default = "en";
     foreach ($lang as $key => $l) {
-        if (isset($_GET["lang"]) && ($_GET["lang"]) == $key) {
-            return $_GET["lang"];
+        if (get_param("lang","en") == $key) {
+            return get_param("lang", "en");
         }
     }
     return $default;
@@ -67,8 +68,9 @@ function translate(string $str) {
 }
 
 function getProduct() {
-    $productName = $_GET['product'];
-    $productData = Product::getSingleProduct($_GET['lang'], $_GET['product']);
+    $lang = htmlspecialchars(get_param("lang", "en"));
+    $prodName = htmlspecialchars(get_param("product",""));
+    $productData = Product::getSingleProduct($lang,$prodName);
     $product = new Product($productData["realName"],
                 $productData["name"],
                 $productData["price"],
@@ -83,12 +85,6 @@ function displayBuy() {
 
 function displayShipping(){
     $form = new ShippingForm(getLanguage(["en", "de"]), "confirmation");
-    $form->setCustomerInputTag("text", "Firstname");
-    $form->setCustomerInputTag("text", "Lastname");
-    $form->setCustomerInputTag("text", "Address");
-    $form->setCustomerInputTag("text", "PostalCode");
-    $form->setCustomerInputTag("email", "Email");
-    $form->setCustomerInputTag("text", "Country");
     echo $form->render();
 }
 
@@ -133,4 +129,40 @@ function checkUsername($queryResult, $username) {
         }
     }
     return true;
+}
+
+function displayErrorReason(string $reason) {
+    $error = new ErrorPage($reason);
+    echo $error->render();
+}
+
+function displayErrorPage($reason) {
+    $loc = "Location: ";
+    $uri = $_SERVER['REQUEST_URI'];
+    $uri = str_replace('&page='. get_param("page", ""), '&page=errorPage', $uri);
+    $reason = "&reason=$reason";
+    $url =  $loc . $uri . $reason;
+    header($url);
+}
+
+function get_param($name, $default) {
+    if (!isset($_GET[$name]))
+        return $default;
+    $name_get = htmlspecialchars($_GET[$name]);
+    return urldecode($name_get);
+}
+
+function add_param($url, $name, $value) {
+    if(strpos($url, '?') !== false)
+        $sep = '&';
+    else
+        $sep = '?';
+    return $url . $sep . $name . "=" . urlencode($value);
+}
+
+function checkCookie($id) {
+    if (isset($_COOKIE[$id])) {
+        return $_COOKIE[$id];
+    }
+    return '';
 }

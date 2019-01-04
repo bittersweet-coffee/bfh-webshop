@@ -9,9 +9,10 @@ class Form {
     public function __construct(string $language,string $page="") {
         $this->lang=$language;
         if ($page == "") {
-            $this->url = $_SERVER['PHP_SELF'] . "?lang=$language";
+            $this->url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $language);
         } else {
-            $this->url = $_SERVER['PHP_SELF'] . "?lang=$language" . "&page=$page";
+            $this->url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $language);
+            $this->url = add_param(htmlspecialchars($this->url), "page", $page);
         }
     }
 
@@ -23,18 +24,11 @@ class Form {
         return $this->html = $this->html ."</form>";
     }
 
-    public function setHtml($html): void
-    {
+    public function setHtml($html): void {
         $this->html = $html;
     }
 
-    public function getUrl(): string
-    {
-        foreach($_GET as $key => $value){
-            if ($key != "lang" and $key != "page") {
-                $this->url = $this->url . "&" . $key . "=" . $value;
-            }
-        }
+    public function getUrl(): string {
         return $this->url;
     }
 
@@ -44,7 +38,6 @@ class Form {
     }
 
     public function getCancleButton($reason) {
-        $url = $_SERVER['PHP_SELF'] . "?lang=$this->lang";
         $button = "<input
                 type='submit'
                 value='Cancle' 
@@ -54,7 +47,7 @@ class Form {
     }
 
     public function setInputTag($type, $name) {
-        $cookie = $this->checkCookie($name);
+        $cookie = checkCookie($name);
         $inputTag = "
             <p id='$name'>
                 <label>$name: </label>
@@ -64,29 +57,23 @@ class Form {
             ";
         return $inputTag;
     }
-
-    private function checkCookie($id) {
-        if (isset($_COOKIE[$id])) {
-            return $_COOKIE[$id];
-        }
-        return '';
-    }
 }
 
 class BuyForm extends Form {
 
     private $headerText = "Product Information";
+    private $product;
 
     public function __construct(string $language, string $page = "") {
+        $this->product = getProduct();
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
+        $url = add_param($url,"product", $this->product->getRealName());
         parent::setHtml("<form method='$method' action='$url'>");
-
     }
 
     public function render() {
-        $product = getProduct();
         $header = "<h2>" . translate($this->headerText) . "</h2>";
         $labelText = translate("How many would you like?");
         $label = "<label>" . $labelText . "</label>";
@@ -94,7 +81,7 @@ class BuyForm extends Form {
         $p = "<p>" . $ptext . "</p>";
         $inputTextYes = translate("Yes, good thing!");
         $inputTextNo = translate("No Thanks.");
-        $input1 = "<input id='amount' name='amount' type='number' value='1' onchange='checkAmount()'>";
+        $input1 = "<input id='amount' name='amount' type='number' value='1' min='1''>";
         $input2 = "<input type='radio' name='donation' value=5> " . $inputTextYes;
         $input3 = "<input type='radio' name='donation' value=0 checked='checked'> " . $inputTextNo;
         $submit = "<input type='submit' name='buy'/>";
@@ -102,13 +89,13 @@ class BuyForm extends Form {
         $content = "<p>". $label
                         . $input1
                         . "<p id='amountAlert'></p>"
-                        . "</p>"
+                        . $p
                         . $input2
                         . $input3 . "<br/>"
                         . $submit;
 
         parent::appendContext($content);
-        $content = $header . $product->render() . parent::render();
+        $content = $header . $this->product->render() . parent::render();
         return $content;
     }
 
@@ -117,40 +104,47 @@ class BuyForm extends Form {
 
 class ShippingForm extends Form {
 
-    private $header = "<h2>Shipping</h2>";
-    private $purchaseHeader = "<h3>Purchase Information</h3>";
-    private $customerInformationHeader = "<h3>Customer Information </h3>";
-    private $customerInputTag ="";
+    private $headerText = "Shipping";
+    private $purchaseHeaderText = "Purchase Information";
+    private $customerInfoHeaderText = "Customer Information";
     private $product;
 
 
     public function __construct(string $language, string $page = "") {
-        $this->product = $_SESSION['product'];
-        $this->product->setAmount($_SESSION['amount']);
-        $this->product->setDonation($_SESSION['donation']);
+        $this->product = getProduct();
+        $this->product->setAmount(get_param("amount", 1));
+        $this->product->setDonation(get_param("donation", 0));
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
+        $url = add_param($url,"product", $this->product->getRealName());
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
     public function render() {
-        parent::appendContext($this->purchaseHeader);
-        parent::appendContext($this->product->render());
-        parent::appendContext($this->customerInformationHeader);
-        parent::appendContext($this->customerInputTag);
-        $comment ="<p>Leave Some Comments here:</p>";
+        $header = "<h2>" . translate($this->headerText) . "</h2>";
+        $purchaseHeader = "<h3>". translate($this->purchaseHeaderText) . "</h3>";
+        $customerInformationHeader = "<h3>". translate($this->customerInfoHeaderText) . "</h3>";
+        $commentText = translate("Leave Some Comments here");
+        $comment ="<p>" . $commentText . "</p>";
         $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea>";
-        $submit = "<input type='submit' value='Submit' name='submit'/>";
-        parent::appendContext(file_get_contents('html/PaymentMethod.html'));
+        $submit = "<input type='submit' name='shipping'/>";
+
+        parent::appendContext($header);
+        parent::appendContext($purchaseHeader);
+        parent::appendContext($this->product->render());
+        parent::appendContext($customerInformationHeader);
+        parent::appendContext(Customer::render_InputTags());
+        if (getLanguage(["en", "de"]) == "de") {
+            parent::appendContext(file_get_contents('html/PaymentMethod_de.html'));
+        } else {
+            parent::appendContext(file_get_contents('html/PaymentMethod_en.html'));
+        }
         parent::appendContext($comment);
         parent::appendContext($submit);
-        $context = $this->header . parent::render();
-        return $context;
-    }
 
-    public function setCustomerInputTag($type, $name) {
-        $this->customerInputTag = $this->customerInputTag . parent::setInputTag($type,$name);
+        $context = parent::render();
+        return $context;
     }
 
 }
@@ -160,55 +154,29 @@ class ConfirmationForm extends Form {
     private $customer;
     private $product;
     private $productPayment;
-    private $purchaseHeader = "<h3>Purchase Information</h3>";
-    private $customerInformationHeader = "<h3>Customer Information </h3>";
-    private $paymentInformationHeader = "<h3>Payment Information </h3>";
 
     public function __construct(string $language, string $page = "") {
-        $this->product = $_SESSION['product'];
-        $this->customer = new Customer(
-            $_SESSION['Firstname'],
-            $_SESSION['Lastname'],
-            $_SESSION['Email'],
-            $_SESSION['PostalCode'],
-            $_SESSION['Address'],
-            $_SESSION['Country']
-        );
-        $_SESSION['customer'] = $this->customer;
-        if ($_SESSION['payment'] == "card") {
-            $this->productPayment = ProductPayment::cardPayment(
-                $_SESSION['payment'],
-                $_SESSION['card_name'],
-                $_SESSION['card_number'],
-                $_SESSION['card_cvv']);
-        } else if ($_SESSION['payment'] == "paper") {
-            $this->productPayment = ProductPayment::billPayment(
-                $_SESSION['payment'],
-                $_SESSION['bill_firstname'],
-                $_SESSION['bill_lastname'],
-                $_SESSION['bill_address'],
-                $_SESSION['bill_postalCode'],
-                $_SESSION['bill_country']
-            );
-        }
-
-
+        $this->product = getProduct();
+        $this->customer = $_SESSION['customer'];
+        $this->productPayment = $_SESSION['payment'];
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
         parent::setHtml("<form method='$method' action='$url'>");
-
     }
 
     public function render() {
-        parent::appendContext($this->purchaseHeader);
+        $purchaseHeader = "<h3>" . translate("Purchase Information"). "</h3>";
+        $customerInformationHeader = "<h3>" . translate("Customer Information"). "</h3>";
+        $paymentInformationHeader = "<h3>" . translate("Payment Information"). "</h3>";
+        parent::appendContext($purchaseHeader);
         parent::appendContext($this->product->render());
-        parent::appendContext($this->customerInformationHeader);
+        parent::appendContext($customerInformationHeader);
         parent::appendContext($this->customer->render());
-        parent::appendContext($this->paymentInformationHeader);
+        parent::appendContext($paymentInformationHeader);
         parent::appendContext($this->productPayment->render());
         if (isset($_SESSION['comment']) && $_SESSION['comment'] != "") {
-            $comment = "<h5> Your Comment</h5>";
+            $comment = "<h5>"  . translate("Your Comment") . "</h5>";
             $comment = $comment . "<p>" . $_SESSION['comment'] . "</p>";
             parent::appendContext($comment);
         }
