@@ -50,15 +50,19 @@ class Product
             ";
 
         if (isset($this->amount)) {
-            $html = $html . "<p><label>Amount: </label>$this->amount</p>";
+            $labelAmountText = translate("Amount");
+            $labelDonationText = translate("Donation");
+            $html = $html . "<p><label>". $labelAmountText . ": </label>$this->amount</p>";
         }
-        if (isset($this->donation)) {
-            $html = $html . "<p><label>Donation: </label>$this->donation</p>";
-            $html = $html . "<p>Thanks for the donation to \"Safe A Fisherman\"</p>";
+        if (isset($this->donation) && $this->donation != 0) {
+            $html = $html . "<p><label>" . $labelDonationText . ": </label>$this->donation</p>";
+            $fishermanText = translate("Thanks for the donation to \"Safe A Fisherman\"");
+            $html = $html . "<p>". $fishermanText . "</p>";
         }
         $this->totoal = $this->getTotoal();
         if ($this->totoal > 0) {
-            $html = $html . "<p><label>Total Price: </label>$this->totoal</p>";
+            $totalPriceText = translate("Total Price");
+            $html = $html . "<p><label>" . $totalPriceText .": </label>$this->totoal</p>";
         }
         return $html;
     }
@@ -154,11 +158,11 @@ class ProductHandler {
         $html = "<div id='container'>";
         foreach ($this->products as $product) {
             $name = $product->getRealName();
-            $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
+            $url = htmlspecialchars($_SERVER['PHP_SELF']) . "?lang=$lang" . "&page=$page";
             $url = $url . "&product=$name";
             $html = $html . "<div id='box'>";
             $html = $html . $product->render();
-            $html = $html . "<a href='$url' class='button'>Buy Now</a></div>";
+            $html = $html . "<a href='$url' class='button'>" . translate("Buy Now") . "</a></div>";
         }
         echo $html. "</div>";
     }
@@ -246,9 +250,9 @@ class ProductPayment {
 
     public function renderCard() {
         $context = "
-            <h4> Credit Card Information </h4>
-            <p><label>Name on the Card: </label> $this->card_name</p>
-            <p><label>Number: </label> $this->card_number</p>
+            <h4> " . translate("Credit Card Information") ." </h4>
+            <p><label>" . translate("Name on the Card"). " : </label> $this->card_name</p>
+            <p><label>". translate("Cardnumber")." : </label> $this->card_number</p>
             <p><label>CVV: </label> $this->card_cvv</p>
             ";
         return $context;
@@ -256,12 +260,12 @@ class ProductPayment {
 
     public function renderBill() {
         $context = "
-            <h4> Billing Address </h4>
-            <p><label>First name: </label> $this->bill_firstname</p>
-            <p><label>Last name: </label> $this->bill_lastname</p>
-            <p><label>Address: </label> $this->bill_address</p>
-            <p><label>Postal Code: </label> $this->bill_postalCode</p>
-            <p><label>Country: </label> $this->bill_country</p>
+            <h4> ". translate("Billing Address") ." </h4>
+            <p><label>". translate("Firstname") .": </label> $this->bill_firstname</p>
+            <p><label>". translate("Lastname") .": </label> $this->bill_lastname</p>
+            <p><label>". translate("Address") .": </label> $this->bill_address</p>
+            <p><label>". translate("PostalCode") .": </label> $this->bill_postalCode</p>
+            <p><label>". translate("Country") .": </label> $this->bill_country</p>
         ";
         return $context;
     }

@@ -1,19 +1,24 @@
 <?php
 
 
-    include 'php/utils/functions.php';
+    require 'autoloader.php';
     include 'php/database/database.php';
+    require 'php/languages/Translator.php';
+    include 'php/customer/Customer.php';
+    include 'php/user/User.php';
+    include 'php/utils/functions.php';
     include 'php/products/Product.php';
     include 'php/utils/Form.php';
-    include 'php/customer/Customer.php';
-    include 'php/user/user.php';
-    include 'php/utils/Nav.php';
+    include 'php/utils/validate.php';
+    include 'php/utils/error.php';
+
     //include 'php/mail/mail.php';
 
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-    require 'php/utils/Translator.php';
+    include 'php/utils/login.php';
+    include 'php/utils/registration.php';
     require 'html/head.html';
     $nav = new Nav(getLanguage(["en", "de"]));?>
 

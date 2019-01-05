@@ -1,10 +1,17 @@
 <?php
 
 function getPageContent($content) {
-    include 'php/utils/login.php';
-    include 'php/utils/validate.php';
+    /*$test = "
+            <button onclick=\"getTime()\">Get Time</button>
+            <p id='time'>test</p>
+        ";
+    echo $test;*/
+    if (checkLogin()) {
+        $username = $_SESSION['user']['username'];
+        echo "<p>" . translate("You are currently logged in as") .": '$username'</p>";
+    }
     $productHandler = new ProductHandler();
-    switch ((isset($_GET[$content]) ? $_GET[$content] : '')) {
+    switch (get_param($content,'')) {
         case 'rods':
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             break;
@@ -25,6 +32,17 @@ function getPageContent($content) {
         case 'login':
             displayLogin();
             break;
+        case 'logout':
+            displayLogout();
+            break;
+        case 'userarea':
+            if (checkLogin()) {
+                include 'php/user/userarea.php';
+                displayUserArea();
+            } else {
+                displayNoAccess();
+            }
+            break;
         case 'buy':
             displayBuy();
             break;
@@ -32,7 +50,7 @@ function getPageContent($content) {
             displayShipping();
             break;
         case 'register':
-            displayRegister();
+            displayRegisterFrom();
             break;
         case 'sign_in':
             displaySignIn();
@@ -40,8 +58,14 @@ function getPageContent($content) {
         case 'confirmation':
             displayConfirmation();
             break;
-
+        case 'errorPage':
+            displayErrorReason(get_param("reason", "error"));
+            break;
         default:
+            if (checkLogin()) {
+                $username = $_SESSION['user']['username'];
+                echo "<h3> ". translate("Welcome") ." $username</h3>";
+            }
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             $productHandler->setupProducts('Reels', getLanguage(["en", "de"]));
             $productHandler->setupProducts('Lures', getLanguage(["en", "de"]));
@@ -54,8 +78,8 @@ function getPageContent($content) {
 function getLanguage($lang) {
     $default = "en";
     foreach ($lang as $key => $l) {
-        if (isset($_GET["lang"]) && ($_GET["lang"]) == $key) {
-            return $_GET["lang"];
+        if (get_param("lang","en") == $key) {
+            return get_param("lang", "en");
         }
     }
     return $default;
@@ -67,8 +91,9 @@ function translate(string $str) {
 }
 
 function getProduct() {
-    $productName = $_GET['product'];
-    $productData = Product::getSingleProduct($_GET['lang'], $_GET['product']);
+    $lang = htmlspecialchars(get_param("lang", "en"));
+    $prodName = htmlspecialchars(get_param("product",""));
+    $productData = Product::getSingleProduct($lang,$prodName);
     $product = new Product($productData["realName"],
                 $productData["name"],
                 $productData["price"],
@@ -83,47 +108,12 @@ function displayBuy() {
 
 function displayShipping(){
     $form = new ShippingForm(getLanguage(["en", "de"]), "confirmation");
-    $form->setCustomerInputTag("text", "Firstname");
-    $form->setCustomerInputTag("text", "Lastname");
-    $form->setCustomerInputTag("text", "Address");
-    $form->setCustomerInputTag("text", "PostalCode");
-    $form->setCustomerInputTag("email", "Email");
-    $form->setCustomerInputTag("text", "Country");
     echo $form->render();
 }
 
 function displayConfirmation() {
     $form = new ConfirmationForm(getLanguage(["en", "de"]), "");
     echo $form->render();
-}
-
-function displayLogin() {
-    echo "<h1> Create Account or Login </h1>";
-    if (isset($_GET["reason"]) && $_GET["reason"] == "loginFailed") {
-        echo "<h3> Wrong Password or wrong Username</h3>";
-    }
-    include 'php/utils/registration.php';
-}
-
-function displayRegister() {
-    $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
-    $registerForm->setUserInputTag("text", "Username");
-    $registerForm->setUserInputTag("password", "Password");
-    $registerForm->setUserInputTag("password", "Retype");
-    $registerForm->setUserInputTag("text", "Firstname");
-    $registerForm->setUserInputTag("text", "Lastname");
-    $registerForm->setUserInputTag("text", "Address");
-    $registerForm->setUserInputTag("text", "PostalCode");
-    $registerForm->setUserInputTag("email", "Email");
-    $registerForm->setUserInputTag("text", "Country");
-    echo $registerForm->render();
-}
-
-function displaySignIn() {
-    $login = new LoginForm(getLanguage(["en", "de"]), "");
-    $login->setUserInputTag("text", "Username");
-    $login->setUserInputTag("password", "Password");
-    echo $login->render();
 }
 
 function checkUsername($queryResult, $username) {
@@ -134,3 +124,64 @@ function checkUsername($queryResult, $username) {
     }
     return true;
 }
+
+function displayErrorReason(string $reason) {
+    $error = new ErrorPage($reason);
+    echo $error->render();
+}
+
+function displayLogout(){
+    echo displayLogoutMenu();
+}
+
+function createErrorUrl($reason) {
+    $loc = "Location: ";
+    $url = htmlspecialchars($_SERVER['PHP_SELF']);
+    $url = add_param($url, "lang", getLanguage(["en", "de"]));
+    $url = add_param($url, "page", "errorPage");
+    $url = add_param($url,"reason", $reason);
+    $url =  $loc . $url;
+    header($url);
+}
+
+function get_param($name, $default) {
+    if (!isset($_GET[$name]))
+        return $default;
+    $name_get = htmlspecialchars($_GET[$name]);
+    return urldecode($name_get);
+}
+
+function add_param($url, $name, $value) {
+    if(strpos($url, '?') !== false)
+        $sep = '&';
+    else
+        $sep = '?';
+    return $url . $sep . $name . "=" . urlencode($value);
+}
+
+function checkCookie($id) {
+    if (isset($_COOKIE[$id])) {
+        return $_COOKIE[$id];
+    }
+    return '';
+}
+
+function checkUserSession(string $name) {
+    if (checkLogin()) {
+        $name = strtolower($name);
+        return $_SESSION['user'][$name];
+    }
+    return "";
+}
+
+function checkLogin() {
+    return (isset($_SESSION['login']) && $_SESSION['login'] == true);
+}
+
+function displayNoAccess() {
+    echo "<h1>" . translate("No Access") . "</h1>";
+    echo "<p>" . translate("No access. Please log in first.") . "</p>";
+    displaySignIn();
+}
+
+

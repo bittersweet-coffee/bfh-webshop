@@ -9,6 +9,16 @@ class Customer
     private $email;
     private $country;
 
+    private CONST inputElements = array (
+        "Firstname" => "text",
+        "Lastname" => "text",
+        "Address" => "text",
+        "PostalCode" => "text",
+        "Email" => "email",
+        "Country" => "text"
+    );
+
+
     private CONST getCustomerQuery = "SELECT * FROM shopusers
               JOIN contact_users ON shopusers.contact = contact_users.id
               WHERE shopusers.username LIKE ?";
@@ -26,20 +36,6 @@ class Customer
         $this->postalCode = intval($postalCode);
         $this->email = $email;
         $this->country = $country;
-    }
-
-    public function render()
-    {
-        $context =
-            "<div id='customer_container'>
-                <p><label>Firstname: </label> $this->firstname</p>
-                <p><label>Lastname: </label> $this->lastname</p>
-                <p><label>Address: </label> $this->address</p>
-                <p><label>Email: </label> $this->email</p>
-                <p><label>Postal Code: </label> $this->email</p>
-                <p><label>Country: </label> $this->country</p>
-            </div>";
-        return $context;
     }
 
     public function getEmail(): string
@@ -82,5 +78,45 @@ class Customer
         }
         $row = $result->fetch_assoc();
         return $row;
+    }
+
+    public function render()
+    {
+        $context =
+            "<div id='customer_container'>
+                <p><label>Firstname: </label> $this->firstname</p>
+                <p><label>Lastname: </label> $this->lastname</p>
+                <p><label>Address: </label> $this->address</p>
+                <p><label>Email: </label> $this->email</p>
+                <p><label>Postal Code: </label> $this->email</p>
+                <p><label>Country: </label> $this->country</p>
+            </div>";
+        return $context;
+    }
+
+    public static function render_InputTags(): string {
+        $customerInputTag = "<div id='customer_tags'>";
+        foreach (self::inputElements as $inputElementName => $inputType) {
+            $customerInputTag = $customerInputTag . self::setInputTag($inputType, $inputElementName);
+        }
+        return $customerInputTag . "</div>";
+    }
+
+    private static function setInputTag($type, $name): string {
+        $value = checkUserSession($name);
+        $cookie = checkCookie($name);
+        if ($cookie != '') {
+            $value = $cookie;
+        }
+        $t_name = translate($name);
+        $t_mark = translate("can't be empty or is not valid");
+        $inputTag = "
+            <p id='$name'>
+                <label>$t_name: </label>
+                <input type='$type' name='$name' value='$value' required>
+                <mark>'$t_name' $t_mark</mark>
+            </p>
+            ";
+        return $inputTag;
     }
 }

@@ -1,42 +1,45 @@
 <?php
 
 if (isset($_POST["register"])) {
-    if (checkUsername(User::getDatabaseUsernames(), $_POST["Username"])) {
+    if (checkUsername(User::getDatabaseUsernames(), $_SESSION['user']->getUsername())) {
         doRegistration();
-        echo "<h3> Successfully created user </h3>";
-        displayMainMenu();
+        $loc = "Location: ";
+        $url = htmlspecialchars($_SERVER['PHP_SELF']);
+        $url = add_param($url, "lang", getLanguage(["en", "de"]));
+        $url = add_param($url, "page", "login");
+        $url = add_param($url,"reason", "registerSuccess");
+        $url =  $loc . $url;
+        header($url);
     } else {
-        displayUserAlreadyTaken();
+        $loc = "Location: ";
+        $url = htmlspecialchars($_SERVER['PHP_SELF']);
+        $url = add_param($url, "lang", getLanguage(["en", "de"]));
+        $url = add_param($url, "page", "login");
+        $url = add_param($url,"reason", "userAlreadyTaken");
+        $url =  $loc . $url;
+        header($url);
     }
-} else {
-    displayMainMenu();
+}
+
+function displayRegisterFrom() {
+    $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
+    echo $registerForm->render();
+}
+
+function displayRegisterMenu() {
+    $lang = getLanguage(["en", "de"]);
+    $page = "register";
+    $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+    $url = add_param($url, "page", $page);
+    $html = "<a href='$url' class='button'>" . translate("Register") . "</a>";
+    $page = "sign_in";
+    $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+    $url = add_param($url, "page", $page);
+    $html = $html . "<a href='$url' class='button'>" . translate("Sign in") . "</a>";
+    echo $html;
 }
 
 function doRegistration() {
-    $customer = new Customer(
-        $_SESSION["Firstname"],
-        $_SESSION["Lastname"],
-        $_SESSION["Address"],
-        $_SESSION['PostalCode'],
-        $_SESSION["Email"],
-        $_SESSION["Country"]);
-    //$_SESSION['customer'] = $customer;
-    $user = new User($customer, $_POST["Username"], $_POST["Password"]);
+    $user = $_SESSION['user'];
     $user->storeUser();
-}
-
-function displayUserAlreadyTaken() {
-    echo "<h2> This Username is already taken... </h2>";
-    displayRegister();
-}
-
-function displayMainMenu() {
-    $lang = getLanguage(["en", "de"]);
-    $page = "register";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = "<a href='$url' class='button'>Register</a>";
-    $page = "sign_in";
-    $url = $_SERVER['PHP_SELF'] . "?lang=$lang" . "&page=$page";
-    $html = $html . "<a href='$url' class='button'>Sign In</a>";
-    echo $html;
 }

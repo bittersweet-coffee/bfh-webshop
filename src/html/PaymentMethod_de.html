@@ -1,0 +1,58 @@
+<div>
+    <label>Zahlungsmethode: </label>
+    <select id='billId' name='payment' onchange='getBillDiv()' required>
+        <option value=''></option>
+        <option value='card'>Kreditkarte</option>
+        <option value='paper'>Papier Rechnung</option>
+    </select>
+    <div class='hidden' id='card'>
+        <h5> Kreditkatren Informationen </h5>
+        <p id='card_name'>
+            <label>Name auf der Kreditkarte: </label>
+            <input type='text' name='card_name'>
+            <mark>Kreditkartenname nicht valide oder leer.</mark>
+        </p>
+        <p id="card_number">
+            <label>Kartennummer: </label>
+            <input type="text" name="card_number">
+            <mark>Kartennummer nicht valide oder leer.</mark>
+        </p>
+        <p id="card_cvv">
+            <label>CVV: </label>
+            <input type="text" name="card_cvv">
+            <mark>CVV nicht valide oder leer.</mark>
+        </p>
+    </div>
+    <div class='hidden' id='paper'>
+        <h5> Rechnungsadresse </h5>
+        <p id="address_checkbox">
+            <input type="checkbox" name="sameAddress">
+            <label>Gleiche Adresse wie Kunde</label>
+            <label>Wenn aktiviert, werde werden kopiert.</label></p>
+        <p id="bill_firstname">
+            <label>Vorname: </label>
+            <input type="text" name="bill_firstname">
+            <mark>Vorname kann nicht leer sein oder ist nicht gültig.</mark>
+        </p>
+        <p id="bill_lastname">
+            <label>Nachname: </label>
+            <input type="text" name="bill_lastname">
+            <mark>Nachname kann nicht leer sein oder ist nicht gültig.</mark>
+        </p>
+        <p id="bill_address">
+            <label>Adresse: </label>
+            <input type="text" name="bill_address">
+            <mark>Adresse kann nicht leer sein oder ist nicht gültig.</mark>
+        </p>
+        <p id="bill_postalCode">
+            <label>Postal code: </label>
+            <input type="text" name="bill_postalCode">
+            <mark>Postleizahl kann nicht leer sein oder ist nicht gültig.</mark>
+        </p>
+        <p id="bill_country">
+            <label>Land: </label>
+            <input type="text" name="bill_country">
+            <mark>Land kann nicht leer sein oder ist nicht gültig.</mark>
+        </p>
+    </div>
+</div>

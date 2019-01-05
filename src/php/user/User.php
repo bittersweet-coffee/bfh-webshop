@@ -12,6 +12,13 @@ class User {
     private CONST lastCustomerIDQuery = "SELECT MAX(id) FROM `contact_users`";
     private CONST lastShopUserIDQuery = "SELECT MAX(id) FROM `shopusers`";
     private CONST passwordHashQuery = "SELECT * FROM `shopusers` WHERE `username` LIKE ?";
+    private CONST updatePasswordQuery = "UPDATE shopusers SET password = ? WHERE shopusers.username LIKE ?";
+
+    private CONST inputElements = array (
+        "Username" => "text",
+        "Password" => "password",
+        "Retype" => "password",
+    );
 
     private $customer;
     private $username;
@@ -46,9 +53,9 @@ class User {
         $this->storeCustomerData($idContUsers,
             $this->customer->getFirstname(),
             $this->customer->getLastname(),
-            $this->customer->getEmail(),
             $this->customer->getAddress(),
             intval($this->customer->getPostalCode()),
+            $this->customer->getEmail(),
             $this->customer->getCountry());
         $idShopUser = $this->getLastID(self::lastShopUserIDQuery) + 1;
         $this->storeUserData($idShopUser,$this->username,$this->password,$idContUsers);
@@ -65,18 +72,18 @@ class User {
     private function storeCustomerData(int $id,
                                        string $fname,
                                        string $lname,
-                                       string $mail,
                                        string $adr,
                                        int $pc,
+                                       string $mail,
                                        string $country) {
         $query = Database::doQueryPrepare(self::storeCustomerData);
-        $query->bind_param('issssis',
+        $query->bind_param('isssiss',
             $id,
             $fname,
             $lname,
-            $mail,
             $adr,
             $pc,
+            $mail,
             $country);
         $query->execute();
     }
@@ -104,8 +111,40 @@ class User {
             "firstname" => $customer->getFirstname(),
             "lastname" => $customer->getLastname(),
             "address" => $customer->getAddress(),
-            "postalCode" => $customer->getPostalCode(),
+            "postalcode" => $customer->getPostalCode(),
+            "email" => $customer->getEmail(),
             "country" => $customer->getCountry());
         return $user;
+    }
+
+    public static function render_InputTags(): string {
+        $userInputTag = "";
+        foreach (self::inputElements as $inputElementName => $inputType) {
+            $userInputTag = $userInputTag . self::setInputTag($inputType, $inputElementName);
+        }
+        return $userInputTag;
+    }
+
+    private static function setInputTag($type, $name): string {
+        $t_name = translate($name);
+        $t_mark = translate("can't be empty or is not valid");
+        $inputTag = "
+            <p id='$name'>
+                <label>$t_name: </label>
+                <input type='$type' name='$name' required>
+                <mark>'$t_name' $t_mark</mark>
+            </p>
+            ";
+        return $inputTag;
+    }
+
+    public static function changePassword($user, $pw) {
+        $pw = password_hash($pw,PASSWORD_BCRYPT);
+        $query = Database::doQueryPrepare(self::updatePasswordQuery);
+        $query->bind_param('ss', $pw,$user);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
+
     }
 }
