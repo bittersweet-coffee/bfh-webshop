@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Dez 2018 um 12:00
+-- Erstellungszeit: 05. Jan 2019 um 17:15
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -43,8 +43,7 @@ CREATE TABLE `contact_users` (
 --
 
 INSERT INTO `contact_users` (`id`, `firstname`, `lastname`, `address`, `postalcode`, `email`, `country`) VALUES
-(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'jan.henzi@hotmail.com', 'CH'),
-(2, 'TestUserFirstname', 'TestUserLastName', 'TestUserStrasse 12', 1234, 'testUser@mail.com', 'GB');
+(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'jan.henzi@hotmail.com', 'CH');
 
 -- --------------------------------------------------------
 
@@ -84,8 +83,7 @@ CREATE TABLE `payment_card` (
 --
 
 INSERT INTO `payment_card` (`id`, `name`, `number`, `cvv`) VALUES
-(1, 'JAN HENZI', 1234123412341234, 123),
-(2, 'TEST USER', 4321432143214321, 321);
+(1, 'JAN HENZI', 1234123412341234, 123);
 
 -- --------------------------------------------------------
 
@@ -107,8 +105,7 @@ CREATE TABLE `payment_paper` (
 --
 
 INSERT INTO `payment_paper` (`id`, `firstname`, `lastname`, `address`, `postalcode`, `country`) VALUES
-(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'CH'),
-(2, 'TestUserFirstname', 'TestUserLastName', 'TestUserStrasse 12', 1234, 'GB');
+(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'CH');
 
 -- --------------------------------------------------------
 
@@ -237,8 +234,7 @@ CREATE TABLE `shopusers` (
 --
 
 INSERT INTO `shopusers` (`id`, `username`, `password`, `contact`) VALUES
-(1, 'henzij', 'welcome1', 1),
-(2, 'testuser', 'welcome1', 2);
+(1, 'henzij', 'welcome1', 1);
 
 -- --------------------------------------------------------
 
@@ -257,8 +253,7 @@ CREATE TABLE `users_card_paper` (
 --
 
 INSERT INTO `users_card_paper` (`id_u`, `id_c`, `id_p`) VALUES
-(1, 1, 1),
-(2, 2, 2);
+(1, 1, 1);
 
 --
 -- Indizes der exportierten Tabellen
