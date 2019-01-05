@@ -1,10 +1,17 @@
 <?php
 
 function getPageContent($content) {
-    include 'php/utils/login.php';
-    include 'php/utils/validate.php';
+    /*$test = "
+            <button onclick=\"getTime()\">Get Time</button>
+            <p id='time'>test</p>
+        ";
+    echo $test;*/
+    if (checkLogin()) {
+        $username = $_SESSION['user']['username'];
+        echo "<p>" . translate("You are currently logged in as") .": '$username'</p>";
+    }
     $productHandler = new ProductHandler();
-    switch ((isset($_GET[$content]) ? get_param($content,'') : '')) {
+    switch (get_param($content,'')) {
         case 'rods':
             $productHandler->setupProducts('Fishing Rods', getLanguage(["en", "de"]));
             break;
@@ -28,6 +35,14 @@ function getPageContent($content) {
         case 'logout':
             displayLogout();
             break;
+        case 'userarea':
+            if (checkLogin()) {
+                include 'php/user/userarea.php';
+                displayUserArea();
+            } else {
+                displayNoAccess();
+            }
+            break;
         case 'buy':
             displayBuy();
             break;
@@ -35,7 +50,7 @@ function getPageContent($content) {
             displayShipping();
             break;
         case 'register':
-            displayRegister();
+            displayRegisterFrom();
             break;
         case 'sign_in':
             displaySignIn();
@@ -101,33 +116,6 @@ function displayConfirmation() {
     echo $form->render();
 }
 
-function displayLogin() {
-    echo "<h1> ". translate("Create Account or Login") ." </h1>";
-    if (get_param("reason", "") == "loginFailed") {
-        echo "<h3> ". translate("Wrong Password or wrong Username") . "</h3>";
-    }
-    if (get_param("action", "") == "logout") {
-        session_destroy();
-        $loc = "Location: ";
-        $url = htmlspecialchars($_SERVER['PHP_SELF']);
-        $url = add_param($url, "lang", getLanguage(["en", "de"]));
-        $url = add_param($url, "page", "login");
-        $url =  $loc . $url;
-        header($url);
-    }
-    include 'php/utils/registration.php';
-}
-
-function displayRegister() {
-    $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
-    echo $registerForm->render();
-}
-
-function displaySignIn() {
-    $login = new LoginForm(getLanguage(["en", "de"]), "");
-    echo $login->render();
-}
-
 function checkUsername($queryResult, $username) {
     while($row = mysqli_fetch_row($queryResult)) {
         if ($row[0] == $username){
@@ -143,7 +131,7 @@ function displayErrorReason(string $reason) {
 }
 
 function displayLogout(){
-    displayLogoutMenu();
+    echo displayLogoutMenu();
 }
 
 function createErrorUrl($reason) {
@@ -178,7 +166,22 @@ function checkCookie($id) {
     return '';
 }
 
+function checkUserSession(string $name) {
+    if (checkLogin()) {
+        $name = strtolower($name);
+        return $_SESSION['user'][$name];
+    }
+    return "";
+}
+
 function checkLogin() {
     return (isset($_SESSION['login']) && $_SESSION['login'] == true);
 }
+
+function displayNoAccess() {
+    echo "<h1>" . translate("No Access") . "</h1>";
+    echo "<p>" . translate("No access. Please log in first.") . "</p>";
+    displaySignIn();
+}
+
 

@@ -12,6 +12,7 @@ class User {
     private CONST lastCustomerIDQuery = "SELECT MAX(id) FROM `contact_users`";
     private CONST lastShopUserIDQuery = "SELECT MAX(id) FROM `shopusers`";
     private CONST passwordHashQuery = "SELECT * FROM `shopusers` WHERE `username` LIKE ?";
+    private CONST updatePasswordQuery = "UPDATE shopusers SET password = ? WHERE shopusers.username LIKE ?";
 
     private CONST inputElements = array (
         "Username" => "text",
@@ -110,7 +111,8 @@ class User {
             "firstname" => $customer->getFirstname(),
             "lastname" => $customer->getLastname(),
             "address" => $customer->getAddress(),
-            "postalCode" => $customer->getPostalCode(),
+            "postalcode" => $customer->getPostalCode(),
+            "email" => $customer->getEmail(),
             "country" => $customer->getCountry());
         return $user;
     }
@@ -134,5 +136,15 @@ class User {
             </p>
             ";
         return $inputTag;
+    }
+
+    public static function changePassword($user, $pw) {
+        $pw = password_hash($pw,PASSWORD_BCRYPT);
+        $query = Database::doQueryPrepare(self::updatePasswordQuery);
+        $query->bind_param('ss', $pw,$user);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
+
     }
 }

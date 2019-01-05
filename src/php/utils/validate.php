@@ -44,13 +44,38 @@ function checkCustomerData() {
     return true;
 }
 
+if (isset($_POST["register"])) {
+    if (checkCustomerData() && checkUserData()) {
+        createCustomer();
+        createUser();
+    } else {
+        createErrorUrl("registrationFailed");
+    }
+}
+
+function createUser() {
+    $user = new User($_SESSION['customer'],
+        htmlspecialchars($_POST["Username"]),
+        htmlspecialchars($_POST["Password"]));
+    $_SESSION['user'] = $user;
+}
+
+function checkUserData() {
+    if (!isset($_POST["Username"])   ||
+        !isset($_POST["Password"]) ||
+        !isset($_POST["Retype"])) {
+        return false;
+    }
+    return true;
+}
+
 function setCustomerCookies() {
-    setcookie("Firstname", htmlspecialchars($_POST["Firstname"]));
-    setcookie("Lastname", htmlspecialchars($_POST["Lastname"]));
-    setcookie("Address", htmlspecialchars($_POST["Address"]));
-    setcookie("PostalCode", htmlspecialchars($_POST["PostalCode"]));
-    setcookie("Email", htmlspecialchars($_POST["Email"]));
-    setcookie("Country", htmlspecialchars($_POST["Country"]));
+    setcookie("Firstname", htmlspecialchars($_POST["Firstname"]), time()+300);
+    setcookie("Lastname", htmlspecialchars($_POST["Lastname"]), time()+300);
+    setcookie("Address", htmlspecialchars($_POST["Address"]), time()+300);
+    setcookie("PostalCode", htmlspecialchars($_POST["PostalCode"]), time()+300);
+    setcookie("Email", htmlspecialchars($_POST["Email"]), time()+300);
+    setcookie("Country", htmlspecialchars($_POST["Country"]), time()+300);
 }
 
 function createCustomer() {

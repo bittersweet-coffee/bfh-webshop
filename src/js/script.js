@@ -1,23 +1,33 @@
 $(document).ready(function () {
-    var shippingbutton = $("input[name=shipping]");
-    var regbutton = $("input[name=register]");
+    var btn = $("input[type=submit]");
     $("* mark").hide();
-    checkCustomerData(shippingbutton);
-    checkCreditCardData(shippingbutton);
-    checkUserData(regbutton);
-    checkCustomerData(regbutton);
+    checkCustomerData(btn);
+    checkUserData(btn);
     handleAddressCheckbox();
     $('#billId').on('change', function() {
         selectedOption = this.value;
         if (selectedOption == "") {
-            submitbutton.prop('disabled', true);
+            btn.prop('disabled', true);
         } else if (selectedOption == "card") {
-            checkCreditCardData(shippingbutton);
+            checkCreditCardData(btn);
         } else if (selectedOption == "paper"){
-            checkBilladdressData(shippingbutton);
+            checkBilladdressData(btn);
         }
     });
+
+
 });
+
+function getTime() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("time").innerHTML = this.responseText;
+        }
+    };
+    xmlhttp.open("GET", "php/utils/time.php", true);
+    xmlhttp.send();
+}
 
 function getBillDiv() {
     var selectedOption = document.getElementById("billId").value;
@@ -159,8 +169,10 @@ function checkCustomerData(button) {
 
 function checkUserData(button) {
     var username = true,
-    password = true,
-    retype = true;
+        password = true,
+        oldpassword = true,
+        newpassword = true,
+        retype = true;
 
     $("#Username input").focusout(function () {
         username = checkifempty(this.value.match(/^[A-Za-z]+\d*[A-Za-z]*\d*$/));
@@ -185,12 +197,48 @@ function checkUserData(button) {
             fadeMark("Password", password, "Password can't be empty. " +
                 "Only numbers and letters are allowed.");
         }
-        fadeMark("Password", password, "Password can't be empty or is not valid (only digits and characters!");
         button.prop('disabled', password);
+    });
+
+    $("#Oldpassword input").focusout(function () {
+        oldpassword = checkifempty(this.value.match(/^\d*[A-Za-z]+\d*[A-Za-z]*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Oldpassword", oldpassword, "Das Passwort darf nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Oldpassword", oldpassword, "Password can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', oldpassword);
+    });
+
+    $("#Newpassword input").focusout(function () {
+        newpassword = checkifempty(this.value.match(/^\d*[A-Za-z]+\d*[A-Za-z]*$/));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Newpassword", newpassword, "Das Passwort darf nicht leer sein. " +
+                "Es sind nur Zahlen und Buchstaben erlaubt.");
+        } else {
+            fadeMark("Newpassword", newpassword, "Password can't be empty. " +
+                "Only numbers and letters are allowed.");
+        }
+        button.prop('disabled', newpassword);
     });
 
     $("#Retype input").focusout(function () {
         retype = checkifempty(this.value.match($("#Password input").val()));
+        var lang = getUrlParameter('lang');
+        if (lang == "de") {
+            fadeMark("Retype", retype, "Passt nicht zum Passwortfeld!");
+        } else {
+            fadeMark("Retype", retype, "Does not match with Password Field!");
+        }
+        button.prop('disabled', retype);
+    });
+
+    $("#Retype input").focusout(function () {
+        retype = checkifempty(this.value.match($("#Newpassword input").val()));
         var lang = getUrlParameter('lang');
         if (lang == "de") {
             fadeMark("Retype", retype, "Passt nicht zum Passwortfeld!");
@@ -221,10 +269,10 @@ function checkCreditCardData(button) {
         card_number = checkifempty(this.value.match(/^(\d{4}(\s|-){1}){3}(\d{4})$/));
         var lang = getUrlParameter('lang');
         if (lang == "de") {
-            fadeMark("card_name", card_number, "Die Kartennummer stimmt nicht mit der Bedingung überein! " +
+            fadeMark("card_number", card_number, "Die Kartennummer stimmt nicht mit der Bedingung überein! " +
                 "Zahlenblöcke müssen mit Leerzeichen oder Minus (-) getrennt werden.");
         } else {
-            fadeMark("card_name", card_number, "The card number does not match the condition! " +
+            fadeMark("card_number", card_number, "The card number does not match the condition! " +
                 "Number blocks must be separated with spaces or minus (-).");
         }
         button.prop('disabled', card_number);
@@ -234,9 +282,9 @@ function checkCreditCardData(button) {
         card_cvv = checkifempty(this.value.match(/^\d{3}$/));
         var lang = getUrlParameter('lang');
         if (lang == "de") {
-            fadeMark("card_name", card_cvv, "CVV muss aus 3 Zahlen bestehen!");
+            fadeMark("card_cvv", card_cvv, "CVV muss aus 3 Zahlen bestehen!");
         } else {
-            fadeMark("card_name", card_cvv, "CVV has to be 3 numbers!");
+            fadeMark("card_cvv", card_cvv, "CVV has to be 3 numbers!");
         }
         button.prop('disabled', card_cvv);
     });
@@ -330,7 +378,7 @@ function checkBilladdressData(button) {
     });
 }
 
-//fond and copies from here : "https://davidwalsh.name/query-string-javascript"
+//fond and copied from here : "https://davidwalsh.name/query-string-javascript"
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');

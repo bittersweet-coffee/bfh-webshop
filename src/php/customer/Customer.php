@@ -95,25 +95,25 @@ class Customer
     }
 
     public static function render_InputTags(): string {
-        $customerInputTag = "";
+        $customerInputTag = "<div id='customer_tags'>";
         foreach (self::inputElements as $inputElementName => $inputType) {
             $customerInputTag = $customerInputTag . self::setInputTag($inputType, $inputElementName);
         }
-        return $customerInputTag;
+        return $customerInputTag . "</div>";
     }
 
     private static function setInputTag($type, $name): string {
+        $value = checkUserSession($name);
         $cookie = checkCookie($name);
+        if ($cookie != '') {
+            $value = $cookie;
+        }
         $t_name = translate($name);
         $t_mark = translate("can't be empty or is not valid");
-        $autofocus = "";
-        if ($name == "Firstname") {
-            $autofocus = "autofocus";
-        }
         $inputTag = "
             <p id='$name'>
                 <label>$t_name: </label>
-                <input type='$type' name='$name' value='$cookie' required $autofocus>
+                <input type='$type' name='$name' value='$value' required>
                 <mark>'$t_name' $t_mark</mark>
             </p>
             ";

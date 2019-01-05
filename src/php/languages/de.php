@@ -55,6 +55,8 @@ $messages['Registration'] = 'Registrierung';
 $messages['Username'] = 'Benutzername';
 $messages['Password'] = 'Passwort';
 $messages['Retype'] = 'Wiederholung';
+$messages['Oldpassword'] = 'Altes Passwort';
+$messages['Newpassword'] = 'Neues Passwort';
 $messages['Buy'] = 'Kaufen';
 $messages['Ship'] = 'Versand';
 $messages['Confirm'] = 'Bestätigen';
@@ -69,6 +71,18 @@ $messages['An error has occurred'] = 'Ein Fehler ist aufgetreten';
 $messages['The reason seems to be this'] = 'Der Grund scheint folgendes zu sein';
 $messages['Try it again. If it occurs again, contact the administrator'] = 'Versuchen Sie es nochmals. Wenn es wieder auftritt kontaktieren Sie den Administrator';
 $messages['Do you really want to log out?'] = 'Möchtetst du wirklich ausloggen?';
+$messages['No access. Please log in first.'] = 'Kein Zutritt. Bitte logge dich zuerst ein.';
+$messages['No Access'] = 'Kein Zutritt';
+$messages['In this section you have the following options'] = 'In diesem Bereich hast du folgende Optionen';
 
+$messages['Change customer data'] = 'Kundendaten Verändern';
+$messages['Change user data'] = 'Benutzerdaten Verändern';
+$messages['Select an option to perform it'] = 'Wähle eine Option um diese durchzuführen';
+$messages['You are currently logged in as'] = 'Du bist momentan eingeloggt als';
+
+$messages['Change Password'] = 'Passwort ändern';
+$messages['Password successfully changed. You should log in again to check it.'] = "Passwort erfolgreich geändert. Du solltest dich neu einloggen um es zu prüfen.";
+$messages['Your old password does not seem to be correct.'] = 'Dein altes passwort scheint nicht zu stimmen.';
+$messages['Successfully created user'] = 'Erfolgreich Benutzer angelegt';
 
 

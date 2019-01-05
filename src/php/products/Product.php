@@ -54,7 +54,7 @@ class Product
             $labelDonationText = translate("Donation");
             $html = $html . "<p><label>". $labelAmountText . ": </label>$this->amount</p>";
         }
-        if (isset($this->donation)) {
+        if (isset($this->donation) && $this->donation != 0) {
             $html = $html . "<p><label>" . $labelDonationText . ": </label>$this->donation</p>";
             $fishermanText = translate("Thanks for the donation to \"Safe A Fisherman\"");
             $html = $html . "<p>". $fishermanText . "</p>";

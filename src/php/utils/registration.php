@@ -1,37 +1,32 @@
 <?php
 
 if (isset($_POST["register"])) {
-    if (checkUsername(User::getDatabaseUsernames(), htmlspecialchars($_POST["Username"]))) {
+    if (checkUsername(User::getDatabaseUsernames(), $_SESSION['user']->getUsername())) {
         doRegistration();
-        echo "<h3> Successfully created user </h3>";
-        displayMainMenu();
+        $loc = "Location: ";
+        $url = htmlspecialchars($_SERVER['PHP_SELF']);
+        $url = add_param($url, "lang", getLanguage(["en", "de"]));
+        $url = add_param($url, "page", "login");
+        $url = add_param($url,"reason", "registerSuccess");
+        $url =  $loc . $url;
+        header($url);
     } else {
-        displayUserAlreadyTaken();
+        $loc = "Location: ";
+        $url = htmlspecialchars($_SERVER['PHP_SELF']);
+        $url = add_param($url, "lang", getLanguage(["en", "de"]));
+        $url = add_param($url, "page", "login");
+        $url = add_param($url,"reason", "userAlreadyTaken");
+        $url =  $loc . $url;
+        header($url);
     }
-} else {
-    displayMainMenu();
 }
 
-function doRegistration() {
-    $customer = new Customer(
-        $_SESSION["Firstname"],
-        $_SESSION["Lastname"],
-        $_SESSION["Address"],
-        $_SESSION['PostalCode'],
-        $_SESSION["Email"],
-        $_SESSION["Country"]);
-    //$_SESSION['customer'] = $customer;
-    $user = new User($customer, $_POST["Username"], $_POST["Password"]);
-    $user->storeUser();
+function displayRegisterFrom() {
+    $registerForm = new RegisterForm(getLanguage(["en", "de"]), "login");
+    echo $registerForm->render();
 }
 
-function displayUserAlreadyTaken() {
-
-    echo "<h2>" .translate("This Username is already taken..."). "  </h2>";
-    displayRegister();
-}
-
-function displayMainMenu() {
+function displayRegisterMenu() {
     $lang = getLanguage(["en", "de"]);
     $page = "register";
     $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
@@ -42,4 +37,9 @@ function displayMainMenu() {
     $url = add_param($url, "page", $page);
     $html = $html . "<a href='$url' class='button'>" . translate("Sign in") . "</a>";
     echo $html;
+}
+
+function doRegistration() {
+    $user = $_SESSION['user'];
+    $user->storeUser();
 }

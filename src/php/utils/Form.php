@@ -47,12 +47,13 @@ class Form {
     }
 
     public function setInputTag($type, $name) {
-        $labelText = translate($name);
+        $t_name = translate($name);
+        $t_mark = translate("can't be empty or is not valid");
         $inputTag = "
             <p id='$name'>
-                <label>$labelText: </label>
+                <label>$t_name: </label>
                 <input type='$type' name='$name' required>
-                <mark>'$name' can't be empty or is not valid.</mark>
+                <mark>'$t_name' $t_mark</mark>
             </p>
             ";
         return $inputTag;
@@ -128,7 +129,7 @@ class ShippingForm extends Form {
         $customerInformationHeader = "<h3>". translate($this->customerInfoHeaderText) . "</h3>";
         $commentText = translate("Leave Some Comments here");
         $comment ="<p>" . $commentText . "</p>";
-        $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea>";
+        $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea><br/>";
         $submitText = translate("Ship");
         $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
 
@@ -200,15 +201,13 @@ class RegisterForm extends Form {
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
-
-
     public function render() {
         $signInHeader ="<h2> ". translate("Registration") . " </h2>";
         parent::appendContext($signInHeader);
         parent::appendContext(User::render_InputTags());
         parent::appendContext(Customer::render_InputTags());
         $submitText = translate("Register");
-        $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
+        $submit = "<input type='submit' name='register' value='".$submitText."'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Registration"));
         return parent::render();
@@ -239,5 +238,87 @@ class LoginForm extends Form {
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Login"));
         return parent::render();
+    }
+}
+
+class UserareaUserForm extends Form {
+
+    public function __construct(string $language, string $page = "")
+    {
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getUsernameField(string $name) {
+        $t_name = translate("Username");
+        return "
+            <label>$t_name: $name</label>
+        ";
+    }
+
+    private function getFormsElements() {
+        $header = "<h3>" . translate("Change customer data") . "</h3>";
+        $username = $_SESSION['user']['username'];
+        $usernameField = $this->getUsernameField($username);
+        $old_passwordField = parent::setInputTag("password", "Oldpassword");
+        $new_passwordField = parent::setInputTag("password", "Newpassword");
+        $retype = parent::setInputTag("password", "Retype");
+        $submit = "<input type='submit' value='". translate("Change Password") ."' name='post_changeUserData'/>";
+        return [$header,
+            $usernameField,
+            $old_passwordField,
+            $new_passwordField,
+            $retype,
+            $submit,
+            parent::getCancleButton("noChange")];
+    }
+}
+
+class UserareaCustomerForms extends Form {
+
+    private $username;
+
+    public function __construct(string $language, string $page = "")
+    {
+        $this->username = $_SESSION['user']['username'];
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $header = "<h3>" . translate("Change user data") . "</h3>";
+        $usernameField = $this->getUsernameField($this->username);
+        $inputTags = Customer::render_InputTags();
+        $submit = "<input type='submit' value='". translate("Change user data") ."' name='post_changeCustomerData'/>";
+        return [$header,
+            $usernameField,
+            $inputTags,
+            $submit,
+            parent::getCancleButton("noChange")];
+    }
+
+    private function getUsernameField(string $name) {
+        $t_name = translate("Username");
+        return "
+            <label>$t_name: $name</label>
+        ";
     }
 }

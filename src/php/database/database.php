@@ -13,6 +13,7 @@ class Database extends mysqli {
         parent::__construct(self::SERVERNAME, self::USERNAME, self::PASSWORD, self::DATABASE);
     }
 
+    //singleton
     static public function getDBInstance() {
         if (!self::$instance) {
             @self::$instance = new Database();
@@ -23,24 +24,4 @@ class Database extends mysqli {
     static public function doQueryPrepare($query) {
         return self::getDBInstance()->prepare($query);
     }
-}
-
-class Entity {
-
-    private $database;
-
-
-
-    public function __construct()
-    {
-        $this->database = new Database();
-    }
-
-    public static function getUsernames() {
-        $instance = new self();
-        $result = $instance->getDatabaseUsernames();
-        return $result;
-    }
-
-
 }
