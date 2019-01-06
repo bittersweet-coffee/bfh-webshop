@@ -76,4 +76,19 @@ class UserareaController {
         return $user;
     }
 
+    public function addProduct() {
+        $forms =  new AddProductForms(getLanguage(["en", "de"]), "userarea");
+        $this->model->setDisplay($forms->render());
+    }
+
+    public function deleteProduct() {
+        //$forms =  new DeleteProductForms(getLanguage(["en", "de"]), "userarea");
+        //$this->model->setDisplay($forms->render());
+    }
+
+    public function updateProduct() {
+        //$forms =  new UpdateProductForms(getLanguage(["en", "de"]), "userarea");
+        //$this->model->setDisplay($forms->render());
+    }
+
 }

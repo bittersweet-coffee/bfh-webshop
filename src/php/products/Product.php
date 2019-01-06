@@ -27,6 +27,8 @@ class Product
         JOIN p_type on product.p_id=p_type.id
         WHERE language.short LIKE ? and product.name LIKE ?";
 
+    private CONST getProductTypes = "SELECT p_type.name FROM p_type";
+
     public function __construct($realName, $name, $price, $description)
     {
         $this->realName = $realName;
@@ -67,10 +69,67 @@ class Product
         return $html;
     }
 
-    public function renderMailContent() {
-        $context = "
-        ";
+    private static function render_select_AddProductTypes() {
+        $ptype = self::getProductTypes();
+        $html = "<h4>" . translate("Select a product type") . "</h4>";
+        $html = $html . "<label>" . translate("Product Type") .  ":</label>";
+        $html = $html . "<select id='addProduct' name='addP' required>";
+        $html = $html . "<option value=''></option>";
+        while($row = mysqli_fetch_row($ptype)) {
+            $html = $html . "<option value='$row[0]'>" . translate($row[0]) . "</option>";
+        }
+        $html = $html . "</select>";
+        return $html;
     }
+
+    public static function render_addProductForms() {
+        return ["<div id='addProductInput'>",
+            self::render_select_AddProductTypes(),
+            self::render_inputTagsEN(),
+            self::render_inputTagsDE(),
+            self::render_Price(),
+            "</div>"];
+    }
+
+    private static function render_inputTagsEN() {
+        $html = "<div>";
+        $html = $html. "<h4>" . translate("Product English"). "</h4>";
+        $lang = "EN";
+        $html = $html. self::setInputTag("text", "Productname", $lang);
+        $html = $html . "<p>" . translate("Description"). "</p>";
+        $html = $html ."<textarea id='DescriptionEN' rows='4' cols='50' name='DescriptionEN'></textarea><br/>";
+        return $html . "</div>";
+    }
+
+    private static function render_inputTagsDE() {
+        $html = "<div>";
+        $html = $html. "<h4>" . translate("Product German"). "</h4>";
+        $lang = "DE";
+        $html = $html. self::setInputTag("text", "Productname", $lang);
+        $html = $html . "<p>" . translate("Description"). "</p>";
+        $html = $html ."<textarea id='DescriptionDE' rows='4' cols='50' name='DescriptionDE'></textarea><br/>";
+        return $html . "</div>";
+    }
+
+    private static function render_Price() {
+        return "<h4>" . translate("Set the Product Price") . "</h4>"
+            . self::setInputTag("text", translate("Price"));
+    }
+
+    private static function setInputTag($type, $name, $lang = ""): string {
+        $t_name = translate($name);
+        $t_mark = translate("can't be empty or is not valid");
+        $id = $name . $lang;
+        $inputTag = "
+            <p id='$id'>
+                <label>$t_name: </label>
+                <input type='$type' name='$id' required>
+                <mark>'$t_name' $t_mark</mark>
+            </p>
+            ";
+        return $inputTag;
+    }
+
 
     public function getName()
     {
@@ -134,6 +193,16 @@ class Product
         return $row;
     }
 
+    public static function getProductTypes() {
+        $query = Database::doQueryPrepare(self::getProductTypes);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result) {
+            return false;
+        }
+        return $result;
+    }
+
 
 }
 
@@ -169,13 +238,6 @@ class ProductHandler {
 
     private function addProduct(Product $product ) {
         $this->products[] = $product;
-        $this->storeInSession($product->getName(),$product);
-    }
-
-    private function storeInSession(string $key, Product $value) {
-        if (!isset($_SESSION[$key])) {
-            $_SESSION[$key] = $value;
-        }
     }
 }
 

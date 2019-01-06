@@ -17,6 +17,8 @@ $messages['Yes, good thing!'] = 'Yes, good thing!';
 $messages['No Thanks.'] = 'No Thanks.';
 
 $messages['Name'] = 'Name';
+$messages['Productname'] = 'Productname';
+$messages['Product Type'] = 'Product Type';
 $messages['Price'] = 'Price';
 $messages['Description'] = 'Description';
 
@@ -93,3 +95,8 @@ $messages['As shopadmin you have the following options'] = 'As shopadmin you hav
 $messages['Add a new Product'] = 'Add a new Product';
 $messages['Delete a Product'] = 'Delete a Product';
 $messages['Update a Product'] = 'Update a Product';
+
+$messages['Select a product type'] = 'Select a product type';
+$messages['Product English'] = 'Product English';
+$messages['Product German'] = 'Product German';
+$messages['Set the Product Price'] = 'Set the Product Price';

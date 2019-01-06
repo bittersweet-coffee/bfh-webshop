@@ -287,8 +287,7 @@ class UserareaCustomerForms extends Form {
 
     private $username;
 
-    public function __construct(string $language, string $page = "")
-    {
+    public function __construct(string $language, string $page = "") {
         $this->username = $_SESSION['user']['username'];
         parent::__construct($language, $page);
         $method = parent::getMethod();
@@ -321,4 +320,38 @@ class UserareaCustomerForms extends Form {
             <label>$t_name: $name</label>
         ";
     }
+}
+
+class AddProductForms extends Form {
+
+    public function __construct(string $language, string $page = "") {
+        if (!checkAdmin()) {
+            createErrorUrl("NotAdminUser");
+        }
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $header = "<h3>" . translate("Add a new Product") . "</h3>";
+        $html = "";
+        foreach (Product::render_addProductForms() as $element) {
+            $html = $html . $element;
+        }
+        $submit = "<input type='submit' value='". translate("Add a new Product") ."' name='post_addProduct'/>";
+        return [$header,
+            $html,
+            $submit,
+            parent::getCancleButton("noAdd")];
+    }
+
 }
