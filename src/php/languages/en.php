@@ -100,3 +100,5 @@ $messages['Select a product type'] = 'Select a product type';
 $messages['Product English'] = 'Product English';
 $messages['Product German'] = 'Product German';
 $messages['Set the Product Price'] = 'Set the Product Price';
+
+$messages['Successfully created new product.'] = 'Successfully created new product.';

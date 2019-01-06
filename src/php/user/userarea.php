@@ -19,7 +19,14 @@ function displayUserArea() {
             $_POST["Country"]);
     }
     if (isset($_POST["post_addProduct"])) {
-        //$usercontroller->addProductToDB()
+        $usercontroller->addProductToDB(
+            $_POST["addP"],
+            $_POST["ProductnameEN"],
+            $_POST["ProductnameDE"],
+            $_POST["Price"],
+            $_POST["DescriptionEN"],
+            $_POST["DescriptionDE"]
+        );
     }
     $userview->render();
 }

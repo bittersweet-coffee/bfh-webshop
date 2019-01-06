@@ -84,4 +84,8 @@ class UserareaModel {
         return Customer::getCustomer($username);
     }
 
+    public function addProduct($type, $pEN, $pDE, $price, $dEN="", $dDE="") {
+        return Product::storeProduct($type, $pEN, $pDE, $price, $dEN, $dDE);
+    }
+
 }

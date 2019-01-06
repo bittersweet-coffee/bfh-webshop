@@ -91,4 +91,27 @@ class UserareaController {
         //$this->model->setDisplay($forms->render());
     }
 
+    public function addProductToDB($type, $pEN, $pDE, $price, $dEN="", $dDE="") {
+        if (checkAdmin()) {
+            $success = $this->model->addProduct(
+                htmlspecialchars($type),
+                htmlspecialchars($pEN),
+                htmlspecialchars($pDE),
+                htmlspecialchars($price),
+                htmlspecialchars($dEN),
+                htmlspecialchars($dDE)
+            );
+            if (!$success) {
+                $this->model->setInfo("Successfully created new product.");
+                $prod = Product::getSingleProduct(getLanguage(["en", "de"]), $pEN);
+                $product = new Product($prod['realName'], $prod['name'], $prod['price'], $prod['descr']);
+                $this->model->setDisplay($product->render());
+            } else {
+               createErrorUrl("ProductAddQueryFailed");
+            }
+        } else {
+            $this->model->setInfo("Something went wrong. Are you logged in?");
+        }
+    }
+
 }

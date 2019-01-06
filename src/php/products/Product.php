@@ -29,6 +29,18 @@ class Product
 
     private CONST getProductTypes = "SELECT p_type.name FROM p_type";
 
+    private CONST getProductID = "SELECT id FROM p_type WHERE  name LIKE ?";
+
+    private CONST getLastID_PR = "SELECT MAX(id) FROM `p_real`";
+    private CONST getLastID_P = "SELECT MAX(id) FROM `product`";
+
+
+    private CONST insertPReal = "INSERT INTO p_real (`id`, `l_id`, `name`, `description`) 
+        VALUES (?,?,?,?)";
+
+    private CONST insertP = "INSERT INTO `product`(`id`, `name`, `price`, `p_id`, `d_id`) 
+        VALUES (?,?,?,?,?)";
+
     public function __construct($realName, $name, $price, $description)
     {
         $this->realName = $realName;
@@ -113,7 +125,7 @@ class Product
 
     private static function render_Price() {
         return "<h4>" . translate("Set the Product Price") . "</h4>"
-            . self::setInputTag("text", translate("Price"));
+            . self::setInputTag("text", "Price");
     }
 
     private static function setInputTag($type, $name, $lang = ""): string {
@@ -203,6 +215,53 @@ class Product
         return $result;
     }
 
+    public static function storeProduct($type, $pEN, $pDE, $price, $dEN="", $dDE="") {
+        $typeID = self::getTypeID($type);
+        $lastRealProductID = self::getLastID(self::getLastID_PR);
+        $resPR_EN = self::StoreRealProduct($lastRealProductID + 1, 1, $pEN, $dEN);
+        $resPR_DE = self::StoreRealProduct($lastRealProductID + 2, 2, $pDE, $dDE);
+        $lastProductID = self::getLastID(self::getLastID_P);
+        $resP_EN = self::storeProd($lastProductID + 1, $pEN, $price, $typeID, $lastRealProductID + 1);
+        $resP_DE = self::storeProd($lastProductID + 2, $pEN, $price, $typeID, $lastRealProductID + 2);
+        return $resPR_EN && $resPR_DE && $resP_EN && $resP_DE;
+    }
+
+    private static function getTypeID($type) {
+        $query = Database::doQueryPrepare(self::getProductID);
+        $query->bind_param('s', $type);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result || $result->num_rows !== 1) {
+            return false;
+        }
+        $row = $result->fetch_assoc();
+        return $row['id'];
+    }
+
+    private static function getLastID($query) {
+        $query = Database::doQueryPrepare($query);
+        $query->execute();
+        $res = $query->get_result();
+        $row = mysqli_fetch_row($res);
+        return $row[0];
+    }
+
+    private static function StoreRealProduct($ID, $ID_L, $NAME, $DESC) {
+        $query = Database::doQueryPrepare(self::insertPReal);
+        $query->bind_param('iiss', $ID, $ID_L, $NAME, $DESC);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
+    }
+
+    private static function storeProd($ID, $NAME, $PR, $ID_T, $ID_P) {
+        $query = Database::doQueryPrepare(self::insertP);
+        $query->bind_param('isiii', $ID, $NAME, $PR, $ID_T, $ID_P);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
+    }
+
 
 }
 
@@ -239,6 +298,7 @@ class ProductHandler {
     private function addProduct(Product $product ) {
         $this->products[] = $product;
     }
+
 }
 
 class ProductPayment {

@@ -100,3 +100,4 @@ $messages['Product English'] = 'Produkt Englisch';
 $messages['Product German'] = 'Produkt Deutsch';
 
 $messages['Set the Product Price'] = 'Den Produktpreis festlegen';
+$messages['Successfully created new product.'] = 'Erfolgreich neues Produkt angelegt.';
