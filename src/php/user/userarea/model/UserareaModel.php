@@ -10,6 +10,12 @@ class UserareaModel {
         "changeCustomerData" => "Change customer data",
         "changeUserData" => "Change user data",
         "logout" => "Logout");
+    private $adminActions = array(
+        "addProduct" => "Add a new Product",
+        "deleteProduct" => "Delete a Product",
+        "updateProduct" => "Update a Product"
+    );
+    private $adminText = "As shopadmin you have the following options";
     private $display;
     private $info = "";
 
@@ -31,11 +37,19 @@ class UserareaModel {
     }
 
     public function getWelcomeText(): string {
-        return translate($this->welcomeText) . $this->user['username'];
+        return translate($this->welcomeText) . " " . $this->user['username'];
     }
 
     public function getUserActions(): array {
         return $this->userActions;
+    }
+
+    public function getAdminActions(): array {
+        return $this->adminActions;
+    }
+
+    public function getAdminText(): string {
+        return translate($this->adminText);
     }
 
     public function setDisplay($display): void {
@@ -60,6 +74,14 @@ class UserareaModel {
 
     public function changePassword($username, $password) {
         return User::changePassword($username,$password);
+    }
+
+    public function changeCustomer(string $fname, string $lname, string $addr, int $pc, string $mail, string $cntry) {
+        return Customer::updateCustomer($this->user['username'], $fname, $lname, $addr, $pc, $mail, $cntry);
+    }
+
+    public function getCustomer($username){
+        return Customer::getCustomer($username);
     }
 
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 05. Jan 2019 um 17:15
+-- Erstellungszeit: 06. Jan 2019 um 14:54
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -43,7 +43,8 @@ CREATE TABLE `contact_users` (
 --
 
 INSERT INTO `contact_users` (`id`, `firstname`, `lastname`, `address`, `postalcode`, `email`, `country`) VALUES
-(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'jan.henzi@hotmail.com', 'CH');
+(1, 'Jan', 'Henzi', 'Angelstrasse 1', 1234, 'jan.henzi@angelmail.com', 'CH'),
+(2, 'Admin', 'Master', 'Adminstrasse 999', 9999, 'admin@adminmail.com', 'AD');
 
 -- --------------------------------------------------------
 
@@ -234,7 +235,8 @@ CREATE TABLE `shopusers` (
 --
 
 INSERT INTO `shopusers` (`id`, `username`, `password`, `contact`) VALUES
-(1, 'henzij', 'welcome1', 1);
+(1, 'henzij', 'welcome1', 1),
+(2, 'admin', '$2y$10$UCCDE/xdFg8jHI1hWM.5EOJMBxgOiGhn.af2am0Px5l39WVY8EU0y', 2);
 
 -- --------------------------------------------------------
 

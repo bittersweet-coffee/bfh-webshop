@@ -9,5 +9,14 @@ function displayUserArea() {
     if (isset($_POST["post_changeUserData"])) {
         $usercontroller->changePassword($_POST["Oldpassword"], $_POST["Newpassword"]);
     }
+    if (isset($_POST["post_changeCustomerData"])) {
+        $usercontroller->changeCustomer(
+            $_POST["Firstname"],
+            $_POST["Lastname"],
+            $_POST["Address"],
+            $_POST["PostalCode"],
+            $_POST["Email"],
+            $_POST["Country"]);
+    }
     $userview->render();
 }

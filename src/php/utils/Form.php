@@ -266,7 +266,7 @@ class UserareaUserForm extends Form {
     }
 
     private function getFormsElements() {
-        $header = "<h3>" . translate("Change customer data") . "</h3>";
+        $header = "<h3>" . translate("Change user data") . "</h3>";
         $username = $_SESSION['user']['username'];
         $usernameField = $this->getUsernameField($username);
         $old_passwordField = parent::setInputTag("password", "Oldpassword");
@@ -304,7 +304,7 @@ class UserareaCustomerForms extends Form {
     }
 
     private function getFormsElements() {
-        $header = "<h3>" . translate("Change user data") . "</h3>";
+        $header = "<h3>" . translate("Change customer data") . "</h3>";
         $usernameField = $this->getUsernameField($this->username);
         $inputTags = Customer::render_InputTags();
         $submit = "<input type='submit' value='". translate("Change user data") ."' name='post_changeCustomerData'/>";

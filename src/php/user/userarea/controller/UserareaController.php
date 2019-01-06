@@ -40,6 +40,40 @@ class UserareaController {
         }
     }
 
+    public function changeCustomer(string $fname, string $lname, string $addr, int $pc, string $mail, string $cntry) {
+        $username = $this->model->getUser()['username'];
+        if (checkUserExistence($username) && checkLogin()) {
+            $success = $this->model->changeCustomer(
+                htmlspecialchars($fname),
+                htmlspecialchars($lname),
+                htmlspecialchars($addr),
+                htmlspecialchars($pc),
+                htmlspecialchars($mail),
+                htmlspecialchars($cntry));
+            if (!$success) {
+                $user = $this->updateSession($username);
+                $this->model->setInfo("Customer data has been updated and is spread as follows:");
+                $this->model->setDisplay($user->render());
+            } else {
+                createErrorUrl("QueryFailed");
+            }
+        } else {
+            $this->model->setInfo("Something went wrong. Are you logged in?");
+        }
+    }
 
+    private function updateSession($username) {
+        $customerData = $this->model->getCustomer($username);
+        $customer = new Customer(
+            $customerData["firstname"],
+            $customerData["lastname"],
+            $customerData["address"],
+            $customerData["postalcode"],
+            $customerData["email"],
+            $customerData["country"]);
+        $user = new User($customer, $username);
+        $_SESSION['user'] = $user->toArray();
+        return $user;
+    }
 
 }

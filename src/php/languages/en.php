@@ -86,3 +86,10 @@ $messages['Change Password'] = 'Change Password';
 $messages['Password successfully changed. You should log in again to check it.'] = "Password successfully changed. You should log in again to check it.";
 $messages['Your old password does not seem to be correct.'] = 'your old password does not seem to be correct.';
 $messages['Successfully created user'] = 'Successfully created user';
+$messages['Something went wrong. Are you logged in?'] = 'Something went wrong. Are you logged in?';
+$messages['Customer data has been updated and is spread as follows:'] = 'Customer data has been updated and is saved as follows:';
+$messages['As shopadmin you have the following options'] = 'As shopadmin you have the following options';
+
+$messages['Add a new Product'] = 'Add a new Product';
+$messages['Delete a Product'] = 'Delete a Product';
+$messages['Update a Product'] = 'Update a Product';

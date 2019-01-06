@@ -31,6 +31,12 @@ class UserareaView {
         foreach ($this->model->getUserActions() as $action => $text) {
             $html = $html . $this->generateOptionButton($action, $text);
         }
+        if (checkAdmin()) {
+            $html = $html . "<p>" . $this->model->getAdminText() . "</p>";
+            foreach ($this->model->getAdminActions() as $action => $text) {
+                $html = $html . $this->generateOptionButton($action, $text);
+            }
+        }
         $t = $this->model->getInfo();
         if ($t != "") {
             $html = $html . "<p> $t </p>";
