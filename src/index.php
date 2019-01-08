@@ -20,6 +20,10 @@
     include 'php/utils/login.php';
     include 'php/utils/registration.php';
     require 'html/head.html';
+    if (!isset($_SESSION["cart"])) {
+        $_SESSION["cart"] = new ShoppingCart();
+    }
+    $cart = $_SESSION["cart"];
     $nav = new Nav(getLanguage(["en", "de"]));?>
 
 <body>

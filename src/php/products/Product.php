@@ -506,11 +506,13 @@ class ProductHandler {
         $html = "<div id='container'>";
         foreach ($this->products as $product) {
             $name = $product->getRealName();
-            $url = htmlspecialchars($_SERVER['PHP_SELF']) . "?lang=$lang" . "&page=$page";
-            $url = $url . "&product=$name";
+            $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), 'lang', $lang);
+            $url = add_param($url, 'page', $page);
+            $url = add_param($url, 'product', $name);
             $html = $html . "<div id='box'>";
             $html = $html . $product->render();
-            $html = $html . "<a href='$url' class='button'>" . translate("Buy Now") . "</a></div>";
+            $html = $html . "<a href='$url'><button type='button'>" . translate("Buy Now") . "</button></a>";
+            $html = $html . "<button onclick='addToCart(\"$name\")' class='button'>" . translate("Add to Cart") . "</button></div>";
         }
         echo $html. "</div>";
     }

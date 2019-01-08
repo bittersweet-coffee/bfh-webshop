@@ -108,3 +108,5 @@ $messages['Successfully deleted products.'] = 'Successfully deleted products.';
 $messages['Select a product'] = 'Select a product';
 $messages['Product'] = 'Product';
 $messages['Successfully updated product.'] = 'Successfully updated product.';
+$messages['Cart'] = 'Cart';
+$messages['Add to Cart'] = 'Add to Cart';

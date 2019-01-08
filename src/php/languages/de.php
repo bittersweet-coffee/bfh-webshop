@@ -111,3 +111,5 @@ $messages['Select a product'] = 'Wähle ein Produkt';
 $messages['Update Product'] = 'Produkt Ändern';
 $messages['Product'] = 'Produkt';
 $messages['Successfully updated product.'] = 'Erfolgreich Produkt geändert.';
+$messages['Cart'] = 'Korb';
+$messages['Add to Cart'] = 'Warenkorb';

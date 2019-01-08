@@ -1,5 +1,6 @@
 <?php
 
+
 class Nav {
     private $elements = array (
         "rods" => array("nav-left", "rods", "Fishing Rods"),
@@ -15,8 +16,28 @@ class Nav {
     private $t;
     
     public function __construct(string $lang) {
-        $this->t = new Translator($lang);
         $this->html = "<nav><ul>";
+    }
+
+    public function render() {
+        $this->appendListItems();
+        $this->appendLanguages();
+        $this->appendShoppingChart();
+        $this->appendUserArea();
+        $this->appendItem("</nav></ul>");
+        return $this->html;
+
+    }
+
+    private function appendShoppingChart() {
+        $class = "nav-right";
+        $lang = getLanguage(["en", "de"]);
+        $urlBase = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
+        $url = add_param($urlBase, "page", "cart");
+        $cart = $_SESSION["cart"];
+        $content = translate("Cart") .": " . $cart->getNbrItems();
+        $listItem = "<li class='$class' id='cart'><a href='$url' alt='cart'>$content</a></li>";
+        $this->appendItem($listItem);
     }
     
     private function appendItem(string $html) {
@@ -28,13 +49,12 @@ class Nav {
         $urlBase = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", $lang);
         foreach ($this->elements as $item) {
             $class = $item[0];
-            $url = add_param($urlBase, "page", $item[1]);
             if (checkLogin() && $item[1] == "login") {
                 $url = add_param($urlBase, "page", "logout");
-                $content = $this->t->t("Logout");
+                $content = translate("Logout");
             } else {
                 $url = add_param($urlBase, "page", $item[1]);
-                $content = $this->t->t($item[2]);
+                $content = translate($item[2]);
             }
 
             $listItem = "<li class='$class'><a href='$url' alt='$item[1]'>$content</a></li>";
@@ -69,14 +89,4 @@ class Nav {
             $this->appendItem($userarea);
         }
     }
-
-    public function render() {
-        $this->appendListItems();
-        $this->appendLanguages();
-        $this->appendUserArea();
-        $this->appendItem("</nav></ul>");
-        return $this->html;
-
-    }
-    
 }

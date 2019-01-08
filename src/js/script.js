@@ -14,18 +14,25 @@ $(document).ready(function () {
             checkBilladdressData(btn);
         }
     });
-
 });
 
-function getTime() {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("time").innerHTML = this.responseText;
+function addToCart(product) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/products/ShoppingCart.php',
+        data: { action: "add",
+                product: product},
+        success: function(response) {
+            var t = "";
+            var lang = getUrlParameter('lang');
+            if (lang == "de") {
+                t = "Korb: ";
+            } else {
+                t = "Cart: "
+            }
+            $("#cart a").html(t + response);
         }
-    };
-    xmlhttp.open("GET", "php/utils/time.php", true);
-    xmlhttp.send();
+    });
 }
 
 function getBillDiv() {
