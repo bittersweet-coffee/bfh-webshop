@@ -178,6 +178,10 @@ function checkLogin() {
     return (isset($_SESSION['login']) && $_SESSION['login'] == true);
 }
 
+function checkAdmin() {
+    return checkLogin() && isset($_SESSION['admin']) && $_SESSION['admin'] == true;
+}
+
 function displayNoAccess() {
     echo "<h1>" . translate("No Access") . "</h1>";
     echo "<p>" . translate("No access. Please log in first.") . "</p>";

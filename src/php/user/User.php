@@ -24,7 +24,7 @@ class User {
     private $username;
     private $password;
 
-    public function __construct(Customer $customer, string $username, string $password) {
+    public function __construct(Customer $customer, string $username, string $password = "notSet") {
         $this->customer = $customer;
         $this->username = $username;
         $this->password = password_hash($password,PASSWORD_BCRYPT);
@@ -115,6 +115,16 @@ class User {
             "email" => $customer->getEmail(),
             "country" => $customer->getCountry());
         return $user;
+    }
+
+    public function render() {
+        $customerContent = $this->customer->render();
+        $context =
+            "<div id='user_container'>
+                <p><label>" . translate("Username") . ": </label> $this->username</p>
+                $customerContent
+            </div>";
+        return $context;
     }
 
     public static function render_InputTags(): string {

@@ -266,7 +266,7 @@ class UserareaUserForm extends Form {
     }
 
     private function getFormsElements() {
-        $header = "<h3>" . translate("Change customer data") . "</h3>";
+        $header = "<h3>" . translate("Change user data") . "</h3>";
         $username = $_SESSION['user']['username'];
         $usernameField = $this->getUsernameField($username);
         $old_passwordField = parent::setInputTag("password", "Oldpassword");
@@ -283,12 +283,11 @@ class UserareaUserForm extends Form {
     }
 }
 
-class UserareaCustomerForms extends Form {
+class UserareaCustomerForm extends Form {
 
     private $username;
 
-    public function __construct(string $language, string $page = "")
-    {
+    public function __construct(string $language, string $page = "") {
         $this->username = $_SESSION['user']['username'];
         parent::__construct($language, $page);
         $method = parent::getMethod();
@@ -304,7 +303,7 @@ class UserareaCustomerForms extends Form {
     }
 
     private function getFormsElements() {
-        $header = "<h3>" . translate("Change user data") . "</h3>";
+        $header = "<h3>" . translate("Change customer data") . "</h3>";
         $usernameField = $this->getUsernameField($this->username);
         $inputTags = Customer::render_InputTags();
         $submit = "<input type='submit' value='". translate("Change user data") ."' name='post_changeCustomerData'/>";
@@ -320,5 +319,147 @@ class UserareaCustomerForms extends Form {
         return "
             <label>$t_name: $name</label>
         ";
+    }
+}
+
+class AddProductForm extends Form {
+
+    public function __construct(string $language, string $page = "") {
+        if (!checkAdmin()) {
+            createErrorUrl("NotAdminUser");
+        }
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $header = "<h3>" . translate("Add a new Product") . "</h3>";
+        $html = "";
+        foreach (Product::render_addProductForm() as $element) {
+            $html = $html . $element;
+        }
+        $submit = "<input type='submit' value='". translate("Add a new Product") ."' name='post_addProduct'/>";
+        return [$header,
+            $html,
+            $submit,
+            parent::getCancleButton("noAdd")];
+    }
+
+}
+
+class DeleteProductForm extends Form {
+
+    public function __construct(string $language, string $page = "") {
+        if (!checkAdmin()) {
+            createErrorUrl("NotAdminUser");
+        }
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $header = "<h3>" . translate("Delete Products") . "</h3>";
+        $html = "";
+        foreach (Product::render_deleteProductForm() as $element) {
+            $html = $html . $element;
+        }
+        $submit = "<input type='submit' value='". translate("Delete") ."' name='post_deleteProduct'/>";
+        return [$header,
+            $html,
+            $submit,
+            parent::getCancleButton("noDel")];
+    }
+}
+
+class SearchProductForm extends Form {
+
+    private $load;
+    private $method;
+    private $URL;
+    private $lang;
+    private $page;
+    private $prodData;
+
+    public function __construct(string $language, string $page = "", $load=false, array $prodData=[]) {
+        $this->prodData = $prodData;
+        if (!checkAdmin()) {
+            createErrorUrl("NotAdminUser");
+        }
+        parent::__construct($language, $page);
+        $this->method = parent::getMethod();
+        $this->URL = parent::getUrl();
+        $this->lang = $language;
+        $this->page = $page;
+        parent::setHtml("<form method='$this->method' action='$this->URL'>");
+        $this->load = $load;
+    }
+
+    public function render() {
+        parent::appendContext("<h3>" . translate("Update Product") . "</h3>");
+        foreach (Product::render_searchProductForm() as $element) {
+            parent::appendContext($element);
+        }
+        parent::appendContext("<input type='submit' value='". translate("Load") ."' name='post_searchProduct'/>");
+        parent::appendContext(parent::getCancleButton("noDel"));
+        $form = parent::render();
+        if ($this->load) {
+            $formUpdate = new UpdateProductForm($this->lang, $this->page, $this->prodData);
+            $form = $form . $formUpdate->render();
+        }
+
+        return $form;
+    }
+}
+
+class UpdateProductForm extends Form {
+
+    private $prodData;
+
+    public function __construct(string $language, string $page = "", array $prodData=[]) {
+        $this->prodData = $prodData;
+        if (!checkAdmin()) {
+            createErrorUrl("NotAdminUser");
+        }
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $html = "";
+        foreach (Product::render_updateProductForm($this->prodData) as $element) {
+            $html = $html . $element;
+        }
+        $_SESSION['old_name'] = $this->prodData['en'][0];
+        $submit = "<input type='submit' value='". translate("Update") ."' name='post_updateProduct'/>";
+        return [$html,
+            $submit,
+            parent::getCancleButton("noDel")];
     }
 }

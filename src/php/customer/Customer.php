@@ -1,5 +1,4 @@
 <?php
-
 class Customer
 {
     private $firstname;
@@ -8,7 +7,6 @@ class Customer
     private $postalCode;
     private $email;
     private $country;
-
     private CONST inputElements = array (
         "Firstname" => "text",
         "Lastname" => "text",
@@ -17,11 +15,18 @@ class Customer
         "Email" => "email",
         "Country" => "text"
     );
-
-
     private CONST getCustomerQuery = "SELECT * FROM shopusers
               JOIN contact_users ON shopusers.contact = contact_users.id
               WHERE shopusers.username LIKE ?";
+
+    private CONST updateCustomerQuery = "UPDATE contact_users, shopusers SET 
+        firstname = ?, 
+        lastname = ?, 
+        address = ?, 
+        postalcode = ?, 
+        email = ?, 
+        country = ? 
+        WHERE shopusers.id = contact_users.id AND shopusers.username LIKE ?";
 
     public function __construct(string $firstname,
                                 string $lastname,
@@ -37,63 +42,44 @@ class Customer
         $this->email = $email;
         $this->country = $country;
     }
-
     public function getEmail(): string
     {
         return $this->email;
     }
-
     public function getFirstname(): string
     {
         return $this->firstname;
     }
-
     public function getLastname(): string
     {
         return $this->lastname;
     }
-
     public function getAddress(): string
     {
         return $this->address;
     }
-
     public function getCountry(): string
     {
         return $this->country;
     }
-
     public function getPostalCode(): int
     {
         return (int)$this->postalCode;
-    }
-
-    public static function getCustomer(string $usr) {
-        $query = Database::doQueryPrepare(self::getCustomerQuery);
-        $query->bind_param('s', $usr);
-        $query->execute();
-        $result = $query->get_result();
-        if (!$result || $result->num_rows !== 1) {
-            return false;
-        }
-        $row = $result->fetch_assoc();
-        return $row;
     }
 
     public function render()
     {
         $context =
             "<div id='customer_container'>
-                <p><label>Firstname: </label> $this->firstname</p>
-                <p><label>Lastname: </label> $this->lastname</p>
-                <p><label>Address: </label> $this->address</p>
-                <p><label>Email: </label> $this->email</p>
-                <p><label>Postal Code: </label> $this->email</p>
-                <p><label>Country: </label> $this->country</p>
+                <p><label>" . translate("Firstname") . ": </label> $this->firstname</p>
+                <p><label>" . translate("Lastname") . ": </label> $this->lastname</p>
+                <p><label>" . translate("Address") . ": </label> $this->address</p>
+                <p><label>" . translate("Email") . ": </label> $this->email</p>
+                <p><label>" . translate("Postal Code") . ": </label> $this->email</p>
+                <p><label>" . translate("Country") . ": </label> $this->country</p>
             </div>";
         return $context;
     }
-
     public static function render_InputTags(): string {
         $customerInputTag = "<div id='customer_tags'>";
         foreach (self::inputElements as $inputElementName => $inputType) {
@@ -101,7 +87,6 @@ class Customer
         }
         return $customerInputTag . "</div>";
     }
-
     private static function setInputTag($type, $name): string {
         $value = checkUserSession($name);
         $cookie = checkCookie($name);
@@ -118,5 +103,25 @@ class Customer
             </p>
             ";
         return $inputTag;
+    }
+
+    public static function getCustomer(string $usr) {
+        $query = Database::doQueryPrepare(self::getCustomerQuery);
+        $query->bind_param('s', $usr);
+        $query->execute();
+        $result = $query->get_result();
+        if (!$result || $result->num_rows !== 1) {
+            return false;
+        }
+        $row = $result->fetch_assoc();
+        return $row;
+    }
+
+    public static function updateCustomer(string $usr, string $fname, string $lname, string $addr, int $pc, string $mail, string $cntry) {
+        $query = Database::doQueryPrepare(self::updateCustomerQuery);
+        $query->bind_param('sssisss', $fname, $lname,$addr,$pc,$mail,$cntry,$usr);
+        $query->execute();
+        $result = $query->get_result();
+        return $result;
     }
 }
