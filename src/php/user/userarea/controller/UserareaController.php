@@ -22,7 +22,7 @@ class UserareaController {
     }
 
     public function changeCustomerData() {
-        $forms =  new UserareaCustomerForms(getLanguage(["en", "de"]), "userarea");
+        $forms =  new UserareaCustomerForm(getLanguage(["en", "de"]), "userarea");
         $this->model->setDisplay($forms->render());
     }
 
@@ -77,18 +77,22 @@ class UserareaController {
     }
 
     public function addProduct() {
-        $forms =  new AddProductForms(getLanguage(["en", "de"]), "userarea");
-        $this->model->setDisplay($forms->render());
+        $form =  new AddProductForm(getLanguage(["en", "de"]), "userarea");
+        $this->model->setDisplay($form->render());
     }
 
     public function deleteProduct() {
-        //$forms =  new DeleteProductForms(getLanguage(["en", "de"]), "userarea");
-        //$this->model->setDisplay($forms->render());
+        $form =  new DeleteProductForm(getLanguage(["en", "de"]), "userarea");
+        $this->model->setDisplay($form->render());
     }
 
-    public function updateProduct() {
-        //$forms =  new UpdateProductForms(getLanguage(["en", "de"]), "userarea");
-        //$this->model->setDisplay($forms->render());
+    public function updateProduct(string $prodName = "", $load = false) {
+        $productData = [];
+        if ($load) {
+            $productData = Product::getProductData(htmlspecialchars($prodName));
+        }
+        $form =  new SearchProductForm(getLanguage(["en", "de"]), "userarea", $load, $productData);
+        $this->model->setDisplay($form->render());
     }
 
     public function addProductToDB($type, $pEN, $pDE, $price, $dEN="", $dDE="") {
@@ -114,4 +118,42 @@ class UserareaController {
         }
     }
 
+    public function updateProd($oldName, $pEN, $pDE, $price, $dEN="", $dDE="") {
+        if (checkAdmin()) {
+            $success = $this->model->updateProduct(
+                htmlspecialchars($oldName),
+                htmlspecialchars($pEN),
+                htmlspecialchars($pDE),
+                htmlspecialchars($price),
+                htmlspecialchars($dEN),
+                htmlspecialchars($dDE)
+            );
+            if (!$success) {
+                $this->model->setInfo("Successfully updated product.");
+                $prod = Product::getSingleProduct(getLanguage(["en", "de"]), $pEN);
+                $product = new Product($prod['realName'], $prod['name'], $prod['price'], $prod['descr']);
+                $this->model->setDisplay($product->render());
+            } else {
+                createErrorUrl("ProductUpdateQueryFailed");
+            }
+        } else {
+            $this->model->setInfo("Something went wrong. Are you logged in?");
+        }
+    }
+
+    public function deleteProductsFromDB(array $prod) {
+        if (checkAdmin()) {
+            foreach ($prod as $item) {
+                $success = $this->model->deleteProduct(htmlspecialchars($item));
+                if ($success) {
+                    createErrorUrl("ProductDeleteQueryFailed" . " Product Name: " . $prod);
+                }
+            }
+            if (!$success) {
+                $this->model->setInfo("Successfully deleted products.");
+            }
+        } else {
+            $this->model->setInfo("Something went wrong. Are you logged in?");
+        }
+    }
 }

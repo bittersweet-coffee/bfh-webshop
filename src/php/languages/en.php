@@ -102,3 +102,9 @@ $messages['Product German'] = 'Product German';
 $messages['Set the Product Price'] = 'Set the Product Price';
 
 $messages['Successfully created new product.'] = 'Successfully created new product.';
+$messages['Select products'] = 'Select products';
+$messages['Delete Products'] = 'Delete Products';
+$messages['Successfully deleted products.'] = 'Successfully deleted products.';
+$messages['Select a product'] = 'Select a product';
+$messages['Product'] = 'Product';
+$messages['Successfully updated product.'] = 'Successfully updated product.';

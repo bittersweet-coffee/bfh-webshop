@@ -101,3 +101,13 @@ $messages['Product German'] = 'Produkt Deutsch';
 
 $messages['Set the Product Price'] = 'Den Produktpreis festlegen';
 $messages['Successfully created new product.'] = 'Erfolgreich neues Produkt angelegt.';
+$messages['Select products'] = 'Wähle Produkte';
+$messages['Delete Products'] = 'Lösche Produkte';
+$messages['Delete'] = 'Löschen';
+$messages['Load'] = 'Daten Laden';
+$messages['Update'] = 'Ändern';
+$messages['Successfully deleted product.'] = 'Erfolgreich Produkte gelöscht.';
+$messages['Select a product'] = 'Wähle ein Produkt';
+$messages['Update Product'] = 'Produkt Ändern';
+$messages['Product'] = 'Produkt';
+$messages['Successfully updated product.'] = 'Erfolgreich Produkt geändert.';

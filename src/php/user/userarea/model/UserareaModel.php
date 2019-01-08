@@ -33,7 +33,7 @@ class UserareaModel {
 
     public function getPText(): string
     {
-        return $this->pText;
+        return translate($this->pText);
     }
 
     public function getWelcomeText(): string {
@@ -86,6 +86,14 @@ class UserareaModel {
 
     public function addProduct($type, $pEN, $pDE, $price, $dEN="", $dDE="") {
         return Product::storeProduct($type, $pEN, $pDE, $price, $dEN, $dDE);
+    }
+
+    public function updateProduct($old_name, $pEN, $pDE, $price, $dEN="", $dDE="") {
+        return Product::updateProduct($old_name, $pEN, $pDE, $price, $dEN, $dDE);
+    }
+
+    public function deleteProduct($prod) {
+        return Product::deleteProduct($prod);
     }
 
 }
