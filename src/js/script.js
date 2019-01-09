@@ -35,6 +35,48 @@ function addToCart(product) {
     });
 }
 
+function addMore(name, amount, price) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/products/ShoppingCart.php',
+        data: { action: "addMore",
+            product: name,
+            amount: amount,
+            price: price},
+            success: function(response) {
+                var t = "";
+                var lang = getUrlParameter('lang');
+                if (lang == "de") {
+                    t = "Korb: ";
+                } else {
+                    t = "Cart: "
+                }
+                $("#cart a").html(t + response);
+        }
+    });
+}
+
+function remove(name, amount, price) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/products/ShoppingCart.php',
+        data: { action: "remove",
+            product: name,
+            amount: amount,
+            price: price},
+        success: function(response) {
+            var t = "";
+            var lang = getUrlParameter('lang');
+            if (lang == "de") {
+                t = "Korb: ";
+            } else {
+                t = "Cart: "
+            }
+            $("#cart a").html(t + response);
+        }
+    });
+}
+
 function getBillDiv() {
     var selectedOption = document.getElementById("billId").value;
     if (selectedOption == "") {

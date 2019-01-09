@@ -418,7 +418,7 @@ class SearchProductForm extends Form {
             parent::appendContext($element);
         }
         parent::appendContext("<input type='submit' value='". translate("Load") ."' name='post_searchProduct'/>");
-        parent::appendContext(parent::getCancleButton("noDel"));
+        parent::appendContext(parent::getCancleButton("noSearch"));
         $form = parent::render();
         if ($this->load) {
             $formUpdate = new UpdateProductForm($this->lang, $this->page, $this->prodData);
@@ -458,6 +458,68 @@ class UpdateProductForm extends Form {
         }
         $_SESSION['old_name'] = $this->prodData['en'][0];
         $submit = "<input type='submit' value='". translate("Update") ."' name='post_updateProduct'/>";
+        return [$html,
+            $submit,
+            parent::getCancleButton("noUpdate")];
+    }
+}
+
+class ShoppingcartForm extends Form {
+
+    private $cart;
+
+    public function __construct(string $language, string $page = "", ShoppingCart $cart) {
+        $this->cart = $cart;
+        parent::__construct($language, $page);
+        $method = parent::getMethod();
+        $url = parent::getUrl();
+        parent::setHtml("<form method='$method' action='$url'>");
+    }
+
+    public function render() {
+        foreach ($this->getFormsElements() as $formsElement) {
+            parent::appendContext($formsElement);
+        }
+        return parent::render();
+    }
+
+    private function getFormsElements() {
+        $html = "<table>";
+        $t_Article = translate("Article");
+        $t_Amount = translate("Amount");
+        $t_Price = translate("Price");
+        $t_Total = translate("Total");
+        $t_Add = translate("Add");
+        $t_Rem = translate("Remove");
+        $tableHeader = "<tr><th>$t_Article</th><th>$t_Amount</th><th>$t_Price</th>
+                            <th>$t_Total</th><th>$t_Add</th><th>$t_Rem</th></tr>";
+        $html = $html . $tableHeader;
+        $total = 0;
+        foreach ($this->cart->getItems() as $item => $num) {
+            $row_total = 0;
+            $product = Product::getSingleProduct(getLanguage(["en", "de"]), $item);
+            $name = $product['name'];
+            $price = $product['price'];
+            $row_total += $price * $num;
+            $total += $row_total;
+            $td_name = "<td name='$name'>$name</td>";
+            $td_amou = "<td name='amount'>$num</td>";
+            $td_pric = "<td name='price'>$price</td>";
+            $td_tota = "<td name='row_total'>$row_total</td>";
+            $td_btn_add = "<td><button type='button' onclick='addMore(\"$name\", \"$num\", \"$price\")' class='button'>"
+                . $t_Add . "</button></td>";
+            $td_btn_rem = "<td><button type='button' onclick='remove(\"$name\", \"$num\", \"$price\")' class='button'>"
+                . $t_Rem . "</button></td>";
+            $tableRow = "<tr id='$name'>$td_name $td_amou $td_pric $td_tota $td_btn_add $td_btn_rem</tr>";
+            $html = $html . $tableRow;
+        }
+
+        $html = $html . "<tr><td rowspan='3'></td><td name='total'>$total</td></tr>";
+        $html = $html . "</table>";
+
+
+
+        $submit = "<input type='submit' value='". translate("Checkout") ."' name='post_updateProduct'/>";
         return [$html,
             $submit,
             parent::getCancleButton("noDel")];

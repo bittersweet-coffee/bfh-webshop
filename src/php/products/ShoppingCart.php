@@ -49,5 +49,23 @@ class ShoppingCart {
         return $nbr;
     }
 
+    public function getAmount($item) : int {
+        return $this->cartItems[$item];
+    }
+
+    public function render() {
+        $headerText = translate("Shoppingcart");
+        if ($this->isEmpty()) {
+            $html = "<h2> $headerText </h2>";
+            $html = $html ."<p>" . translate("Your Shoppingcart is Empty") . "</p>";
+            return "<div class='cart_empty'>$html</div>";
+        }
+        $html = "<div class='cartForm'>";
+        $form = new ShoppingcartForm(getLanguage(["en", "de"]), "checkout", $_SESSION["cart"]);
+        $html = $html .$form->render();
+        $html = $html . "</div>";
+        return $html;
+    }
+
 
 }

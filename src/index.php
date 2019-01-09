@@ -2,7 +2,7 @@
 
 
     require 'autoloader.php';
-    include 'php/database/database.php';
+    include 'php/database/Database.php';
     require 'php/languages/Translator.php';
     include 'php/customer/Customer.php';
     include 'php/user/User.php';
