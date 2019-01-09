@@ -128,4 +128,33 @@ class ShoppingCart {
         return $html;
     }
 
+    public function renderMail() {
+        $t_Article = translate("Article");
+        $t_Amount = translate("Amount");
+        $t_Price = translate("Price");
+        $t_Total = translate("Total");
+        $header = "---$t_Article---$t_Amount---$t_Price---$t_Total---\n\n";
+        $mail = $header;
+        $total = 0;
+        $cart = $_SESSION["cart"];
+        foreach ($cart->getItems() as $item => $num) {
+            $row_total = 0;
+            $product = Product::getSingleProduct(getLanguage(["en", "de"]), $item);
+            $name = $product['name'];
+            $price = $product['price'];
+            $row_total += $price * $num;
+            $total += $row_total;
+            $td_name = "---$name";
+            $td_amou = "---$num";
+            $td_pric = "---$price";
+            $td_tota = "---$row_total---\n";
+            $row = "$td_name $td_amou $td_pric $td_tota";
+            $mail = $mail . $row;
+            $mail = $mail . "-----------------------------------------------\n";
+        }
+        $mail = $mail . "\n\nTotal: $total";
+
+        return $mail;
+    }
+
 }

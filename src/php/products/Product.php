@@ -125,6 +125,38 @@ class Product
         return $html;
     }
 
+    public function renderMail() {
+        $labelNameText = translate("Name");
+        $labelPriceText = translate("Price");
+        $labelDescriptionText = translate("Description");
+        $labelName = "----" . $labelNameText . ": ";
+        $labelPrice = "----" . $labelPriceText . ": ";
+        $labelDescription = "----" . $labelDescriptionText . ": ";
+        $mail =
+            "
+                $labelName $this->name ---\n
+                $labelPrice $this->price ---\n
+                $labelDescription $this->description ---\n
+            ";
+
+        if (isset($this->amount)) {
+            $labelAmountText = translate("Amount");
+            $labelDonationText = translate("Donation");
+            $mail = $mail . "----" . $labelAmountText . ": $this->amount ---\n";
+        }
+        if (isset($this->donation) && $this->donation != 0) {
+            $mail = $mail . "----" . $labelDonationText . ": $this->donation ---\n";
+            $fishermanText = translate("Thanks for the donation to \"Safe A Fisherman\"");
+            $mail = $mail . "----" . $fishermanText . "---\n";
+        }
+        $this->totoal = $this->getTotoal();
+        if ($this->totoal > 0) {
+            $totalPriceText = translate("Total Price");
+            $mail = $mail . "----" . $totalPriceText .": $this->totoal ---\n";
+        }
+        return $mail;
+    }
+
     public static function render_updateProductForm(array $productData) {
         return ["<div id='updateProductInput'>",
             self::render_inputTagsEN($productData['en'][0],$productData['en'][1]),
@@ -613,7 +645,4 @@ class ProductPayment {
         ";
         return $context;
     }
-
-
-
 }
