@@ -55,7 +55,7 @@ function getPageContent($content) {
             break;
         case 'cart':
             $cart = $_SESSION["cart"];
-            echo $cart->render();
+            echo $cart->render_form();
             break;
         case 'errorPage':
             displayErrorReason(get_param("reason", "Unknown"));

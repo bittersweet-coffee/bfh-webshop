@@ -110,16 +110,24 @@ class ShippingForm extends Form {
     private $purchaseHeaderText = "Purchase Information";
     private $customerInfoHeaderText = "Customer Information";
     private $product;
+    private $cart;
 
 
     public function __construct(string $language, string $page = "") {
-        $this->product = getProduct();
-        $this->product->setAmount(get_param("amount", 1));
-        $this->product->setDonation(get_param("donation", 0));
+        $this->cart = get_param('cart', false);
+        if (!$this->cart) {
+            $this->product = getProduct();
+            $this->product->setAmount(get_param("amount", 1));
+            $this->product->setDonation(get_param("donation", 0));
+        }
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
-        $url = add_param($url,"product", $this->product->getRealName());
+        if (!$this->cart) {
+            $url = add_param($url,"product", $this->product->getRealName());
+        } else {
+            $url = add_param($url,"cart", true);
+        }
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
@@ -130,12 +138,17 @@ class ShippingForm extends Form {
         $commentText = translate("Leave Some Comments here");
         $comment ="<p>" . $commentText . "</p>";
         $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea><br/>";
-        $submitText = translate("Ship");
+        $submitText = translate("Continue to confirm or cancel");
         $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
 
         parent::appendContext($header);
         parent::appendContext($purchaseHeader);
-        parent::appendContext($this->product->render());
+        if (!$this->cart) {
+            parent::appendContext($this->product->render());
+        } else {
+            $cart = $_SESSION["cart"];
+            parent::appendContext($cart->render());
+        }
         parent::appendContext($customerInformationHeader);
         parent::appendContext(Customer::render_InputTags());
         if (getLanguage(["en", "de"]) == "de") {
@@ -157,14 +170,23 @@ class ConfirmationForm extends Form {
     private $customer;
     private $product;
     private $productPayment;
+    private $cart;
 
     public function __construct(string $language, string $page = "") {
-        $this->product = getProduct();
+        $this->cart = get_param('cart', false);
+        if (!$this->cart) {
+            $this->product = getProduct();
+        }
         $this->customer = $_SESSION['customer'];
         $this->productPayment = $_SESSION['payment'];
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
+        if (!$this->cart) {
+            $url = add_param($url,"product", $this->product->getRealName());
+        } else {
+            $url = add_param($url,"cart", true);
+        }
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
@@ -173,7 +195,12 @@ class ConfirmationForm extends Form {
         $customerInformationHeader = "<h3>" . translate("Customer Information"). "</h3>";
         $paymentInformationHeader = "<h3>" . translate("Payment Information"). "</h3>";
         parent::appendContext($purchaseHeader);
-        parent::appendContext($this->product->render());
+        if (!$this->cart) {
+            parent::appendContext($this->product->render());
+        } else {
+            $cart = $_SESSION["cart"];
+            parent::appendContext($cart->render());
+        }
         parent::appendContext($customerInformationHeader);
         parent::appendContext($this->customer->render());
         parent::appendContext($paymentInformationHeader);
@@ -468,11 +495,12 @@ class ShoppingcartForm extends Form {
 
     private $cart;
 
-    public function __construct(string $language, string $page = "", ShoppingCart $cart) {
+    public function __construct(string $language, ShoppingCart $cart, string $page = "") {
         $this->cart = $cart;
         parent::__construct($language, $page);
         $method = parent::getMethod();
         $url = parent::getUrl();
+        $url = add_param($url, "cart", true);
         parent::setHtml("<form method='$method' action='$url'>");
     }
 
@@ -503,18 +531,18 @@ class ShoppingcartForm extends Form {
             $row_total += $price * $num;
             $total += $row_total;
             $td_name = "<td name='$name'>$name</td>";
-            $td_amou = "<td name='amount'>$num</td>";
+            $td_amou = "<td name='amount' id='amount'>$num</td>";
             $td_pric = "<td name='price'>$price</td>";
-            $td_tota = "<td name='row_total'>$row_total</td>";
-            $td_btn_add = "<td><button type='button' onclick='addMore(\"$name\", \"$num\", \"$price\")' class='button'>"
+            $td_tota = "<td name='row_total' id='rowtotal'>$row_total</td>";
+            $td_btn_add = "<td id='add'><button id='add'type='button' onclick='addMore(\"$name\",\"$price\")' class='button'>"
                 . $t_Add . "</button></td>";
-            $td_btn_rem = "<td><button type='button' onclick='remove(\"$name\", \"$num\", \"$price\")' class='button'>"
+            $td_btn_rem = "<td id='remove'><button type='button' onclick='remove(\"$name\", \"$price\")' class='button'>"
                 . $t_Rem . "</button></td>";
             $tableRow = "<tr id='$name'>$td_name $td_amou $td_pric $td_tota $td_btn_add $td_btn_rem</tr>";
             $html = $html . $tableRow;
         }
 
-        $html = $html . "<tr><td rowspan='3'></td><td name='total'>$total</td></tr>";
+        $html = $html . "<tr><td rowspan='3'></td><td name='total' id='supertotal'>$total</td></tr>";
         $html = $html . "</table>";
 
 

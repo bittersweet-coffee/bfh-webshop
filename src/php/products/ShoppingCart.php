@@ -1,16 +1,46 @@
 <?php
 
-if (isset($_GET["action"]) && strip_tags($_GET["action"] == "add")) {
-    $product = strip_tags($_GET["product"]);
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
+if (isset($_GET["action"])) {
+    if (strip_tags($_GET["action"] == "add")) {
+        $product = strip_tags($_GET["product"]);
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["cart"])) {
+            $_SESSION["cart"] = new ShoppingCart();
+        }
+        $cart = $_SESSION["cart"];
+        $cart->addItem($product, 1);
+        echo $cart->getNbrItems();
     }
-    if (!isset($_SESSION["cart"])) {
-        $_SESSION["cart"] = new ShoppingCart();
+    if (strip_tags($_GET["action"] == "remove")) {
+        $product = strip_tags($_GET["product"]);
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["cart"])) {
+            $_SESSION["cart"] = new ShoppingCart();
+        }
+        $cart = $_SESSION["cart"];
+        $cart->removeItem($product, 1);
+        $amount_total = $cart->getNbrItems();
+        $amount_item = $cart->getAmount($product);
+        echo "$amount_total,$amount_item";
     }
-    $cart = $_SESSION["cart"];
-    $cart->addItem($product, 1);
-    echo $cart->getNbrItems();
+    if (strip_tags($_GET["action"] == "addMore")) {
+        $product = strip_tags($_GET["product"]);
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION["cart"])) {
+            $_SESSION["cart"] = new ShoppingCart();
+        }
+        $cart = $_SESSION["cart"];
+        $cart->addItem($product, 1);
+        $amount_total = $cart->getNbrItems();
+        $amount_item = $cart->getAmount($product);
+        echo "$amount_total,$amount_item";
+    }
 }
 
 class ShoppingCart {
@@ -53,7 +83,7 @@ class ShoppingCart {
         return $this->cartItems[$item];
     }
 
-    public function render() {
+    public function render_form() {
         $headerText = translate("Shoppingcart");
         if ($this->isEmpty()) {
             $html = "<h2> $headerText </h2>";
@@ -61,11 +91,41 @@ class ShoppingCart {
             return "<div class='cart_empty'>$html</div>";
         }
         $html = "<div class='cartForm'>";
-        $form = new ShoppingcartForm(getLanguage(["en", "de"]), "checkout", $_SESSION["cart"]);
+        $form = new ShoppingcartForm(getLanguage(["en", "de"]), $_SESSION["cart"], "shipping");
         $html = $html .$form->render();
         $html = $html . "</div>";
         return $html;
     }
 
+    public function render() {
+        $html = "<table>";
+        $t_Article = translate("Article");
+        $t_Amount = translate("Amount");
+        $t_Price = translate("Price");
+        $t_Total = translate("Total");
+        $tableHeader = "<tr><th>$t_Article</th><th>$t_Amount</th><th>$t_Price</th>
+                            <th>$t_Total</th></tr>";
+        $html = $html . $tableHeader;
+        $total = 0;
+        $cart = $_SESSION["cart"];
+        foreach ($cart->getItems() as $item => $num) {
+            $row_total = 0;
+            $product = Product::getSingleProduct(getLanguage(["en", "de"]), $item);
+            $name = $product['name'];
+            $price = $product['price'];
+            $row_total += $price * $num;
+            $total += $row_total;
+            $td_name = "<td name='$name'>$name</td>";
+            $td_amou = "<td name='amount' id='amount'>$num</td>";
+            $td_pric = "<td name='price'>$price</td>";
+            $td_tota = "<td name='row_total' id='rowtotal'>$row_total</td>";
+            $tableRow = "<tr id='$name'>$td_name $td_amou $td_pric $td_tota</tr>";
+            $html = $html . $tableRow;
+        }
+        $html = $html . "<tr><td rowspan='3'></td><td name='total' id='supertotal'>$total</td></tr>";
+        $html = $html . "</table>";
+
+        return $html;
+    }
 
 }

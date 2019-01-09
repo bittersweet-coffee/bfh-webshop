@@ -35,15 +35,14 @@ function addToCart(product) {
     });
 }
 
-function addMore(name, amount, price) {
+function addMore(name, price) {
     $.ajax({
         type: 'GET',
         url: 'php/products/ShoppingCart.php',
         data: { action: "addMore",
-            product: name,
-            amount: amount,
-            price: price},
+            product: name},
             success: function(response) {
+                var r = response.split(",").map(Number);
                 var t = "";
                 var lang = getUrlParameter('lang');
                 if (lang == "de") {
@@ -51,20 +50,44 @@ function addMore(name, amount, price) {
                 } else {
                     t = "Cart: "
                 }
-                $("#cart a").html(t + response);
+                $("#cart a").html(t + r[0]);
+                var row_total = r[1] * price;
+                setRowTotal(name, row_total);
+                setAmount(name, r[1]);
+                if (r[1] > 0) {
+                    $("#"+ name + " #remove button").prop('disabled', false);
+                }
+                var total = $("#supertotal").html();
+                total = parseInt(total) + parseInt(price);
+                setTotal(total);
         }
     });
 }
 
-function remove(name, amount, price) {
+function setRowTotal(product, row_total) {
+    var hashtag="#";
+    var str = hashtag + product+ " #rowtotal";
+    $(str).html(row_total);
+}
+
+function setAmount(product, amount) {
+    var hashtag="#";
+    var str = hashtag + product+ " #amount";
+    $(str).html(amount);
+}
+
+function setTotal(total) {
+    $("#supertotal").html(total)
+}
+
+function remove(name, price) {
     $.ajax({
         type: 'GET',
         url: 'php/products/ShoppingCart.php',
         data: { action: "remove",
-            product: name,
-            amount: amount,
-            price: price},
+            product: name},
         success: function(response) {
+            var r = response.split(",").map(Number);
             var t = "";
             var lang = getUrlParameter('lang');
             if (lang == "de") {
@@ -72,7 +95,28 @@ function remove(name, amount, price) {
             } else {
                 t = "Cart: "
             }
-            $("#cart a").html(t + response);
+            var amount_total = r[0];
+            if (isNaN(amount_total)) {
+                amount_total = 0;
+            }
+            var amount = r[1];
+            if (isNaN(amount)) {
+                amount = 0;
+            }
+            $("#cart a").html(t + amount_total);
+            var row_total = amount * price;
+            setRowTotal(name, row_total);
+            setAmount(name, amount);
+            var total = $("#supertotal").html();
+            var p = price;
+            if (amount == 0) {
+                $("#"+ name + " #remove button").prop('disabled', true);
+            }
+            total = parseInt(total) - parseInt(p);
+            if (total <= 0) {
+                total = 0;
+            }
+            setTotal(total);
         }
     });
 }
