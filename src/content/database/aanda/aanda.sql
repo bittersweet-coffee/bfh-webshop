@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 06. Jan 2019 um 14:54
+-- Erstellungszeit: 09. Jan 2019 um 23:20
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -133,8 +133,8 @@ INSERT INTO `product` (`id`, `name`, `price`, `p_id`, `d_id`) VALUES
 (4, 'Amateurrod', 20, 1, 4),
 (5, 'Megarod', 200, 1, 5),
 (6, 'Megarod', 200, 1, 6),
-(7, 'Superreel', 25.5, 2, 7),
-(8, 'Superreel', 25.5, 2, 8),
+(7, 'Superreel', 30, 2, 7),
+(8, 'Superreel', 30, 2, 8),
 (9, 'Amateurreel', 15.5, 2, 9),
 (10, 'Amateurreel', 15.5, 2, 10),
 (11, 'Super lure', 3, 3, 11),
@@ -149,8 +149,8 @@ INSERT INTO `product` (`id`, `name`, `price`, `p_id`, `d_id`) VALUES
 (20, 'Superaccessories', 70, 5, 20),
 (21, 'Amateuraccessories', 23.3, 5, 21),
 (22, 'Amateuraccessories', 23.3, 5, 22),
-(23, 'Gigarod', 99.9, 1, 23),
-(24, 'Gigarod', 99.9, 1, 24);
+(23, 'Giga Rod', 888, 1, 23),
+(24, 'Giga Rod', 888, 1, 24);
 
 -- --------------------------------------------------------
 

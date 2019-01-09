@@ -40,6 +40,10 @@ nav ul {
     float: right;
 }
 
+#cart {
+    color: #000000;
+}
+
 nav a {
     display: block;
     font: 1em "Open Sans", sans-serif;

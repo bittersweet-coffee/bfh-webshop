@@ -80,6 +80,21 @@ class Customer
             </div>";
         return $context;
     }
+
+    public function renderMail()
+    {
+        $context =
+            "
+                ----" . translate("Firstname") . ": $this->firstname \n
+                ----" . translate("Lastname") . ":  $this->lastname \n
+                ----" . translate("Address") . ": $this->address \n
+                ----" . translate("Email") . ":  $this->email \n
+                ----" . translate("Postal Code") . ": $this->email \n
+                ----" . translate("Country") . ": $this->country \n
+            ";
+        return $context;
+    }
+
     public static function render_InputTags(): string {
         $customerInputTag = "<div id='customer_tags'>";
         foreach (self::inputElements as $inputElementName => $inputType) {

@@ -8,8 +8,10 @@ function __autoload($class_name) {
         'php/user/userarea/controller/',
         'php/user/userarea/model/',
         'php/user/userarea/view/',
+        'php/products/',
         'php/utils/',
         'php/customer'
+
     );
 
     foreach($directorys as $directory) {

@@ -108,3 +108,16 @@ $messages['Successfully deleted products.'] = 'Successfully deleted products.';
 $messages['Select a product'] = 'Select a product';
 $messages['Product'] = 'Product';
 $messages['Successfully updated product.'] = 'Successfully updated product.';
+$messages['Cart'] = 'Cart';
+$messages['Add to Cart'] = 'Add to Cart';
+$messages['Shoppingcart'] = 'Shoppingcart';
+$messages['Your Shoppingcart is Empty'] = 'Your Shoppingcart is Empty';
+$messages['Article'] = 'Article';
+$messages['Add'] = 'Add';
+$messages['Remove'] = 'Remove';
+$messages['Checkout'] = 'Checkout';
+$messages['Continue to confirm or cancel'] = 'Continue to confirm or cancel';
+$messages['Confirmation'] = 'Bestätigung';
+
+$messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Your order will be processed within the next few days. Best regards, a&a-Team';
+
