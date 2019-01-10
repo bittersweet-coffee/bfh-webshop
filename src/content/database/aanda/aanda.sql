@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 10. Jan 2019 um 01:17
+-- Erstellungszeit: 10. Jan 2019 um 18:10
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -149,8 +149,8 @@ INSERT INTO `product` (`id`, `name`, `price`, `p_id`, `d_id`) VALUES
 (20, 'Boot mat', 22.5, 5, 20),
 (21, 'Fishing cup', 5.3, 5, 21),
 (22, 'Fishing cup', 5.3, 5, 22),
-(23, 'all-round rod', 90, 1, 23),
-(24, 'all-round rod', 90, 1, 24),
+(23, 'All Round rod', 90, 1, 23),
+(24, 'All Round rod', 90, 1, 24),
 (25, 'Telescopic rod', 63, 1, 25),
 (26, 'Telescopic rod', 63, 1, 26),
 (27, 'Battle Brake Roll', 299, 2, 27),
@@ -198,8 +198,8 @@ INSERT INTO `p_real` (`id`, `l_id`, `name`, `description`) VALUES
 (20, 2, 'Kofferraummatte', 'Universal-Kofferraummatte aus PVC\r\nAbwaschbar\r\nRutschfest\r\nWasser- und schmutzabweisend'),
 (21, 1, 'Fishing cup', 'With stylish Fox logo'),
 (22, 2, 'Angeltasse', 'Mit stylischem Fox Logo'),
-(23, 1, 'all-round rod', 'The all-round rod lies like an extended arm in the hand. The casting characteristics convince by width and accuracy. Every bait movement is reliably transmitted to the angler.'),
-(24, 2, 'all-round rod', 'Die Allroundrute liegt wie ein verlÃ¤ngerter Arm in der Hand. Die Wurfeigenschaften Ã¼berzeugen durch Weite und Genauigkeit. Bei der FÃ¼hrung wird jede  KÃ¶derbewegung zuverlÃ¤ssig an den Angler Ã¼bertragen. '),
+(23, 1, 'All Round rod', 'The all-round rod lies like an extended arm in the hand. The casting characteristics convince by width and accuracy. Every bait movement is reliably transmitted to the angler.'),
+(24, 2, 'Allroundrute', 'Die Allroundrute liegt wie ein verlaengerter Arm in der Hand. Die Wurfeigenschaften Ueberzeugen durch Weite und Genauigkeit. Bei der Fuehrung wird jede  KÃ¶derbewegung zuverlÃ¤ssig an den Angler Ã¼bertragen. '),
 (25, 1, 'Telescopic rod', 'The telescopic rod is a versatile telescopic rod that covers a wide range of angling types. Tele rods with their high quality carbon fibre blanks and wound rings show an excellent action, which comes very close to that of rods.'),
 (26, 2, 'Teleskoprute', 'Die Teleskoprute ist eine vielseitig einsetzbare Teleskoprute, die eine groÃŸe Bandbreite an Angelarten abdeckt. Tele Ruten weisen mit ihren hochwertigen Kohlefaserblanks und gewickelten Ringen eine hervorragende Aktion auf, die denen von Steckruten sehr nahe kommt.'),
 (27, 1, 'Battle Brake Roll', 'Battle Brake Roll is a professional roll with Fighting\' Drag battle brake. This Fightin Drag function allows a lightning fast fine tuning in the drill.'),
@@ -248,7 +248,7 @@ CREATE TABLE `shopusers` (
 
 INSERT INTO `shopusers` (`id`, `username`, `password`, `contact`) VALUES
 (1, 'henzij', 'welcome1', 1),
-(2, 'admin', '$2y$10$UCCDE/xdFg8jHI1hWM.5EOJMBxgOiGhn.af2am0Px5l39WVY8EU0y', 2);
+(2, 'admin', '$2y$10$mRjvaAec8eh7vUVblw0McuQpIu5KKV0szheSQW4TU22KeZ00wUvpW', 2);
 
 -- --------------------------------------------------------
 
