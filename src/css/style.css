@@ -1,4 +1,11 @@
 
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 header {
     overflow: hidden;
     width: 100%;
@@ -22,6 +29,7 @@ nav {
     top: 0;
     left: 0;
     position: fixed;
+    border-bottom: 3px solid #4285f4;
 }
 
 nav ul {
@@ -40,6 +48,11 @@ nav ul {
     float: right;
 }
 
+.nav-active {
+    color: #ffffff;
+    background: #4285f4;
+}
+
 nav a {
     display: block;
     font: 1em "Open Sans", sans-serif;
@@ -49,37 +62,39 @@ nav a {
     padding: 14px 16px;
 }
 
-nav a:active {
+nav a:hover {
     color: #ffffff;
     background: #4285f4;
 }
 
 #content {
-    margin-top: 50px;
-    border: 1px solid black;
+    margin-top: 55px;
+    margin-bottom: 75px;
+    height: 100%;
 }
 
-footer {
-    border: 1px solid black;
+.container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1240px;
 }
 
-#logo {
-    width: 5%;
+.products {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-#container {
-    width:100%;
-}
-
-#box {
-    background:lightblue;
-    border:1px solid black;
-    min-height:30px;
-    margin-top:10px;
-    margin-right:0.5%;
-    width: 190px;
+.box {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    margin: 1%;
+    flex: 1 16%;
+    border: 3px solid #4285f4;
+    border-radius: 10px;
     display: inline-block;
 }
+
 .hidden {
     opacity: 0;
     max-height: 0;
@@ -91,11 +106,66 @@ footer {
     font-weight: bold;
 }
 
+.prod-name {
+    font-weight: bold;
+}
+
+.prod-price {
+    color: #e60021;
+}
+
+/* https://www.w3schools.com/css/tryit.asp?filename=trycss_buttons_animate3 */
 a.button {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
-
+    display: inline-block;
+    padding: 5px 15px;
+    text-align: center;
     text-decoration: none;
-    color: initial;
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #72a4f7;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px #999;
+}
+
+a.button:hover {
+    background-color: #4285f4;
+}
+
+a.button:active {
+    background-color: #4285f4;
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
+}
+
+footer {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    position: fixed;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f1f1;
+    border-top: 3px solid #4285f4;
+}
+
+#logo {
+    width: 3%;
+}
+
+@media (max-width: 920px) {
+    .box {
+        flex: 1 21%;
+    }
+}
+
+@media (max-width: 600px) {
+    .box {
+        flex: 1 46%;
+    }
 }

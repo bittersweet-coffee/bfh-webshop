@@ -44,9 +44,9 @@ class Product
         $labelDescription = "<label>" . $labelDescriptionText . ": </label>";
         $html =
             "
-                <p>$labelName $this->name;</p>
-                <p>$labelPrice $this->price</p>
-                <p>$labelDescription $this->description</p>
+                <p class=\"prod-name\">$this->name</p>
+                <p class=\"prod-price\">$this->price</p>
+                <p class=\"prod-descr\">$this->description</p>
             ";
 
         if (isset($this->amount)) {
@@ -155,12 +155,12 @@ class ProductHandler {
     public function renderAllProducts() {
         $lang = getLanguage(["en", "de"]);
         $page = "buy";
-        $html = "<div id='container'>";
+        $html = "<div class='container products'>";
         foreach ($this->products as $product) {
             $name = $product->getRealName();
             $url = htmlspecialchars($_SERVER['PHP_SELF']) . "?lang=$lang" . "&page=$page";
             $url = $url . "&product=$name";
-            $html = $html . "<div id='box'>";
+            $html = $html . "<div class='box'>";
             $html = $html . $product->render();
             $html = $html . "<a href='$url' class='button'>" . translate("Buy Now") . "</a></div>";
         }
