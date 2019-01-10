@@ -5,19 +5,19 @@ if (isset($_GET["actionCart"])) {
         session_start();
     }
     $cart = $_SESSION["cart"];
-    if (strip_tags($_GET["action"] == "add")) {
+    if (strip_tags($_GET["actionCart"] == "add")) {
         $product = strip_tags($_GET["product"]);
         $cart->addItem($product, 1);
         echo $cart->getNbrItems();
     }
-    if (strip_tags($_GET["action"] == "remove")) {
+    if (strip_tags($_GET["actionCart"] == "remove")) {
         $product = strip_tags($_GET["product"]);
         $cart->removeItem($product, 1);
         $amount_total = $cart->getNbrItems();
         $amount_item = $cart->getAmount($product);
         echo "$amount_total,$amount_item";
     }
-    if (strip_tags($_GET["action"] == "addMore")) {
+    if (strip_tags($_GET["actionCart"] == "addMore")) {
         $product = strip_tags($_GET["product"]);
         $cart->addItem($product, 1);
         $amount_total = $cart->getNbrItems();

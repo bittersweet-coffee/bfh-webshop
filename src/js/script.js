@@ -20,18 +20,18 @@ function addToCart(product) {
     $.ajax({
         type: 'GET',
         url: 'php/products/ShoppingCart.php',
-        data: { action: "add",
+        data: { actionCart: "add",
                 product: product},
-        success: function(response) {
-            var t = "";
-            var lang = getUrlParameter('lang');
-            if (lang == "de") {
-                t = "Korb: ";
-            } else {
-                t = "Cart: "
-            }
-            $("#cart a").html(t + response);
-        }
+                success: function(response) {
+                    var t = "";
+                    var lang = getUrlParameter('lang');
+                    if (lang == "de") {
+                        t = "Korb: ";
+                    } else {
+                        t = "Cart: "
+                    }
+                    $("#cart a").html(t + response);
+                }
     });
 }
 
