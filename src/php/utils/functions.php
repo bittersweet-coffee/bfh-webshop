@@ -1,11 +1,6 @@
 <?php
 
 function getPageContent($content) {
-    /*$test = "
-            <button onclick=\"getTime()\">Get Time</button>
-            <p id='time'>test</p>
-        ";
-    echo $test;*/
     if (checkLogin()) {
         $username = $_SESSION['user']['username'];
         echo "<p>" . translate("You are currently logged in as") .": '$username'</p>";
@@ -58,8 +53,12 @@ function getPageContent($content) {
         case 'confirmation':
             displayConfirmation();
             break;
+        case 'cart':
+            $cart = $_SESSION["cart"];
+            echo $cart->render_form();
+            break;
         case 'errorPage':
-            displayErrorReason(get_param("reason", "error"));
+            displayErrorReason(get_param("reason", "Unknown"));
             break;
         default:
             if (checkLogin()) {
@@ -176,6 +175,10 @@ function checkUserSession(string $name) {
 
 function checkLogin() {
     return (isset($_SESSION['login']) && $_SESSION['login'] == true);
+}
+
+function checkAdmin() {
+    return checkLogin() && isset($_SESSION['admin']) && $_SESSION['admin'] == true;
 }
 
 function displayNoAccess() {

@@ -40,6 +40,7 @@ function checkCustomerData() {
         !isset($_POST["PostalCode"])) {
        return false;
     }
+
     setCustomerCookies();
     return true;
 }

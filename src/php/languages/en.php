@@ -17,6 +17,8 @@ $messages['Yes, good thing!'] = 'Yes, good thing!';
 $messages['No Thanks.'] = 'No Thanks.';
 
 $messages['Name'] = 'Name';
+$messages['Productname'] = 'Productname';
+$messages['Product Type'] = 'Product Type';
 $messages['Price'] = 'Price';
 $messages['Description'] = 'Description';
 
@@ -86,3 +88,36 @@ $messages['Change Password'] = 'Change Password';
 $messages['Password successfully changed. You should log in again to check it.'] = "Password successfully changed. You should log in again to check it.";
 $messages['Your old password does not seem to be correct.'] = 'your old password does not seem to be correct.';
 $messages['Successfully created user'] = 'Successfully created user';
+$messages['Something went wrong. Are you logged in?'] = 'Something went wrong. Are you logged in?';
+$messages['Customer data has been updated and is spread as follows:'] = 'Customer data has been updated and is saved as follows:';
+$messages['As shopadmin you have the following options'] = 'As shopadmin you have the following options';
+
+$messages['Add a new Product'] = 'Add a new Product';
+$messages['Delete a Product'] = 'Delete a Product';
+$messages['Update a Product'] = 'Update a Product';
+
+$messages['Select a product type'] = 'Select a product type';
+$messages['Product English'] = 'Product English';
+$messages['Product German'] = 'Product German';
+$messages['Set the Product Price'] = 'Set the Product Price';
+
+$messages['Successfully created new product.'] = 'Successfully created new product.';
+$messages['Select products'] = 'Select products';
+$messages['Delete Products'] = 'Delete Products';
+$messages['Successfully deleted products.'] = 'Successfully deleted products.';
+$messages['Select a product'] = 'Select a product';
+$messages['Product'] = 'Product';
+$messages['Successfully updated product.'] = 'Successfully updated product.';
+$messages['Cart'] = 'Cart';
+$messages['Add to Cart'] = 'Add to Cart';
+$messages['Shoppingcart'] = 'Shoppingcart';
+$messages['Your Shoppingcart is Empty'] = 'Your Shoppingcart is Empty';
+$messages['Article'] = 'Article';
+$messages['Add'] = 'Add';
+$messages['Remove'] = 'Remove';
+$messages['Checkout'] = 'Checkout';
+$messages['Continue to confirm or cancel'] = 'Continue to confirm or cancel';
+$messages['Confirmation'] = 'Bestätigung';
+
+$messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Your order will be processed within the next few days. Best regards, a&a-Team';
+

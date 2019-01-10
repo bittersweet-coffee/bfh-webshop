@@ -60,6 +60,9 @@ function performLoggin(string $usr, string $pwd) {
     $customer = buildCustomer($usr);
     $user = new User($customer, $usr, $pwd);
     $_SESSION['login'] = true;
+    if ($usr === "admin") {
+        $_SESSION['admin'] = true;
+    }
     $_SESSION['user'] = $user->toArray();
 }
 

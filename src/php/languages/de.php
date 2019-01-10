@@ -17,6 +17,8 @@ $messages['Yes, good thing!'] = 'Ja, gute Sache!';
 $messages['No Thanks.'] = 'Nein Danke.';
 
 $messages['Name'] = 'Name';
+$messages['Productname'] = 'Produktname';
+$messages['Product Type'] = 'Produkt Typ';
 $messages['Price'] = 'Preis';
 $messages['Description'] = 'Beschreibung';
 
@@ -84,5 +86,38 @@ $messages['Change Password'] = 'Passwort ändern';
 $messages['Password successfully changed. You should log in again to check it.'] = "Passwort erfolgreich geändert. Du solltest dich neu einloggen um es zu prüfen.";
 $messages['Your old password does not seem to be correct.'] = 'Dein altes passwort scheint nicht zu stimmen.';
 $messages['Successfully created user'] = 'Erfolgreich Benutzer angelegt';
+$messages['Something went wrong. Are you logged in?'] = 'Etwas ist schief gegangen. Sind Sie eingeloggt?';
+$messages['Customer data has been updated and is spread as follows:'] = 'Kundendaten wurden upgedatet und sind wie folgt gespreichert:';
 
+$messages['As shopadmin you have the following options'] = 'Als Shopadmin hast du noch folgende Optionen';
 
+$messages['Add a new Product'] = 'Produkt Hinzufügen';
+$messages['Delete a Product'] = 'Produkt Löschen';
+$messages['Update a Product'] = 'Produkt Ändern';
+
+$messages['Select a product type'] = 'Wähle einen Produkt typ';
+$messages['Product English'] = 'Produkt Englisch';
+$messages['Product German'] = 'Produkt Deutsch';
+
+$messages['Set the Product Price'] = 'Den Produktpreis festlegen';
+$messages['Successfully created new product.'] = 'Erfolgreich neues Produkt angelegt.';
+$messages['Select products'] = 'Wähle Produkte';
+$messages['Delete Products'] = 'Lösche Produkte';
+$messages['Delete'] = 'Löschen';
+$messages['Load'] = 'Daten Laden';
+$messages['Update'] = 'Ändern';
+$messages['Successfully deleted product.'] = 'Erfolgreich Produkte gelöscht.';
+$messages['Select a product'] = 'Wähle ein Produkt';
+$messages['Update Product'] = 'Produkt Ändern';
+$messages['Product'] = 'Produkt';
+$messages['Successfully updated product.'] = 'Erfolgreich Produkt geändert.';
+$messages['Cart'] = 'Korb';
+$messages['Add to Cart'] = 'Warenkorb';
+$messages['Shoppingcart'] = 'Warenkorb';
+$messages['Your Shoppingcart is Empty'] = 'Dein Warenkorb ist leer';
+$messages['Article'] = 'Artikel';
+$messages['Add'] = 'Hinzufügen';
+$messages['Remove'] = 'Entfernen';
+$messages['Checkout'] = 'Zur Kasse';
+$messages['Continue to confirm or cancel'] = 'Weiter zum bestätigen oder abbrechen';
+$messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Deine Bestellung wird so in den nächsten Tagen bearbeitet. Beste Grüsse, a&a-Team';
