@@ -11,8 +11,7 @@
     include 'php/utils/Form.php';
     include 'php/utils/validate.php';
     include 'php/utils/error.php';
-
-    //include 'php/mail/mail.php';
+    include 'php/mail/mail.php';
 
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
