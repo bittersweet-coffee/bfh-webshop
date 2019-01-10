@@ -10,7 +10,7 @@ if(isset($_POST['confirm'])){
     $to = $customer->getEmail();
     $from = "aanda.shop";
     $subject = translate("Confirmation");
-    $productInfos = $content->render();
+    $productInfos = $content->renderMail();
     $purchaseHeader = "---" . translate("Purchase Information"). "---\n";
     $customerInformationHeader = "---" . translate("Customer Information"). "...\n";
     $cInfo = $customer->renderMail();
