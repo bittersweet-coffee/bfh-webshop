@@ -14,6 +14,7 @@ if(isset($_POST['confirm'])){
     $purchaseHeader = "---" . translate("Purchase Information"). "---\n";
     $customerInformationHeader = "---" . translate("Customer Information"). "...\n";
     $cInfo = $customer->renderMail();
+    $content->cleanUp();
     $text = "Your order will be processed within the next few days. Best regards, a&a-Team";
     $message = "
         $purchaseHeader

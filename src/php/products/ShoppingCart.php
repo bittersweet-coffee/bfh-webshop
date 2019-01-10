@@ -157,4 +157,10 @@ class ShoppingCart {
         return $mail;
     }
 
+    public function cleanUp() {
+        foreach ($this->cartItems as $key=>$value) {
+            $this->cartItems[$key] = 0;
+        }
+    }
+
 }

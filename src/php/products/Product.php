@@ -228,6 +228,15 @@ class Product
         return $this->totoal;
     }
 
+    public function cleanUp() {
+        $this->name = "";
+        $this->realName = "";
+        $this->price = 0;
+        $this->description = "";
+        $this->amount = 0;
+        $this->donation = 0;
+    }
+
     public static function getProductsFromDatabase($type, $language) {
         $query = Database::doQueryPrepare(self::productQuery);
         $query->bind_param('ss', $language, $type);
