@@ -1,27 +1,17 @@
 <?php
 
-if (isset($_GET["action"])) {
+if (isset($_GET["actionCart"])) {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    $cart = $_SESSION["cart"];
     if (strip_tags($_GET["action"] == "add")) {
         $product = strip_tags($_GET["product"]);
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (!isset($_SESSION["cart"])) {
-            $_SESSION["cart"] = new ShoppingCart();
-        }
-        $cart = $_SESSION["cart"];
         $cart->addItem($product, 1);
         echo $cart->getNbrItems();
     }
     if (strip_tags($_GET["action"] == "remove")) {
         $product = strip_tags($_GET["product"]);
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (!isset($_SESSION["cart"])) {
-            $_SESSION["cart"] = new ShoppingCart();
-        }
-        $cart = $_SESSION["cart"];
         $cart->removeItem($product, 1);
         $amount_total = $cart->getNbrItems();
         $amount_item = $cart->getAmount($product);
@@ -29,13 +19,6 @@ if (isset($_GET["action"])) {
     }
     if (strip_tags($_GET["action"] == "addMore")) {
         $product = strip_tags($_GET["product"]);
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (!isset($_SESSION["cart"])) {
-            $_SESSION["cart"] = new ShoppingCart();
-        }
-        $cart = $_SESSION["cart"];
         $cart->addItem($product, 1);
         $amount_total = $cart->getNbrItems();
         $amount_item = $cart->getAmount($product);
@@ -73,14 +56,19 @@ class ShoppingCart {
 
     public function getNbrItems() : int{
         $nbr = 0;
-        foreach ($this->cartItems as $item) {
-            $nbr += $item;
+        foreach ($this->cartItems as $key=>$value) {
+            $nbr += $value;
         }
         return $nbr;
     }
 
     public function getAmount($item) : int {
-        return $this->cartItems[$item];
+        if (array_key_exists($item, $this->cartItems)) {
+            return $this->cartItems[$item];
+        } else {
+            return 0;
+        }
+
     }
 
     public function render_form() {

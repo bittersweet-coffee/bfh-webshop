@@ -1,9 +1,5 @@
 <?php
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
 // BUY-FORMS validation
 if (isset($_POST["buy"])) {
     if (!isset($_POST["amount"]) and !isset($_POST["donation"])) {

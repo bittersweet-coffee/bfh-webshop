@@ -1,6 +1,7 @@
 <?php
-
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 // from: http://php.net/manual/de/language.oop5.autoload.php
 function __autoload($class_name) {
     // directories

@@ -534,7 +534,7 @@ class ShoppingcartForm extends Form {
             $td_amou = "<td name='amount' id='amount'>$num</td>";
             $td_pric = "<td name='price'>$price</td>";
             $td_tota = "<td name='row_total' id='rowtotal'>$row_total</td>";
-            $td_btn_add = "<td id='add'><button id='add'type='button' onclick='addMore(\"$name\",\"$price\")' class='button'>"
+            $td_btn_add = "<td id='add'><button type='button' onclick='addMore(\"$name\",\"$price\")' class='button'>"
                 . $t_Add . "</button></td>";
             $td_btn_rem = "<td id='remove'><button type='button' onclick='remove(\"$name\", \"$price\")' class='button'>"
                 . $t_Rem . "</button></td>";

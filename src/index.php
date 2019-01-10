@@ -1,6 +1,5 @@
 <?php
 
-
     require 'autoloader.php';
     include 'php/database/Database.php';
     require 'php/languages/Translator.php';
@@ -12,10 +11,6 @@
     include 'php/utils/validate.php';
     include 'php/utils/error.php';
     include 'php/mail/mail.php';
-
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
     include 'php/utils/login.php';
     include 'php/utils/registration.php';
     require 'html/head.html';

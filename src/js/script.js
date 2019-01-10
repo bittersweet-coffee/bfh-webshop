@@ -39,7 +39,7 @@ function addMore(name, price) {
     $.ajax({
         type: 'GET',
         url: 'php/products/ShoppingCart.php',
-        data: { action: "addMore",
+        data: { actionCart: "addMore",
             product: name},
             success: function(response) {
                 var r = response.split(",").map(Number);
@@ -55,7 +55,8 @@ function addMore(name, price) {
                 setRowTotal(name, row_total);
                 setAmount(name, r[1]);
                 if (r[1] > 0) {
-                    $("#"+ name + " #remove button").prop('disabled', false);
+                    var id = "[id='" + name + "']" + " #remove button";
+                    $(id).prop('disabled', false);
                 }
                 var total = $("#supertotal").html();
                 total = parseInt(total) + parseInt(price);
@@ -65,15 +66,13 @@ function addMore(name, price) {
 }
 
 function setRowTotal(product, row_total) {
-    var hashtag="#";
-    var str = hashtag + product+ " #rowtotal";
-    $(str).html(row_total);
+    var id = "[id='" + product + "']" + " #rowtotal";
+    $(id).html(row_total);
 }
 
 function setAmount(product, amount) {
-    var hashtag="#";
-    var str = hashtag + product+ " #amount";
-    $(str).html(amount);
+    var id = "[id='" + product + "']" + " #amount";
+    $(id).html(amount);
 }
 
 function setTotal(total) {
@@ -84,39 +83,40 @@ function remove(name, price) {
     $.ajax({
         type: 'GET',
         url: 'php/products/ShoppingCart.php',
-        data: { action: "remove",
+        data: { actionCart: "remove",
             product: name},
-        success: function(response) {
-            var r = response.split(",").map(Number);
-            var t = "";
-            var lang = getUrlParameter('lang');
-            if (lang == "de") {
-                t = "Korb: ";
-            } else {
-                t = "Cart: "
-            }
-            var amount_total = r[0];
-            if (isNaN(amount_total)) {
-                amount_total = 0;
-            }
-            var amount = r[1];
-            if (isNaN(amount)) {
-                amount = 0;
-            }
-            $("#cart a").html(t + amount_total);
-            var row_total = amount * price;
-            setRowTotal(name, row_total);
-            setAmount(name, amount);
-            var total = $("#supertotal").html();
-            var p = price;
-            if (amount == 0) {
-                $("#"+ name + " #remove button").prop('disabled', true);
-            }
-            total = parseInt(total) - parseInt(p);
-            if (total <= 0) {
-                total = 0;
-            }
-            setTotal(total);
+            success: function(response) {
+                var r = response.split(",").map(Number);
+                var t = "";
+                var lang = getUrlParameter('lang');
+                if (lang == "de") {
+                    t = "Korb: ";
+                } else {
+                    t = "Cart: "
+                }
+                var amount_total = r[0];
+                if (isNaN(amount_total)) {
+                    amount_total = 0;
+                }
+                var amount = r[1];
+                if (isNaN(amount)) {
+                    amount = 0;
+                }
+                $("#cart a").html(t + amount_total);
+                var row_total = amount * price;
+                setRowTotal(name, row_total);
+                setAmount(name, amount);
+                var total = $("#supertotal").html();
+                var p = price;
+                if (amount == 0) {
+                    var id = "[id='" + name + "']" + " #remove button";
+                    $(id).prop('disabled', true);
+                }
+                total = parseInt(total) - parseInt(p);
+                if (total <= 0) {
+                    total = 0;
+                }
+                setTotal(total);
         }
     });
 }
