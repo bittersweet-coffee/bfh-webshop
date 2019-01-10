@@ -541,9 +541,9 @@ class ProductHandler {
             $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), 'lang', $lang);
             $url = add_param($url, 'page', $page);
             $url = add_param($url, 'product', $name);
-            $html = $html . "<div id='box'>";
+            $html = $html . "<div class='box'>";
             $html = $html . $product->render();
-            $html = $html . "<a href='$url'><button type='button'>" . translate("Buy Now") . "</button></a>";
+            $html = $html . "<a href='$url' class='button'><button type='button'>" . translate("Buy Now") . "</button></a>";
             $html = $html . "<button onclick='addToCart(\"$name\")' class='button'>" . translate("Add to Cart") . "</button></div>";
         }
         echo $html. "</div>";

@@ -51,7 +51,7 @@ nav ul {
 .nav-active {
     color: #ffffff;
     background: #4285f4;
-
+}
 
 nav a {
     display: block;
@@ -115,7 +115,7 @@ nav a:hover {
 }
 
 /* https://www.w3schools.com/css/tryit.asp?filename=trycss_buttons_animate3 */
-a.button {
+.button {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
@@ -131,11 +131,15 @@ a.button {
     box-shadow: 0 5px #999;
 }
 
-a.button:hover {
+.button button {
+    all: unset;
+}
+
+.button:hover {
     background-color: #4285f4;
 }
 
-a.button:active {
+.button:active {
     background-color: #4285f4;
     box-shadow: 0 2px #666;
     transform: translateY(4px);
