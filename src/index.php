@@ -31,10 +31,11 @@
     </header>
     <?php echo $nav->render();?>
     <div id="content">
-        <img src="img/logo.png" alt="Logo" id="logo">
         <?php echo getPageContent("page"); ?>
     </div>
-    <footer>Footer</footer>
+    <footer>
+        <img src="img/logo.png" alt="Angelbedarf & Anderes" title="Angelbedarf & Anderes" id="logo">
+    </footer>
     <script src="js/script.js"></script>
 </body>
 </html>
