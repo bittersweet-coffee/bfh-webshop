@@ -545,11 +545,12 @@ class ShoppingcartForm extends Form {
         $html = $html . "<tr><td rowspan='3'></td><td name='total' id='supertotal'>$total</td></tr>";
         $html = $html . "</table>";
 
-
-
-        $submit = "<input type='submit' value='". translate("Checkout") ."' name='post_updateProduct'/>";
+        $submit = "<input type='submit' class='button' value='". translate("Checkout") ."' name='cart'/>";
+        $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", get_param("lang", "en"));
+        $cancel = "<a href='$url' class='button'><button type='button'>" . translate("Cancle") . "</button></a>";
+        
         return [$html,
             $submit,
-            parent::getCancleButton("noDel")];
+            $cancel];
     }
 }
