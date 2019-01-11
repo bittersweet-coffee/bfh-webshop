@@ -13,7 +13,6 @@ class Translator {
         }
     }
 
-    // Singleton
     public function t(string $str): string {
         require "php/languages/". $this->lang . ".php";
         if (isset($messages[$str])) {

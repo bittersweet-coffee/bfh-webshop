@@ -548,7 +548,7 @@ class ShoppingcartForm extends Form {
         $submit = "<input type='submit' class='button' value='". translate("Checkout") ."' name='cart'/>";
         $url = add_param(htmlspecialchars($_SERVER['PHP_SELF']), "lang", get_param("lang", "en"));
         $cancel = "<a href='$url' class='button'><button type='button'>" . translate("Cancle") . "</button></a>";
-        
+
         return [$html,
             $submit,
             $cancel];

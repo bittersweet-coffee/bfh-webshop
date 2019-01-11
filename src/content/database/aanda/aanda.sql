@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 10. Jan 2019 um 18:10
+-- Erstellungszeit: 11. Jan 2019 um 17:51
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.10
 
@@ -127,8 +127,8 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `price`, `p_id`, `d_id`) VALUES
-(1, 'SeatroutX', 60.5, 1, 1),
-(2, 'SeatroutX', 60.5, 1, 2),
+(1, 'Sea Trout Rod', 60.5, 1, 1),
+(2, 'Sea Trout Rod', 60.5, 1, 2),
 (3, 'Pose Rod', 30, 1, 3),
 (4, 'Pose Rod', 30, 1, 4),
 (5, 'Carp rod', 39.9, 1, 5),
