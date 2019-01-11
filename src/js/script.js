@@ -50,17 +50,17 @@ function addMore(name, price) {
                 } else {
                     t = "Cart: "
                 }
-                $("#cart a").html(t + r[0]);
-                var row_total = r[1] * price;
+                $("#cart a").html(t + (Math.round(r[0] * 10)/10));
+                var row_total = (Math.round((r[1] * price)*10)/10);
                 setRowTotal(name, row_total);
-                setAmount(name, r[1]);
+                setAmount(name, (Math.round(r[1] * 10)/10));
                 if (r[1] > 0) {
                     var id = "[id='" + name + "']" + " #remove button";
                     $(id).prop('disabled', false);
                 }
                 var total = $("#supertotal").html();
                 total = parseInt(total) + parseInt(price);
-                setTotal(total);
+                setTotal((Math.round(total*10))/10);
         }
     });
 }
@@ -102,8 +102,8 @@ function remove(name, price) {
                 if (isNaN(amount)) {
                     amount = 0;
                 }
-                $("#cart a").html(t + amount_total);
-                var row_total = amount * price;
+                $("#cart a").html(t + (Math.round(amount_total *10)/10));
+                var row_total = (Math.round((amount * price)*10)/10);
                 setRowTotal(name, row_total);
                 setAmount(name, amount);
                 var total = $("#supertotal").html();
@@ -112,7 +112,7 @@ function remove(name, price) {
                     var id = "[id='" + name + "']" + " #remove button";
                     $(id).prop('disabled', true);
                 }
-                total = parseInt(total) - parseInt(p);
+                total = Math.round((parseInt(total) - parseInt(p))*10)/10;
                 if (total <= 0) {
                     total = 0;
                 }

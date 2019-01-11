@@ -89,7 +89,7 @@ class Product
     {
         $this->realName = $realName;
         $this->name = $name;
-        $this->price = $price;
+        $this->price = round($price, 1);
         $this->description = $description;
     }
 
@@ -97,9 +97,6 @@ class Product
         $labelNameText = translate("Name");
         $labelPriceText = translate("Price");
         $labelDescriptionText = translate("Description");
-        $labelName = "<label>" . $labelNameText . ": </label>";
-        $labelPrice = "<label>" . $labelPriceText . ": </label>";
-        $labelDescription = "<label>" . $labelDescriptionText . ": </label>";
         $html =
             "
                 <p class=\"prod-name\">$this->name</p>

@@ -527,9 +527,9 @@ class ShoppingcartForm extends Form {
             $row_total = 0;
             $product = Product::getSingleProduct(getLanguage(["en", "de"]), $item);
             $name = $product['name'];
-            $price = $product['price'];
-            $row_total += $price * $num;
-            $total += $row_total;
+            $price = round($product['price'], 1);
+            $row_total += round(($price * $num), 1);
+            $total += round($row_total, 1);
             $td_name = "<td name='$name'>$name</td>";
             $td_amou = "<td name='amount' id='amount'>$num</td>";
             $td_pric = "<td name='price'>$price</td>";
