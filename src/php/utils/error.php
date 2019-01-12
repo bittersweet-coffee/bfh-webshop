@@ -14,6 +14,10 @@ class ErrorPage {
         $reason = "<p> $reasonText: '$this->reason' </p>";
         $tryAgainText = translate("Try it again. If it occurs again, contact the administrator");
         $tryAgain = "<p> $tryAgainText </p>";
-        return "<div>" . $header . $reason . $tryAgain . "</div>";
+        $cancel = "<button onclick='window.history.back()' class='button'>" .translate("Back") . "</button>";
+        return "<div>" . $header . $reason . $tryAgain . $cancel . "</div>";
+
     }
+
+
 }

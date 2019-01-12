@@ -121,3 +121,5 @@ $messages['Remove'] = 'Entfernen';
 $messages['Checkout'] = 'Zur Kasse';
 $messages['Continue to confirm or cancel'] = 'Weiter zum bestätigen oder abbrechen';
 $messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Deine Bestellung wird so in den nächsten Tagen bearbeitet. Beste Grüsse, a&a-Team';
+
+$messages['Back'] = 'Zurück';

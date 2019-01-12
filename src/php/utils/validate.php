@@ -36,17 +36,36 @@ function checkCustomerData() {
         !isset($_POST["PostalCode"])) {
        return false;
     }
+    $f = htmlspecialchars($_POST["Firstname"]);
+    $l = htmlspecialchars($_POST["Lastname"]);
+    $e = htmlspecialchars($_POST["Email"]);
+    $a = htmlspecialchars($_POST["Address"]);
+    $c = htmlspecialchars($_POST["Country"]);
+    $p = htmlspecialchars($_POST["PostalCode"]);
+    if (!preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $f) &&
+        !preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $l) &&
+        !preg_match('/^.+@.+\..+$/', $e) &&
+        !preg_match('/^[A-Za-z]+\d*\s*\d*[A-Za-z]*\d*[A-Za-z]*$/', $a) &&
+        !preg_match('/^\d{4}$/', $c) &&
+        !preg_match('/^[A-Za-z]{2}$/', $p)
+    ) {
+        return true;
+    } else {
+        return false;
+    }
 
     setCustomerCookies();
     return true;
 }
 
 if (isset($_POST["register"])) {
-    if (checkCustomerData() && checkUserData()) {
+    if (!checkCustomerData()){
+        createErrorUrl("registrationFailed: Customerdata");
+    } elseif(!checkUserData()) {
+        createErrorUrl("registrationFailed: Userdata");
+    } else {
         createCustomer();
         createUser();
-    } else {
-        createErrorUrl("registrationFailed");
     }
 }
 
@@ -63,7 +82,16 @@ function checkUserData() {
         !isset($_POST["Retype"])) {
         return false;
     }
-    return true;
+    $p = htmlspecialchars($_POST["Password"]);
+    $rt= htmlspecialchars($_POST["Retype"]);
+    if ($p !== $rt) {
+        return false;
+    }
+    $u = htmlspecialchars($_POST["Username"]);
+    if (!preg_match('/[^A-Za-z0-9]/', $u)) {
+        return true;
+    }
+    return false;
 }
 
 function setCustomerCookies() {

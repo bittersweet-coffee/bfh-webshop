@@ -120,4 +120,4 @@ $messages['Continue to confirm or cancel'] = 'Continue to confirm or cancel';
 $messages['Confirmation'] = 'Bestätigung';
 
 $messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Your order will be processed within the next few days. Best regards, a&a-Team';
-
+$messages['Back'] = 'Back';
