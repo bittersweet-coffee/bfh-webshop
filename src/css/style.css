@@ -95,10 +95,72 @@ nav a:hover {
     display: inline-block;
 }
 
+.cartForm {
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+    margin: 1%;
+    flex: 1 16%;
+    border: 3px solid #4285f4;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.cartTable table {
+    padding: 1em;
+}
+
+.cartTable table td, th {
+    width: 7em;
+    height: 3em;
+    border: 1px solid #50b2f4;
+    text-align: center;
+}
+.cartTable table th {
+    background: #d3e6e3;
+    border-color: white;
+}
+
+.cartForm table td button {
+   box-shadow: none;
+}
+
+.customer_tags {
+    margin: 1%;
+    flex-direction: column;
+    flex: 1 16%;
+}
+
+.customer_tags label {
+}
+
+.customer_tags input {
+    display: block;
+    margin-left: 2%;
+}
+
+#comment {
+    margin-left: 2%;
+    margin-bottom: 2%;
+}
 .hidden {
     opacity: 0;
     max-height: 0;
     overflow: hidden;
+}
+
+#paper input {
+    display: block;
+    margin-left: 2%;
+}
+
+#card input {
+    display: block;
+    margin-left: 2%;
+}
+
+#address_checkbox {
+    display: flex;
 }
 
 #amountAlert {

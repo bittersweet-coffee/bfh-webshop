@@ -70,7 +70,7 @@ class Customer
     public function render()
     {
         $context =
-            "<div id='customer_container'>
+            "<div class='customer_container'>
                 <p><label>" . translate("Firstname") . ": </label> $this->firstname</p>
                 <p><label>" . translate("Lastname") . ": </label> $this->lastname</p>
                 <p><label>" . translate("Address") . ": </label> $this->address</p>
@@ -96,7 +96,7 @@ class Customer
     }
 
     public static function render_InputTags(): string {
-        $customerInputTag = "<div id='customer_tags'>";
+        $customerInputTag = "<div class='customer_tags'>";
         foreach (self::inputElements as $inputElementName => $inputType) {
             $customerInputTag = $customerInputTag . self::setInputTag($inputType, $inputElementName);
         }

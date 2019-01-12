@@ -73,20 +73,20 @@ class ShoppingCart {
 
     public function render_form() {
         $headerText = translate("Shoppingcart");
+        $html = "<h2> $headerText </h2>";
         if ($this->isEmpty()) {
-            $html = "<h2> $headerText </h2>";
             $html = $html ."<p>" . translate("Your Shoppingcart is Empty") . "</p>";
             return "<div class='cart_empty'>$html</div>";
         }
-        $html = "<div class='cartForm'>";
+        $html = $html . "<div class='cartForm'><div class='cartTable'>";
         $form = new ShoppingcartForm(getLanguage(["en", "de"]), $_SESSION["cart"], "shipping");
         $html = $html .$form->render();
-        $html = $html . "</div>";
+        $html = $html . "</div></div>";
         return $html;
     }
 
     public function render() {
-        $html = "<table>";
+        $html = "<div class='cartTable'><table>";
         $t_Article = translate("Article");
         $t_Amount = translate("Amount");
         $t_Price = translate("Price");
@@ -110,8 +110,8 @@ class ShoppingCart {
             $tableRow = "<tr id='$name'>$td_name $td_amou $td_pric $td_tota</tr>";
             $html = $html . $tableRow;
         }
-        $html = $html . "<tr><td rowspan='3'></td><td name='total' id='supertotal'>$total</td></tr>";
-        $html = $html . "</table>";
+        $html = $html . "<tr><td></td><td></td><td>Total</td><td name='total' id='supertotal'>$total</td></tr>";
+        $html = $html . "</table></div>";
 
         return $html;
     }

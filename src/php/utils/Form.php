@@ -42,7 +42,8 @@ class Form {
                 type='submit'
                 value='".translate("Cancle")."' 
                 formnovalidate='true'
-                onclick='return cancleForm(this)' />" ;
+                onclick='return cancleForm(this)'
+                class='button'/>" ;
         return $button;
     }
 
@@ -86,7 +87,7 @@ class BuyForm extends Form {
         $input1 = "<input id='amount' name='amount' type='number' value='1' min='1''>";
         $input2 = "<input type='radio' name='donation' value=5> " . $inputTextYes;
         $input3 = "<input type='radio' name='donation' value=0 checked='checked'> " . $inputTextNo;
-        $submit = "<input type='submit' name='buy' value='".$submitText."'/>";
+        $submit = "<input type='submit' class='button' name='buy' value='".$submitText."'/>";
 
         $content = "<p>". $label
                         . $input1
@@ -97,7 +98,11 @@ class BuyForm extends Form {
                         . $submit;
 
         parent::appendContext($content);
-        $content = $header . $this->product->render() . parent::render();
+        $content = "<div class='box'>" .
+            $header .
+            $this->product->render() .
+            "<h2>" . translate("Product Options") . "</h2>" .
+            parent::render() . "</div>";
         return $content;
     }
 
@@ -139,7 +144,7 @@ class ShippingForm extends Form {
         $comment ="<p>" . $commentText . "</p>";
         $comment = $comment ."<textarea id='comment' rows='4' cols='50' name='comment'></textarea><br/>";
         $submitText = translate("Continue to confirm or cancel");
-        $submit = "<input type='submit' name='shipping' value='".$submitText."'/>";
+        $submit = "<input type='submit' class='button' name='shipping' value='".$submitText."'/>";
 
         parent::appendContext($header);
         parent::appendContext($purchaseHeader);
@@ -160,7 +165,7 @@ class ShippingForm extends Form {
         parent::appendContext($submit);
 
         $context = parent::render();
-        return $context;
+        return "<div class='box'>" . $context . "</div>";
     }
 
 }
@@ -211,10 +216,10 @@ class ConfirmationForm extends Form {
             parent::appendContext($comment);
         }
         $submitText = translate("Confirm");
-        $submit = "<input type='submit' name='confirm' value='".$submitText."' onclick='return confirmForm(this)'/>";
+        $submit = "<input type='submit' name='confirm' class='button' value='".$submitText."' onclick='return confirmForm(this)'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Purchase"));
-        return parent::render();
+        return "<div class='box'>" . parent::render() . "</div>";
     }
 }
 
@@ -542,7 +547,7 @@ class ShoppingcartForm extends Form {
             $html = $html . $tableRow;
         }
 
-        $html = $html . "<tr><td rowspan='3'></td><td name='total' id='supertotal'>$total</td></tr>";
+        $html = $html . "<tr><td></td><td></td><td>Total</td><td name='total' id='supertotal'>$total</td></tr>";
         $html = $html . "</table>";
 
         $submit = "<input type='submit' class='button' value='". translate("Checkout") ."' name='cart'/>";

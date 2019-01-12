@@ -121,3 +121,5 @@ $messages['Confirmation'] = 'Bestätigung';
 
 $messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Your order will be processed within the next few days. Best regards, a&a-Team';
 $messages['Back'] = 'Back';
+$messages['Product Options'] = 'Product Options';
+$messages['You have to log out first...'] = 'You have to log out first...';

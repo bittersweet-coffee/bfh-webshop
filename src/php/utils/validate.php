@@ -18,12 +18,14 @@ if (isset($_POST["buy"])) {
 }
 
 if (isset($_POST["shipping"])) {
-    if (checkCustomerData() && checkPayment()) {
+    if (!checkCustomerData()) {
+        createErrorUrl("validationFailed: Customer Data");
+    } elseif (!checkPayment()) {
+        createErrorUrl("validationFailed: Payment Data");
+    } else {
         checkComment();
         createCustomer();
         createPayment();
-    } else {
-        createErrorUrl("validationFailed");
     }
 }
 
@@ -36,25 +38,24 @@ function checkCustomerData() {
         !isset($_POST["PostalCode"])) {
        return false;
     }
+    setCustomerCookies();
     $f = htmlspecialchars($_POST["Firstname"]);
     $l = htmlspecialchars($_POST["Lastname"]);
     $e = htmlspecialchars($_POST["Email"]);
     $a = htmlspecialchars($_POST["Address"]);
     $c = htmlspecialchars($_POST["Country"]);
-    $p = htmlspecialchars($_POST["PostalCode"]);
-    if (!preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $f) &&
-        !preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $l) &&
-        !preg_match('/^.+@.+\..+$/', $e) &&
-        !preg_match('/^[A-Za-z]+\d*\s*\d*[A-Za-z]*\d*[A-Za-z]*$/', $a) &&
-        !preg_match('/^\d{4}$/', $c) &&
-        !preg_match('/^[A-Za-z]{2}$/', $p)
+    $p = intval(htmlspecialchars($_POST["PostalCode"]));
+    if (preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $f) &&
+        preg_match('/[A-Za-z]+\d*\s*[A-Za-z]*\d*/', $l) &&
+        preg_match('/^.+@.+\..+$/', $e) &&
+        preg_match('/^[A-Za-z]+\d*\s*\d*[A-Za-z]*\d*[A-Za-z]*$/', $a) &&
+        preg_match('/^\d{4}$/', $p) &&
+        preg_match('/^[A-Za-z]{2}$/', $c)
     ) {
         return true;
     } else {
         return false;
     }
-
-    setCustomerCookies();
     return true;
 }
 

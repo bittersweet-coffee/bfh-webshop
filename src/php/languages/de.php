@@ -123,3 +123,5 @@ $messages['Continue to confirm or cancel'] = 'Weiter zum bestätigen oder abbrec
 $messages['Your order will be processed within the next few days. Best regards, a&a-Team'] = 'Deine Bestellung wird so in den nächsten Tagen bearbeitet. Beste Grüsse, a&a-Team';
 
 $messages['Back'] = 'Zurück';
+$messages['Product Options'] = 'Produkt Oprionen';
+$messages['You have to log out first...'] = 'Du musst dich zuerst ausloggen...';

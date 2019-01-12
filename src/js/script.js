@@ -280,7 +280,7 @@ function checkUserData(button) {
     });
 
     $("#Password input").focusout(function () {
-        password = checkifempty(this.value.match(/^\d*[A-Za-z]+\d*[A-Za-z]*$/));
+        password = checkifempty(this.value.match(/^\d*[A-Za-z]+\d*[A-Za-z]*[!]*$/));
         var lang = getUrlParameter('lang');
         if (lang == "de") {
             fadeMark("Password", password, "Das Passwort darf nicht leer sein. " +

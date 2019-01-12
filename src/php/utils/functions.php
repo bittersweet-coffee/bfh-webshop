@@ -48,7 +48,12 @@ function getPageContent($content) {
             displayRegisterFrom();
             break;
         case 'sign_in':
-            displaySignIn();
+            if (checkLogin()) {
+                echo "<h2>" . translate("You have to log out first...") ." </h2>";
+                echo displayLogoutMenu();
+            } else {
+                displaySignIn();
+            }
             break;
         case 'confirmation':
             displayConfirmation();
