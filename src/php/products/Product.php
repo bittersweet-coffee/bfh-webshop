@@ -100,7 +100,7 @@ class Product
         $html =
             "
                 <p class=\"prod-name\">$this->name</p>
-                <p class=\"prod-price\">$this->price</p>
+                <p class=\"prod-price\">$this->price CHF</p>
                 <p class=\"prod-descr\">$this->description</p>
             ";
 

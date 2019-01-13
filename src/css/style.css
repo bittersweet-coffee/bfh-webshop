@@ -191,6 +191,7 @@ nav a:hover {
     border: none;
     border-radius: 10px;
     box-shadow: 0 5px #999;
+    margin-right: 5px;
 }
 
 .button button {
@@ -228,10 +229,18 @@ footer {
     .box {
         flex: 1 21%;
     }
+
+    #content {
+        margin-top: 110px;
+    }
 }
 
 @media (max-width: 600px) {
     .box {
         flex: 1 46%;
+    }
+
+    #content {
+        margin-top: 150px;
     }
 }

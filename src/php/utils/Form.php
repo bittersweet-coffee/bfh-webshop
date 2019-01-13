@@ -239,7 +239,7 @@ class RegisterForm extends Form {
         parent::appendContext(User::render_InputTags());
         parent::appendContext(Customer::render_InputTags());
         $submitText = translate("Register");
-        $submit = "<input type='submit' name='register' value='".$submitText."'/>";
+        $submit = "<input class='button' type='submit' name='register' value='".$submitText."'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Registration"));
         return parent::render();
@@ -266,7 +266,7 @@ class LoginForm extends Form {
     public function render() {
         parent::appendContext($this->signInHeader);
         parent::appendContext($this->userInputTag);
-        $submit = "<input type='submit' value='Login' name='Login'/>";
+        $submit = "<input class='button' type='submit' value='Login' name='Login'/>";
         parent::appendContext($submit);
         parent::appendContext(parent::getCancleButton("Login"));
         return parent::render();
@@ -304,7 +304,7 @@ class UserareaUserForm extends Form {
         $old_passwordField = parent::setInputTag("password", "Oldpassword");
         $new_passwordField = parent::setInputTag("password", "Newpassword");
         $retype = parent::setInputTag("password", "Retype");
-        $submit = "<input type='submit' value='". translate("Change Password") ."' name='post_changeUserData'/>";
+        $submit = "<input class='button' type='submit' value='". translate("Change Password") ."' name='post_changeUserData'/>";
         return [$header,
             $usernameField,
             $old_passwordField,
@@ -338,7 +338,7 @@ class UserareaCustomerForm extends Form {
         $header = "<h3>" . translate("Change customer data") . "</h3>";
         $usernameField = $this->getUsernameField($this->username);
         $inputTags = Customer::render_InputTags();
-        $submit = "<input type='submit' value='". translate("Change user data") ."' name='post_changeCustomerData'/>";
+        $submit = "<input class='button' type='submit' value='". translate("Change user data") ."' name='post_changeCustomerData'/>";
         return [$header,
             $usernameField,
             $inputTags,
@@ -379,7 +379,7 @@ class AddProductForm extends Form {
         foreach (Product::render_addProductForm() as $element) {
             $html = $html . $element;
         }
-        $submit = "<input type='submit' value='". translate("Add a new Product") ."' name='post_addProduct'/>";
+        $submit = "<input class='button' type='submit' value='". translate("Add a new Product") ."' name='post_addProduct'/>";
         return [$header,
             $html,
             $submit,
@@ -413,7 +413,7 @@ class DeleteProductForm extends Form {
         foreach (Product::render_deleteProductForm() as $element) {
             $html = $html . $element;
         }
-        $submit = "<input type='submit' value='". translate("Delete") ."' name='post_deleteProduct'/>";
+        $submit = "<input class='button' type='submit' value='". translate("Delete") ."' name='post_deleteProduct'/>";
         return [$header,
             $html,
             $submit,
@@ -449,7 +449,7 @@ class SearchProductForm extends Form {
         foreach (Product::render_searchProductForm() as $element) {
             parent::appendContext($element);
         }
-        parent::appendContext("<input type='submit' value='". translate("Load") ."' name='post_searchProduct'/>");
+        parent::appendContext("<input class='button' type='submit' value='". translate("Load") ."' name='post_searchProduct'/>");
         parent::appendContext(parent::getCancleButton("noSearch"));
         $form = parent::render();
         if ($this->load) {
@@ -489,7 +489,7 @@ class UpdateProductForm extends Form {
             $html = $html . $element;
         }
         $_SESSION['old_name'] = $this->prodData['en'][0];
-        $submit = "<input type='submit' value='". translate("Update") ."' name='post_updateProduct'/>";
+        $submit = "<input class='button' type='submit' value='". translate("Update") ."' name='post_updateProduct'/>";
         return [$html,
             $submit,
             parent::getCancleButton("noUpdate")];
