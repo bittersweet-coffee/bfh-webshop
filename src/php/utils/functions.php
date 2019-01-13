@@ -23,6 +23,23 @@ function getPageContent($content) {
             $productHandler->setupProducts('Accessories', getLanguage(["en", "de"]));
             break;
         case 'about':
+            if (getLanguage(["en", "de"]) == "de") {
+                echo "<h2> Sinn und Zweck dieser Webseite </h2>";
+                echo "<p> Dieser Webshop wurde im Rahmen eines Modules 
+                           an der Berner Fachhochschule erstellt. 
+                           Er dient dem alleinigen Zweck des Lernens und alle 
+                           dabei erstellten Produkte und Möglichkeiten hier auf der 
+                           Shop Webseite sind erfunden und teil einer Aufgabe gewesen.
+                     </p>";
+            } else {
+                echo "<h2> Purpose of this website </h2>";
+                echo "<p> This webshop was created as part of a module at the 
+                          Bern University of Applied Sciences. It serves the 
+                          sole purpose of learning and all products and 
+                          possibilities created here on the shop website have 
+                          been invented and part of a task.
+                     </p>";
+            }
             break;
         case 'login':
             displayLogin();
